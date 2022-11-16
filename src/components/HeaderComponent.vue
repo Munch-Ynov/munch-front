@@ -14,11 +14,15 @@ const showMenu = ref(false);
       <!-- Menu links here -->
       <ul
         id="menu"
-        class="fixed top-0 right-0 px-10 py-16 bg-gray-800 z-50 md:relative md:flex md:p-0 md:bg-transparent md:flex-row md:space-x-6"
+        class="fixed top-0 right-0 px-10 py-16 bg-indigo-600 z-50 md:relative md:flex md:p-0 md:bg-transparent md:flex-row md:space-x-6"
         :class="{ hidden: !showMenu }"
       >
         <li class="md:hidden z-90 fixed top-4 right-6">
-          <a class="text-right text-white text-4xl">&times;</a>
+          <a
+            class="text-right text-white text-4xl"
+            @click="showMenu = !showMenu"
+            >&times;</a
+          >
         </li>
 
         <li>
