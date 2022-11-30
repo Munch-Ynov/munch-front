@@ -8,6 +8,5 @@ export interface Irestaurant {
     price: string;
     origines: Origines;
     regime: Regimes;
-
     image?: string;
 }
