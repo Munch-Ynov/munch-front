@@ -8,3 +8,6 @@
     <!-- put the home component here -->
   </main>
 </template>
+
+<style scoped lang="scss">
+</style>
