@@ -24,7 +24,6 @@ const showMenu = ref(false);
             >&times;</a
           >
         </li>
-
         <li>
           <a
             class="text-white opacity-70 hover:opacity-100 duration-300"
@@ -46,7 +45,6 @@ const showMenu = ref(false);
             >Forums</a
           >
         </li>
-
         <li>
           <a
             class="text-white opacity-70 hover:opacity-100 duration-300"

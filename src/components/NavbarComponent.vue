@@ -3,7 +3,7 @@
 </script>
 
 <template>
-        <ul class="flex justify-between">
+        <ul class=" bg-pink-200 flex justify-around">
             <li> 
                 <i class="fa-solid fa-house"></i>
             </li>
