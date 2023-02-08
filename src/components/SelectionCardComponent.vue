@@ -25,7 +25,10 @@ const array = [
 </script>
 
 <template>
+    <div class="flex flex-col">
+    <h1 class="font-bold text-3xl ml-44 mb-5">La sélection de la semaine</h1>
     <div class="flex justify-center space-x-8 ">
         <TopCardComponent v-for="restaurant in array" :name="restaurant.name" :adress="restaurant.adress" :key="restaurant.id"></TopCardComponent>
     </div>
+</div>
 </template>
