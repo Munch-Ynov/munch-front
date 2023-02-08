@@ -1,6 +1,6 @@
 
 <template>
-    <h1>Home</h1>
+    <h1>NotFound</h1>
 </template>
     
     
