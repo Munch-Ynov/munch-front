@@ -2,6 +2,7 @@
 import HeaderComponent from '@/components/HeaderComponent.vue';
 import NavbarComponent from '@/components/NavbarComponent.vue';
 import TopCardComponent from '@/components/TopCardComponent.vue';
+import SelectionCardComponent from '@/components/SelectionCardComponent.vue';
 
 
 </script>
@@ -9,7 +10,7 @@ import TopCardComponent from '@/components/TopCardComponent.vue';
 <template>
     
   <main>
-    <TopCardComponent></TopCardComponent>
+    <SelectionCardComponent></SelectionCardComponent>
     <NavbarComponent class=" fixed  bottom-0 left-0 right-0 " /> 
   </main>
 </template>

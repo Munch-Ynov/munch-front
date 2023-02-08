@@ -2,22 +2,23 @@
 import { ref } from "vue";
 const showMenu = ref(false);
 
-let restaurantAdress = "12 rue de la paix";
-let restaurantName = "Le petit bistro";
+const props = defineProps<{
+  name: string
+  adress: string
+}>()
+
 </script>
 
 <template>
-    <div class="flex justify-center space-x-5 ">
         <div class=" flex flex-col  shrink-0  basis-1/4 rounded-2xl h-[20rem] test ">
             <div class="flex-1"></div>
             <div class="bg-white rounded-lg h-24 flex flex-col items-center relative backgroundTest justify-center">
-                <span class="absolute -translate-y-[80%] -left-[1.5rem] h-14 w-14 rounded-[50%] bg-[#81C1A6] flex justify-center items-center shadowedBadge text-3xl font-semibold">1</span>
-                <div class="text-2xl font-bold">{{ restaurantName }}</div>
-                <div>{{ restaurantAdress }}</div>
+                <span class="absolute -translate-y-[80%] -left-[1.5rem] h-14 w-14 rounded-[50%] bg-[#81C1A6] flex justify-center items-center shadowedBadge1 text-3xl font-semibold">1</span>
+                <div class="text-2xl font-bold">{{ props.name }}</div>
+                <div>{{ props.adress }}</div>
             </div>
         </div>
         
-    </div>
 </template>
 
 <style scoped lang="scss">
