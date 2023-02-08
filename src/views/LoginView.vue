@@ -57,6 +57,7 @@ const { value: passwordValue, errorMessage: passwordError } = useField('password
                 </div>
             </div>
             <button class="btn btn-primary rounded-lg">Connexion</button>
+            <RouterLink to="/inscription" class="text-sm font-semibold text-center cursor-pointer"  >Pas encore de compte ? Inscrivez-vous</RouterLink>
         </form>
     </div>
 </template>

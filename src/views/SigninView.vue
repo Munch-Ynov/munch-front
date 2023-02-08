@@ -1,5 +1,5 @@
 <template>
-    <div class='container flex flex-row p-16 justify-center items-start'>
+    <div class='container flex flex-row p-5 justify-center items-start'>
         <form @submit="submit" class="card flex flex-col gap-8">
             <div>
                 <div class='logo'>
@@ -44,6 +44,7 @@
                 </div>
             </div>
             <button class="btn btn-primary rounded-lg">S'inscrire</button>
+            <RouterLink to="/connexion" class="text-sm font-semibold text-center cursor-pointer"  >Déjà un compte ?</RouterLink>
         </form>
     </div>
 </template>
@@ -99,8 +100,8 @@
 .card{
     width: 100%;
     width: 500px;
-    padding-inline: 64px;
-    padding-block: 128px;
+    padding-inline: 32px;
+    padding-block: 64px;
 }
 
 h2{
