@@ -1,20 +1,11 @@
 <script setup lang="ts">
-import { useUser } from '@/shared/stores';
-const userStore = useUser()
-</script> 
+import { useUser } from "@/shared/stores";
+import HeaderBar from "@/components/HeaderBar.vue";
+const userStore = useUser();
+</script>
 
 <template>
-    <div class='flex flex-row items-center justify-center'>
-        <div class="card">
-            <pre>{{ userStore.currentUser }}</pre>
-        </div>
-    </div>
+  <HeaderBar />
 </template>
 
-
-<style scoped lang="scss" >
-.card {
-    width: 100%;
-    max-width: 300px;
-}
-</style>
+<style scoped lang="scss"></style>
