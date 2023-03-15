@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { useUser } from './shared/stores';
 const userStore = useUser();
 const router = useRouter();
+userStore.fetchCurrentUser();
 
 async function logout() {
     await userStore.logout();

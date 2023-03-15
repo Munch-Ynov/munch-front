@@ -23,5 +23,15 @@ export async function createUser(userForm: UserForm) {
 }
 
 export async function fetchCurrentUser(): Promise<User | null> {
-    return await (await fetch('http://localhost:3000/users/me')).json();
+    const token = localStorage.getItem('user-token');
+    if (!token) {
+        return null;
+    }
+    return await (await fetch('http://localhost:3000/users/me',{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        }
+    })).json();
 }

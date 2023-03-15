@@ -15,8 +15,8 @@
             </router-link>
         </div>
         <ul class="flex flex-row items-center">
-            <!-- <template v-if="isAuthenticated">  -->
-            <template>
+            <template v-if="isAuthenticated"> 
+            <!-- <template> -->
                 <li class="mr-5">
                     <router-link to="/profil">Mon profil</router-link>
                 </li>
@@ -24,8 +24,8 @@
                     Déconnexion
                 </li>
             </template>
-            <!-- <template  v-else-if="isAuthenticated === false"> -->
-            <template>
+            <template  v-else>
+            <!-- <template> -->
                 <li class="mr-5">
                     <router-link to="/connexion">Connexion</router-link>
                 </li>

@@ -9,7 +9,14 @@ export function isAuthenticatedGuard() {
 
 export function isNotAuthenticatedGuard() {
     const userStore = useUser();
-    if (userStore.isAuthenticated) {
-        return '/';
+    try {
+        userStore.fetchCurrentUser();
+        if (userStore.isAuthenticated) {
+            return false;
+        }
+
+        
+    } catch (error) {
+        return true;
     }
 }
