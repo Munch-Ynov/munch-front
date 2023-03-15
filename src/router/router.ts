@@ -33,7 +33,7 @@ export const router = createRouter({
 
 router.beforeEach(async () => {
     const userStore = useUser();
-    if(!userStore.loaded){
+    if(!userStore.isAuth ){
         await userStore.fetchCurrentUser();
     }
 })
