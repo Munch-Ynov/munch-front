@@ -76,7 +76,7 @@
     const { handleSubmit, setErrors} = useForm({validationSchema});
 
     const submit = handleSubmit( async (formValue: UserForm) => {
-        console.log(formValue);
+        // console.log(formValue);
         try {
             await createUser(formValue);
             router.push('/connexion')
