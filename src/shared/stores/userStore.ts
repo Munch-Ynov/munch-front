@@ -17,9 +17,9 @@ export const useUser = defineStore('user', {
     }),
     getters: {
         isAuthenticated(state): boolean | null {
-            console.log(state.currentUser);
-            console.log(state.isAuth);
-            console.log(state.token);
+            // console.log(state.currentUser);
+            // console.log(state.isAuth);
+            // console.log(state.token);
             
             
             if (state.currentUser) {
