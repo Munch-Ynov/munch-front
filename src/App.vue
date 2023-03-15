@@ -1,19 +1,28 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import TheHeader from '@/components/HeaderComponent.vue';
+import { useRouter } from 'vue-router';
+import { useUser } from './shared/stores';
+const userStore = useUser();
+const router = useRouter();
+userStore.fetchCurrentUser();
 
-</script>
+async function logout() {
+    await userStore.logout();
+    router.push('/connexion');
+}
+</script> 
 
 <template>
-  <!-- navbar here -->
-  <div>
-    <RouterView />
-  </div>
+    <div class='flex flex-col app-container'>
+        <TheHeader :isAuthenticated="userStore.isAuthenticated" @logout="logout" />
+        <router-view class='flex-auto'></router-view>
+    </div>
 </template>
 
-<style scoped lang="scss">
-    header {
-    line-height: 1.5;
-    max-height: 100vh;
-    }
-</style>
 
+<style lang="scss" >
+@import "./assets/main.scss";
+.app-container {
+    min-height: 100vh;
+}
+</style>

@@ -14,6 +14,15 @@ import RecentlySavedComponent from '@/components/RecentlySavedComponent.vue';
     <RecentlySavedComponent></RecentlySavedComponent> 
   </main>
 </template>
+    
+    
 
+<script setup lang="ts">
+
+
+</script>
+      
+    
 <style scoped lang="scss">
+
 </style>
