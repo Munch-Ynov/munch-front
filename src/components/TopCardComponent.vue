@@ -10,7 +10,7 @@ const props = defineProps<{
 </script>
 
 <template>
-        <div class=" flex flex-col  shrink-0  basis-1/4 rounded-2xl h-[20rem] test ">
+        <div class=" flex flex-col  shrink-0  basis-1/3 rounded-2xl h-[20rem] test ">
             <div class="flex-1"></div>
             <div class="bg-white rounded-lg h-24 flex flex-col items-center relative backgroundTest justify-center">
                 <span class="absolute -translate-y-[80%] -left-[1.5rem] h-14 w-14 rounded-[50%] bg-[#81C1A6] flex justify-center items-center shadowedBadge1 text-3xl font-semibold">1</span>

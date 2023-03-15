@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import HeaderComponent from '@/components/HeaderComponent.vue';
 import NavbarComponent from '@/components/NavbarComponent.vue';
-import TopCardComponent from '@/components/TopCardComponent.vue';
 import SelectionCardComponent from '@/components/SelectionCardComponent.vue';
-import BottomSavedCardComponent from '@/components/BottomSavedCardComponent.vue';
+import RecentlySavedComponent from '@/components/RecentlySavedComponent.vue';
 
 
 </script>
@@ -12,8 +10,8 @@ import BottomSavedCardComponent from '@/components/BottomSavedCardComponent.vue'
     
   <main>
     <SelectionCardComponent></SelectionCardComponent>
-    <NavbarComponent class=" fixed  bottom-0 left-0 right-0 " /> 
-    <BottomSavedCardComponent></BottomSavedCardComponent>
+    <NavbarComponent class=" fixed  bottom-0 left-0 right-0 " />
+    <RecentlySavedComponent></RecentlySavedComponent> 
   </main>
 </template>
 
