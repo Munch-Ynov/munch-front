@@ -27,20 +27,20 @@ export async function fetchCurrentUser(): Promise<User | null> {
     if (!token) {
         return null;
     }
-    try{
-        const res = await fetch('http://localhost:3000/users/me',{
+    try {
+        const res = await fetch('http://localhost:3000/users/me', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             }
         })
-        if(res.ok){
+        if (res.ok) {
             return await res.json();
-        }else{
+        } else {
             return null;
         }
-    }catch(e){
+    } catch (e) {
         throw e;
     }
 }
