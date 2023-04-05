@@ -37,7 +37,9 @@ router.beforeEach(async () => {
         try{
             await userStore.fetchCurrentUser();
         }
-        catch(e){      
+        catch(e){  
+            console.log(e);
+                
         }
 
     }
