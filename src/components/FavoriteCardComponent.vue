@@ -5,8 +5,8 @@
       src="https://cdn.pixabay.com/photo/2019/05/12/18/56/calf-4198760_1280.jpg"
       alt=""
     />
-    <div class="heart-container">
-      <div class="heart-circle"></div>
+    <div class="heart-container" @click="onHeartClick">
+      <div class="heart-circle" ></div>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="25"
@@ -57,6 +57,25 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: "FavoriteCardComponent",
+  data() {
+    return {
+      isHearted: false,
+    };
+  },
+  methods: {
+    onHeartClick() {
+      this.isHearted = !this.isHearted;
+      console.log(this.isHearted);
+      console.log("click");
+    },
+  },
+};
+</script>
+
 
 <style scoped lang="scss">
 .favorite_title {
