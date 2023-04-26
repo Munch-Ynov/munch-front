@@ -1,10 +1,10 @@
-<script>
+<script setup lang="ts">
 defineProps({
   size: {
     type: String,
     default: "100px",
   },
-  userImage: {
+  profilImage: {
     type: String,
     default: "",
   },
@@ -12,12 +12,18 @@ defineProps({
 </script>
 
 <template>
-  <div class="avatar rounded-full" :style="{height:size, width:size}"></div>
+  <div
+    class="avatar rounded-full"
+    :style="{
+      height: size,
+      width: size,
+      backgroundImage: `url(src/assets/images/${profilImage})`,
+    }"
+  ></div>
 </template>
 
 <style scoped lang="scss">
-.badge-logo {
-  background-image: url("../assets/images/monogramme.svg");
+.avatar {
   background-size: cover;
   background-position: center;
 }

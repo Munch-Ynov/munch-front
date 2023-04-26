@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheHeader from "@/components/HeaderComponent.vue";
+import TheHeader from "@/components/Header.vue";
 import { useRouter } from "vue-router";
 import { useUser } from "./shared/stores";
 const userStore = useUser();

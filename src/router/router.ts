@@ -31,9 +31,9 @@ export const router = createRouter({
     ]
 })
 
-router.beforeEach(async () => {
-    const userStore = useUser();
-    if(!userStore.loaded){
-        await userStore.fetchCurrentUser();
-    }
-})
+// router.beforeEach(async () => {
+//     const userStore = useUser();
+//     if(!userStore.loaded){
+//         await userStore.fetchCurrentUser();
+//     }
+// })
