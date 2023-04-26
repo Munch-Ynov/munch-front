@@ -12,7 +12,7 @@ async function logout() {
 </script>
 
 <template>
-  <!-- <TheHeader :isAuthenticated="userStore.isAuthenticated" @logout="logout" /> -->
+  <TheHeader :isAuthenticated="userStore.isAuthenticated" @logout="logout" />
   <router-view class="flex-auto"></router-view>
 </template>
 
