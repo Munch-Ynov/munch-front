@@ -9,15 +9,6 @@ const imageURL = "@/assets/images/banner-test.jpg";
 <template>
   <TopBar />
   <BannerProfile :bannerImage="'banner-test.jpg'" />
-  <!-- get firstname of current user -->
-  <h1 class="title-name text-3xl font-bold text-center mt-10">
-    {{ userStore.currentUser?.firstName }} John Doe
-    {{ userStore.currentUser?.lastName }}
-  </h1>
 </template>
 
-<style scoped lang="scss">
-.title-name {
-  font-family: var(--font-heading);
-}
-</style>
+<style scoped lang="scss"></style>

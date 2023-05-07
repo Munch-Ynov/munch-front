@@ -11,7 +11,7 @@ const emit = defineEmits<{
   <nav class="header-container flex flex-row items-center px-20">
     <div class="flex-auto flex flex-row items-center">
       <router-link to="/">
-        <h1>Application</h1>
+        <span>Application</span>
       </router-link>
     </div>
     <ul class="flex flex-row items-center">
