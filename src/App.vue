@@ -24,5 +24,6 @@ async function logout() {
 @import "./assets/main.scss";
 .app-container {
     min-height: 100vh;
+    background-color: white;
 }
 </style>
