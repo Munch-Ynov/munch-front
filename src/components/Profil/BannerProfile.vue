@@ -15,16 +15,20 @@ const userStore = useUser();
     class="banner h-40"
     :style="{ backgroundImage: `url(src/assets/images/${bannerImage})` }"
   >
-    <AvatarUser class="avatar" :profilImage="'monogramme.svg'" :size="'20vw'" />
-    <div class="details">
-      <h1 class="text-3xl font-bold">
-        {{ userStore.currentUser?.firstName }} John Doe
-        {{ userStore.currentUser?.lastName }}
-      </h1>
-      <span class="text-lg mt-0">
-        {{ userStore.currentUser?.email }} john@doe.com
-      </span>
-    </div>
+    <AvatarUser
+      class="avatar"
+      :profilImage="'monogramme.svg'"
+      :size="'clamp(125px, 25vw, 200px)'"
+    />
+  </div>
+  <div class="details">
+    <h1 class="text-3xl">
+      {{ userStore.currentUser?.firstName }} Lucas Steward
+      {{ userStore.currentUser?.lastName }}
+    </h1>
+    <span class="text-md mt-1">
+      {{ userStore.currentUser?.email }} Membre Confirmé
+    </span>
   </div>
 </template>
 
@@ -44,10 +48,10 @@ const userStore = useUser();
 }
 
 .details {
-  position: absolute;
-  bottom: -80px;
-  left: 35vw;
-  color: var(--text-color);
+  position: relative;
+  margin-top: 1rem;
+  left: clamp(200px, 36vw, 400px);
+  width: fit-content;
 
   span {
     font-family: "Nexa";
