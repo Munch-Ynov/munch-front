@@ -1,15 +1,22 @@
+<script setup lang="ts">
+import NavbarComponent from '@/components/NavbarComponent.vue';
+import SelectionCardComponent from '@/components/SelectionCardComponent.vue';
+import RecentlySavedComponent from '@/components/RecentlySavedComponent.vue';
+
+
+</script>
 
 <template>
-    <div>
-        <h1>Home</h1>
-        <!-- <RestaurantListComposant/> -->
-    </div>
+  <main>
+    <SelectionCardComponent></SelectionCardComponent>
+    <NavbarComponent class=" fixed  bottom-0 left-0 right-0 " />
+    <RecentlySavedComponent></RecentlySavedComponent> 
+  </main>
 </template>
     
     
 
 <script setup lang="ts">
-// import RestaurantListComposant from '@/components/Restaurants/RestaurantListComposant.vue';
 
 
 

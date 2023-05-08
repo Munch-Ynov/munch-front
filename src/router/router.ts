@@ -25,8 +25,14 @@ export const router = createRouter({
             component: () => import('@/views/ProfileView.vue')
         },
         {
+
             path: '/search',
             component: () => import('@/views/SearchView.vue')
+        },
+        {
+            path: '/favoris',
+            // beforeEnter: [isNotAuthenticatedGuard],
+            component: () => import('@/views/FavoritesView.vue')
         },
         {
             path: '/:notfound(.*)*',
