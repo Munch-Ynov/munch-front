@@ -14,7 +14,7 @@ async function logout() {
 </script> 
 
 <template>
-    <div class='flex flex-col app-container'>
+    <div class='flex flex-col app-container mb-16'>
         <TheHeader :isAuthenticated="userStore.isAuthenticated" @logout="logout" />
         <router-view class='flex-auto'></router-view>
         <NavbarComponent class=" fixed  bottom-0 left-0 right-0" />
