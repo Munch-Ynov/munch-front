@@ -14,7 +14,7 @@ defineProps({
 
 <template>
   <div>
-    <h3 class="font-bold">Mes informations personnelles :</h3>
+    <h3>Mes informations personnelles :</h3>
     <div class="flex flex-col">
       <div class="flex gap-3 items-center p-3">
         <Icon

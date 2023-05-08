@@ -1,16 +1,20 @@
-export interface User {
-  id: string;
-  lastName: string;
-  firstName: string;
-  email: string;
-  admin: boolean;
-  favoris: string;
-  phone: string;
+import type { Restaurant } from "./Restaurant.interface";
+
+export interface Feature {
+  id: number;
+  name: string;
+  icon?: string;
+  category: Category;
+  restaurants: Restaurant[];
+  categoryId: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export interface UserForm extends Partial<User> {}
-
-export interface LoginForm {
-  password: string;
-  email: string;
+export interface Category {
+  id: number;
+  name: string;
+  features: Feature[];
+  createdAt: Date;
+  updatedAt: Date;
 }

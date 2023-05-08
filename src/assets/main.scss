@@ -9,13 +9,13 @@
 
 @font-face {
   font-family: "Cocogoose";
-  src: url("./fonts/Cocogoose.ttf") format("truetype");
+  src: url("./fonts/Cocogoose.regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Cocogoose";
-  src: url("./fonts/Cocogoose-Light.ttf") format("truetype");
-  font-weight: lighter;
+  src: url("./fonts/Cocogoose.light.ttf") format("truetype");
+  font-weight: 300;
 }
 
 @font-face {
@@ -26,13 +26,13 @@
 @font-face {
   font-family: "Nexa";
   src: url("./fonts/Nexa-Light.otf") format("opentype");
-  font-weight: lighter;
+  font-weight: 300;
 }
 
 @font-face {
   font-family: "Nexa";
   src: url("./fonts/Nexa-Bold.otf") format("opentype");
-  font-weight: bold;
+  font-weight: 700;
 }
 
 :root {

@@ -43,14 +43,14 @@ const userStore = useUser();
   position: absolute;
   bottom: 0px;
   transform: translateY(50%);
-  left: 8vw;
+  left: 4vw;
   border: 1vw solid var(--background);
 }
 
 .details {
   position: relative;
   margin-top: 1rem;
-  left: clamp(200px, 36vw, 400px);
+  left: clamp(150px, 30vw, 350px);
   width: fit-content;
 
   span {
