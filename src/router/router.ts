@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useUser } from "../shared/stores";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -29,9 +30,9 @@ export const router = createRouter({
   ],
 });
 
-// router.beforeEach(async () => {
-//   const userStore = useUser();
-//   if (!userStore.loaded) {
-//     await userStore.fetchCurrentUser();
-//   }
-// });
+router.beforeEach(async () => {
+  const userStore = useUser();
+  if (!userStore.isAuth) {
+    await userStore.fetchCurrentUser();
+  }
+});
