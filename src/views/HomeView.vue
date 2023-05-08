@@ -7,7 +7,6 @@ import RecentlySavedComponent from '@/components/RecentlySavedComponent.vue';
 </script>
 
 <template>
-    
   <main>
     <SelectionCardComponent></SelectionCardComponent>
     <NavbarComponent class=" fixed  bottom-0 left-0 right-0 " />
@@ -18,6 +17,7 @@ import RecentlySavedComponent from '@/components/RecentlySavedComponent.vue';
     
 
 <script setup lang="ts">
+
 
 
 </script>

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { isNotAuthenticatedGuard } from '../shared/guards';
+import { isAuthenticatedGuard, isNotAuthenticatedGuard } from '../shared/guards';
 import { useUser } from '../shared/stores';
 
 export const router = createRouter({
@@ -11,18 +11,23 @@ export const router = createRouter({
         },
         {
             path: '/connexion',
-            //  
+            beforeEnter: [isNotAuthenticatedGuard], 
             component: () => import('@/views/LoginView.vue')
         },
         {
             path: '/inscription',
-            // beforeEnter: [isNotAuthenticatedGuard],
+            beforeEnter: [isNotAuthenticatedGuard],
             component: () => import('@/views/SigninView.vue')
         },
         {
             path: '/profil',
-            // beforeEnter: [isNotAuthenticatedGuard],
+            beforeEnter: [isAuthenticatedGuard],
             component: () => import('@/views/ProfileView.vue')
+        },
+        {
+
+            path: '/search',
+            component: () => import('@/views/SearchView.vue')
         },
         {
             path: '/favoris',
@@ -39,7 +44,12 @@ export const router = createRouter({
 router.beforeEach(async () => {
     const userStore = useUser();
     if(!userStore.isAuth ){
-        await userStore.fetchCurrentUser();
+        try{
+            await userStore.fetchCurrentUser().catch(e => console.log(e));
+        }
+        catch(e){  
+            console.log(e);        
+        }
     }
-})
 
+})
