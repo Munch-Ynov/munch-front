@@ -3,7 +3,7 @@ import Monogramme from "@/components/Monogramme.vue";
 </script>
 
 <template>
-  <nav class="w-screen flex flex-row-reverse items-center px-3">
+  <nav class="w-full flex flex-row-reverse items-center px-3">
     <a href="/">
       <Monogramme size="50px" />
     </a>

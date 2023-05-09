@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-  <h3>Mes réservations récentes :</h3>
+  <h3 class="mb-5">Mes réservations récentes :</h3>
   <ReservationItem :reservations="reservations" />
 </template>
 

@@ -42,14 +42,14 @@ const { value: passwordValue, errorMessage: passwordError } =
       <div>
         <div class="logo">
           <img
-            class="max-h-12"
+            class="w-32"
             src="../assets/images/logo-munch.png"
             alt="logo-munch"
           />
         </div>
-        <h2>Se connecter</h2>
+        <span class="text-3xl font-bold">Se connecter</span>
       </div>
-      <div class="text-sm font-semibold">S'inscrire avec des comptes</div>
+      <!-- <div class="text-sm font-semibold">Se connecter avec des comptes</div> -->
       <hr class="m-auto w-3/4" />
       <div>
         <div class="mb-4">
@@ -94,11 +94,6 @@ const { value: passwordValue, errorMessage: passwordError } =
   width: 500px;
   padding-inline: 64px;
   padding-block: 128px;
-}
-
-h2 {
-  font-size: 32px;
-  font-weight: 600;
 }
 
 input {

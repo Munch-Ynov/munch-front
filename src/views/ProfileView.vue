@@ -5,8 +5,14 @@ import BannerProfile from "@/components/Profil/BannerProfile.vue";
 import StatsProfile from "@/components/Profil/StatsProfile.vue";
 import InfoProfile from "@/components/Profil/InfoProfile.vue";
 import ReservationsProfile from "@/components/Profil/ReservationsProfile.vue";
+import { useRouter } from "vue-router";
 const userStore = useUser();
-const imageURL = "@/assets/images/banner-test.jpg";
+
+const router = useRouter();
+
+if (!userStore.isAuthenticated) {
+  router.push("/connexion");
+}
 </script>
 
 <template>
@@ -22,9 +28,17 @@ const imageURL = "@/assets/images/banner-test.jpg";
       :email="userStore.currentUser?.email || 'lucas.steward@munch.com'"
       :phone="userStore.currentUser?.phone || '+262 692 00 00 00 '"
     />
-    <div class="border-b-2 my-8 w-3/4 mx-auto"></div>
+    <div class="separator"></div>
     <ReservationsProfile :reservations="userStore.currentUser?.reservations" />
+    <div class="separator"></div>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.separator {
+  border-bottom: 2px solid var(--gray-2);
+  border-color: var(--gray-2);
+  width: 75%;
+  margin: 2.5rem auto;
+}
+</style>

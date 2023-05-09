@@ -1,17 +1,17 @@
 <template>
-  <div class="container flex flex-row p-5 justify-center items-start">
+  <div class="m-8 flex flex-row p-5 justify-center items-start">
     <form @submit="submit" class="card flex flex-col gap-8">
       <div>
         <div class="logo">
           <img
-            class="max-h-12"
+            class="w-32"
             src="../assets/images/logo-munch.png"
             alt="logo-munch"
           />
         </div>
-        <h2>S'inscrire</h2>
+        <span class="text-3xl font-bold">S'inscrire/Muncher</span>
       </div>
-      <div class="text-sm font-semibold">S'inscrire avec des comptes</div>
+      <!-- <div class="text-sm font-semibold">S'inscrire avec des comptes</div> -->
       <hr class="m-auto w-3/4" />
       <div>
         <div class="mb-4">
@@ -155,11 +155,6 @@ const { value: passwordConfirm, errorMessage: passwordConfirmation } = useField(
   width: 500px;
   padding-inline: 32px;
   padding-block: 64px;
-}
-
-h2 {
-  font-size: 32px;
-  font-weight: 600;
 }
 
 input {
