@@ -22,13 +22,12 @@ const userStore = useUser();
     />
   </div>
   <div class="details">
-    <h1 class="text-3xl">
-      {{ userStore.currentUser?.firstName }} Lucas Steward
+    <h1 class="text-3xl" v-if="userStore.isAuthenticated">
+      {{ userStore.currentUser?.firstName }}
       {{ userStore.currentUser?.lastName }}
     </h1>
-    <span class="text-md mt-1">
-      {{ userStore.currentUser?.email }} Membre Confirmé
-    </span>
+    <h1 class="text-3xl" v-else>Lucas Steward</h1>
+    <span class="text-md mt-1"> Membre Confirmé</span>
   </div>
 </template>
 

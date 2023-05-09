@@ -14,7 +14,7 @@ const imageURL = "@/assets/images/banner-test.jpg";
   <BannerProfile :bannerImage="'banner-test.jpg'" />
   <div class="px-12">
     <StatsProfile
-      :nb-reservations="userStore.currentUser?.reservations.length || 0"
+      :nb-reservations="userStore.currentUser?.reservations?.length || 0"
       :reservationsTitle="'réservations effectuées'"
       :reviewsTitle="'note données'"
     />
@@ -23,7 +23,7 @@ const imageURL = "@/assets/images/banner-test.jpg";
       :phone="userStore.currentUser?.phone || '+262 692 00 00 00 '"
     />
     <div class="border-b-2 my-8 w-3/4 mx-auto"></div>
-    <ReservationsProfile />
+    <ReservationsProfile :reservations="userStore.currentUser?.reservations" />
   </div>
 </template>
 

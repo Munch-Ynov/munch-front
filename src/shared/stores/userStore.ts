@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-catch */
 import { defineStore } from "pinia";
-import type { LoginForm, User } from "../interfaces";
+import type { LoginForm, User } from "../interfaces/User.interface";
 import { fetchCurrentUser, login } from "../services";
 
 interface UserState {
