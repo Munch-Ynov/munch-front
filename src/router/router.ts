@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { isAuthenticatedGuard, isNotAuthenticatedGuard } from '../shared/guards';
-import { useUser } from '../shared/stores';
+import { createRouter, createWebHistory } from "vue-router";
+import { useUser } from "../shared/stores";
+import { isAuthenticatedGuard, isNotAuthenticatedGuard } from "@/shared/guards/auth.guards";
 
 export const router = createRouter({
     history: createWebHistory(),
@@ -11,7 +11,7 @@ export const router = createRouter({
         },
         {
             path: '/connexion',
-            beforeEnter: [isNotAuthenticatedGuard], 
+            beforeEnter: [isNotAuthenticatedGuard],
             component: () => import('@/views/LoginView.vue')
         },
         {
@@ -25,7 +25,6 @@ export const router = createRouter({
             component: () => import('@/views/ProfileView.vue')
         },
         {
-
             path: '/search',
             component: () => import('@/views/SearchView.vue')
         },
