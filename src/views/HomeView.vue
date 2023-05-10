@@ -3,7 +3,6 @@ import SelectionCardComponent from '@/components/SelectionCardComponent.vue';
 import RecentlySavedComponent from '@/components/RecentlySavedComponent.vue';
 import SearchComponent from '@/components/SearchComponent.vue';
 
-</script>
 
 <template>
   <main>
@@ -17,3 +16,4 @@ import SearchComponent from '@/components/SearchComponent.vue';
 <style scoped lang="scss">
 
 </style>
+

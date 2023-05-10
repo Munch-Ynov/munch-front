@@ -1,20 +1,44 @@
 <script setup lang="ts">
-import { useUser } from '@/shared/stores';
-const userStore = useUser()
-</script> 
+import { useUser } from "@/shared/stores";
+import TopBar from "@/components/TopBar.vue";
+import BannerProfile from "@/components/Profil/BannerProfile.vue";
+import StatsProfile from "@/components/Profil/StatsProfile.vue";
+import InfoProfile from "@/components/Profil/InfoProfile.vue";
+import ReservationsProfile from "@/components/Profil/ReservationsProfile.vue";
+import { useRouter } from "vue-router";
+const userStore = useUser();
+
+const router = useRouter();
+
+if (!userStore.isAuthenticated) {
+  router.push("/connexion");
+}
+</script>
 
 <template>
-    <div class='flex flex-row items-center justify-center'>
-        <div class="card">
-            <pre>{{ userStore.currentUser }}</pre>
-        </div>
-    </div>
+  <TopBar />
+  <BannerProfile :bannerImage="'banner-test.jpg'" />
+  <div class="px-12">
+    <StatsProfile
+      :nb-reservations="userStore.currentUser?.reservations?.length || 0"
+      :reservationsTitle="'réservations effectuées'"
+      :reviewsTitle="'note données'"
+    />
+    <InfoProfile
+      :email="userStore.currentUser?.email || 'lucas.steward@munch.com'"
+      :phone="userStore.currentUser?.phone || '+262 692 00 00 00 '"
+    />
+    <div class="separator"></div>
+    <ReservationsProfile :reservations="userStore.currentUser?.reservations" />
+    <div class="separator"></div>
+  </div>
 </template>
 
-
-<style scoped lang="scss" >
-.card {
-    width: 100%;
-    max-width: 300px;
+<style scoped lang="scss">
+.separator {
+  border-bottom: 2px solid var(--gray-2);
+  border-color: var(--gray-2);
+  width: 75%;
+  margin: 2.5rem auto;
 }
 </style>
