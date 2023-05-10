@@ -10,19 +10,30 @@ const state = reactive({
   restaurants: [] as RestaurantInterface[],
 });
 
+const searchProps = defineProps<{
+  search?: string;
+}>();
+
 onMounted(async () => {
-  restaurantStore.fetchRestaurants().then(() => {
-    //getRestaurants = getter de pinia
-    state.restaurants = restaurantStore.getRestaurants;
-    // console.log(state.restaurants);
-  });
+  restaurantStore
+    .fetchRestaurants()
+    .then(() => {
+      //getRestaurants = getter de pinia
+      state.restaurants = restaurantStore.getRestaurants;
+      // console.log(state.restaurants);
+    })
+    .then(() => {
+      if (searchProps.search) {
+        restaurantStore.filterSearch(searchProps.search);
+      }
+    });
 });
 </script>
 <template>
-  <template v-if="state.restaurants.length">
+  <template v-if="restaurantStore.getRestaurants.length">
     <div class="flex flex-col gap-3 px-7">
       <RestaurantCard
-        v-for="restaurant in state.restaurants"
+        v-for="restaurant in restaurantStore.getRestaurants"
         :key="restaurant.id"
         :restaurant="restaurant"
       />
@@ -30,11 +41,7 @@ onMounted(async () => {
   </template>
   <template v-else>
     <div class="flex flex-col items-center justify-center">
-      <Icon
-        icon="eos-icons:three-dots-loading"
-        width="100"
-        color="var(--primary-1)"
-      />
+      Aucun restaurant trouvé
     </div>
   </template>
 </template>

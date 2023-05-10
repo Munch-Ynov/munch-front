@@ -11,6 +11,12 @@
                 <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
             </div>
         </form>
+        <div v-if="vignettesTable.length" class="flex gap-4 pb-6">
+            <div v-for="vignette in vignettesTable" :key="vignette.value" class="flex items-center gap-2 bg-[#81C1A6] rounded-2xl px-4 py-1 font-bold text-white">
+                <span>{{ vignette.value }}</span>
+                <button @click="removeVignette(vignette)" class="cursor-pointer"><Icon icon="mdi:close" /></button>
+            </div>
+        </div>
     </div>
 </template>
     
@@ -21,18 +27,49 @@ import { toFormValidator } from '@vee-validate/zod';
 import { useField, useForm } from 'vee-validate';
 import { Icon } from '@iconify/vue';
 import { z } from 'zod';
+import { useRestaurant } from '@/shared/stores/useRestaurant';
+import { onMounted, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const validationSchema = toFormValidator(z.object({
-    search: z.string().min(3,"Recherche composant") 
+    search: z.string().min(3,"La recherche doit contenir au moins 3 caractères") 
 }))
 
 const {handleSubmit} = useForm({validationSchema});
+const restaurantStore = useRestaurant();
 
 const {value: searchValue, errorMessage} = useField("search")
+const vignettesTable = reactive<{type: string, value:string}[]>([]);
+
+const removeVignette = (vignette: {type: string, value:string}) => {
+    const index = vignettesTable.indexOf(vignette);
+    if(index > -1){
+        vignettesTable.splice(index, 1)
+        restaurantStore.filterSearch("")
+        searchValue.value = ""
+    }
+}
+
 
 const submit = handleSubmit( value => {
-    console.log(value);
-    
+    if(router.currentRoute.value.path == "/"){
+        router.replace("/search")
+        
+    }
+    restaurantStore.filterSearch(value.search).then(() => {
+        if(vignettesTable.length === 0){
+            vignettesTable.push({type: "search", value: value.search})
+        }else{
+            const isSearchFilterPresent = vignettesTable.find(vignette => vignette.type === "search")
+            if(isSearchFilterPresent){
+                isSearchFilterPresent.value = value.search
+            }else{
+                vignettesTable.push({type: "search", value: value.search})
+            }
+        }
+    })
 })
 
 
@@ -43,4 +80,8 @@ const submit = handleSubmit( value => {
     #searchBarWrapper{
         margin-bottom: 32px;
     }
+
+    // .hasError{
+    //     border: 1px solid red;
+    // }
 </style>
