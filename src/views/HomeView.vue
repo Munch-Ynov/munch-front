@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import NavbarComponent from "@/components/NavbarComponent.vue";
-import SelectionCardComponent from "@/components/SelectionCardComponent.vue";
-import RecentlySavedComponent from "@/components/RecentlySavedComponent.vue";
-</script>
+import SelectionCardComponent from '@/components/SelectionCardComponent.vue';
+import RecentlySavedComponent from '@/components/RecentlySavedComponent.vue';
+import SearchComponent from '@/components/SearchComponent.vue';
+
 
 <template>
   <main>
+    <SearchComponent />
     <SelectionCardComponent></SelectionCardComponent>
-    <!-- <NavbarComponent class=" fixed  bottom-0 left-0 right-0 " /> -->
-    <RecentlySavedComponent></RecentlySavedComponent>
+    <RecentlySavedComponent></RecentlySavedComponent> 
   </main>
 </template>
+    
+    
+<style scoped lang="scss">
 
-<script setup lang="ts"></script>
+</style>
 
-<style scoped lang="scss"></style>
