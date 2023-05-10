@@ -8,10 +8,10 @@
                     <input v-model="searchValue" placeholder="Rechercher un restaurant, style culinaire, ..." id="search" type="text" class="bg-[#F4F4F4] pl-8 border-none w-full">
                     <button class="rounded-lg cursor-pointer text-xl bg-[#F4F4F4] relative flex items-center justify-center h-full px-4"><Icon class="absolute" icon="mdi:filter-outline" /></button>
                 </div>
-                <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
+                <!-- <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p> -->
             </div>
         </form>
-        <div v-if="vignettesTable.length" class="flex gap-4 pb-6">
+        <div v-if="vignettesTable.length" class="flex gap-4 pb-6 px-7">
             <div v-for="vignette in vignettesTable" :key="vignette.value" class="flex items-center gap-2 bg-[#81C1A6] rounded-2xl px-4 py-1 font-bold text-white">
                 <span>{{ vignette.value }}</span>
                 <button @click="removeVignette(vignette)" class="cursor-pointer"><Icon icon="mdi:close" /></button>
@@ -55,7 +55,7 @@ const removeVignette = (vignette: {type: string, value:string}) => {
 
 const submit = handleSubmit( value => {
     if(router.currentRoute.value.path == "/"){
-        router.replace("/search")
+        router.push("/search")
         
     }
     restaurantStore.filterSearch(value.search).then(() => {
