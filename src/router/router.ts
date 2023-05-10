@@ -27,7 +27,9 @@ export const router = createRouter({
         {
 
             path: '/search',
-            component: () => import('@/views/SearchView.vue')
+            component: () => import('@/views/SearchView.vue'),
+            props: (route) => ({ search: route.query.q })
+
         },
         {
             path: '/favoris',
