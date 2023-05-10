@@ -4,9 +4,9 @@ import Monogramme from "@/components/Monogramme.vue";
 
 <template>
   <nav class="w-full flex flex-row-reverse items-center px-3">
-    <a href="/">
+    <RouterLink to="/">
       <Monogramme size="50px" />
-    </a>
+    </RouterLink>
   </nav>
 </template>
 
