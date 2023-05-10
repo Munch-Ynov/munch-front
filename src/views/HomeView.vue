@@ -5,7 +5,7 @@ import RecentlySavedComponent from "@/components/RecentlySavedComponent.vue";
 </script>
 
 <template>
-  <main>
+  <main class="mx-12">
     <SelectionCardComponent></SelectionCardComponent>
     <!-- <NavbarComponent class=" fixed  bottom-0 left-0 right-0 " /> -->
     <RecentlySavedComponent></RecentlySavedComponent>

@@ -6,6 +6,8 @@ import StatsProfile from "@/components/Profil/StatsProfile.vue";
 import InfoProfile from "@/components/Profil/InfoProfile.vue";
 import ReservationsProfile from "@/components/Profil/ReservationsProfile.vue";
 import { useRouter } from "vue-router";
+import ParameterProfile from "@/components/Profil/ParameterProfile.vue";
+import LogoutProfile from "@/components/Profil/LogoutProfile.vue";
 const userStore = useUser();
 
 const router = useRouter();
@@ -16,7 +18,6 @@ if (!userStore.isAuthenticated) {
 </script>
 
 <template>
-  <TopBar />
   <BannerProfile :bannerImage="'banner-test.jpg'" />
   <div class="px-12">
     <StatsProfile
@@ -31,6 +32,9 @@ if (!userStore.isAuthenticated) {
     <div class="separator"></div>
     <ReservationsProfile :reservations="userStore.currentUser?.reservations" />
     <div class="separator"></div>
+    <ParameterProfile />
+    <div class="separator"></div>
+    <LogoutProfile />
   </div>
 </template>
 

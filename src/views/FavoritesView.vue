@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import FavoriteCardComponent from "@/components/FavoriteCardComponent.vue";
 </script>
+
 <template>
-  <div>
+  <div class="mx-12">
     <div class="favorite_title">
-      <h1 class="text-2xl font-bold">Mes favoris :</h1>
+      <h1 class="text-3xl font-coco">Mes favoris :</h1>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="32"
@@ -19,18 +20,17 @@ import FavoriteCardComponent from "@/components/FavoriteCardComponent.vue";
       </svg>
     </div>
     <button
-      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded favorite_button"
+      class="hover:bg-primary1 text-white font-bold py-1 px-4 rounded favorite_button"
     >
       Récemment enregistrées
     </button>
-    <div class="flex flex-wrap mt-5 ml-5">
+    <div class="flex flex-wrap mt-5 items-center justify-center gap-5">
       <FavoriteCardComponent />
       <FavoriteCardComponent />
       <FavoriteCardComponent />
       <FavoriteCardComponent />
       <FavoriteCardComponent />
       <FavoriteCardComponent />
-
     </div>
   </div>
 </template>

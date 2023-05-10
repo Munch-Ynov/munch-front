@@ -17,7 +17,7 @@ const userStore = useUser();
   >
     <AvatarUser
       class="avatar"
-      :profilImage="'monogramme.svg'"
+      :profilImage="'exemple-resto.jpg'"
       :size="'clamp(125px, 25vw, 200px)'"
     />
   </div>
