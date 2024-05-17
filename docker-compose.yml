@@ -1,0 +1,19 @@
+services:
+  web:
+    container_name: munch-front
+    image: ghcr.io/munch-ynov/munch-front:latest
+    working_dir: /app
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=${PORT}
+      - API_URL=${API_URL}
+      - NODE_ENV=${NODE_ENV}
+    env_file:
+      - .env
+    networks:
+      - default
+
+networks:
+  default:
+    name: munch-network
