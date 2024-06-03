@@ -63,7 +63,7 @@ jobs:
           touch .env
           echo "PORT=${{ vars.PORT }}" >> .env
           echo "NODE_ENV=${{ vars.NODE_ENV }}" >> .env
-          echo "VITE_API_URL"=${{ vars.VITE_API_URL }} >> .env
+          echo "VITE_API_URL=${{ vars.API_URL }}:${{ vars.API_PORT }}" >> .env
 
       - name: Verify .env file
         run: cat .env
