@@ -36,7 +36,7 @@ ENV TZ=Europe/Paris
 
 # Set API URL 
 ARG API_URL
-ENV ENV VITE_API_URL=${API_URL}
+ENV VITE_API_URL=${API_URL}
 
 # Copy the build from the build-stage
 COPY --from=build-stage /app/dist ./dist
