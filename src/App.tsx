@@ -1,6 +1,4 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
@@ -12,7 +10,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        setResponseApi(data.status);
+        setResponseApi(`status : ${data.status}`);
       })
       .catch((err) => {
         setResponseApi(err);
