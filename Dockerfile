@@ -47,6 +47,7 @@ COPY --from=build-stage /app/package.json ./app
 RUN npm install -g serve
 
 # Expose the port
+ENV PORT = 5000
 EXPOSE 5000
 
 # Start the application

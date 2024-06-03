@@ -50,7 +50,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            API_URL: ${{vars.API_URL}}
+            API_URL: ${{vars.API_URL}}:${{vars.API_PORT}}
   deploy:
     needs: build-and-push-image
     runs-on: ubuntu-latest

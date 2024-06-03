@@ -6,9 +6,3 @@ services:
     restart: always
     ports:
       - "5000:5000"
-    environment:
-      - PORT=${PORT}
-      - VITE_API_URL=${VITE_API_URL}
-      - NODE_ENV=${NODE_ENV}
-    env_file:
-      - .env
