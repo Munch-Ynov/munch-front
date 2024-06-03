@@ -34,6 +34,10 @@ ENV NODE_ENV production
 # Set the Timezone
 ENV TZ=Europe/Paris
 
+# Set API URL 
+ARG API_URL
+ENV VITE_API_URL=${API_URL}
+
 # Copy the build from the build-stage
 COPY --from=build-stage /app/dist ./dist
 COPY --from=build-stage /app/node_modules ./node_modules

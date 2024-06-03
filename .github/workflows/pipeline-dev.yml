@@ -49,6 +49,8 @@ jobs:
           file: ./Dockerfile
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            API_URL: ${{vars.API_URL}}
   deploy:
     needs: build-and-push-image
     runs-on: ubuntu-latest
@@ -58,22 +60,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Creation du fichier .env file
-        run: |
-          touch .env
-          echo "PORT=${{ vars.PORT }}" >> .env
-          echo "NODE_ENV=${{ vars.NODE_ENV }}" >> .env
-          echo "VITE_API_URL=${{ vars.API_URL }}:${{ vars.API_PORT }}" >> .env
-
-      - name: Verify .env file
-        run: cat .env
-      - name: copy .env and docker-compose.yml
+      - name: Push docker-compose.yml
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          source: ".env,docker-compose.yml"
+          source: "docker-compose.yml"
           target: "~/${{ secrets.SSH_USERNAME }}/"
           timeout: 120s
       - name: executing remote ssh commands
