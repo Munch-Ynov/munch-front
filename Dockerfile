@@ -11,6 +11,10 @@ RUN npm install
 # Set to production environment
 ENV NODE_ENV production
 
+# Set API URL 
+ARG API_URL
+ENV VITE_API_URL=${API_URL}
+
 # Set the timezone
 ENV TZ=Europe/Paris
 
@@ -34,14 +38,10 @@ ENV NODE_ENV production
 # Set the Timezone
 ENV TZ=Europe/Paris
 
-# Set API URL 
-ARG API_URL
-ENV VITE_API_URL=${API_URL}
-
 # Copy the build from the build-stage
 COPY --from=build-stage /app/dist ./dist
 COPY --from=build-stage /app/node_modules ./node_modules
-COPY --from=build-stage /app/package.json ./app
+COPY --from=build-stage /app/package.json ./package.json
 
 # Install serve package globally
 RUN npm install -g serve
@@ -51,7 +51,7 @@ ENV PORT = 5000
 EXPOSE 5000
 
 # Start the application
-CMD ["npm", "run", "preview"]
+CMD ["serve", "-s", "dist", "-l", "5000"]
 
 
 
