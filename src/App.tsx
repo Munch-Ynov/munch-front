@@ -13,7 +13,8 @@ function App() {
         setResponseApi(`status : ${data.status}`);
       })
       .catch((err) => {
-        setResponseApi(err);
+        console.error(err);
+        setResponseApi(`Error : ${err.message}`);
       });
   };
 

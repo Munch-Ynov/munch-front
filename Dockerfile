@@ -46,7 +46,7 @@ RUN npm install -g serve
 EXPOSE 5000
 
 # Start the application
-CMD ["serve", "-s", "dist", "-l", "5000"]
+CMD ["npm", "run", "preview"]
 
 
 

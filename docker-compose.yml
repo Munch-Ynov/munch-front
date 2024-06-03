@@ -12,9 +12,3 @@ services:
       - NODE_ENV=${NODE_ENV}
     env_file:
       - .env
-    networks:
-      - default
-
-networks:
-  default:
-    name: munch-network
