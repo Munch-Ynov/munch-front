@@ -3,7 +3,8 @@ name: Create and publish a Docker image
 
 on:
   push:
-    tags: "*"
+    tags:
+      - "*"
     branches:
       - reset
 
@@ -78,5 +79,5 @@ jobs:
           script: |
             cd ~/${{ secrets.SSH_USERNAME }}
             echo ${{ secrets.REGISTRY_KEY }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref }}
+            docker pull $
             docker-compose up -d
