@@ -66,9 +66,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
+            set -e
             cd ~/${{ secrets.SSH_USERNAME }};
-            docker stop ${{ env.IMAGE_NAME }};
-            docker rm ${{ env.IMAGE_NAME }};
+            if docker ps -a | grep -q ${{ env.IMAGE_NAME }}; then
+              docker stop ${{ env.IMAGE_NAME }};
+              docker rm ${{ env.IMAGE_NAME }};
+            fi
             docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
-            docker pull ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:reset;
+            IMAGE_NAME_LOWER=$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')
+            docker pull ghcr.io/${{ env.REGISTRY }}/$IMAGE_NAME_LOWER:reset;
             docker-compose up -d
