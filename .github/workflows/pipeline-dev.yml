@@ -73,5 +73,5 @@ jobs:
               docker rm ${{ env.IMAGE_NAME }};
             fi
             docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
-            docker pull ${{ env.IMAGE_NAME }};
-            docker-compose up -d
+            docker pull ${{ env.IMAGE_NAME }}:reset;
+            docker-compose up -d;
