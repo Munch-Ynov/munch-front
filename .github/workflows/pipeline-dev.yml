@@ -13,6 +13,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ghcr.io/munch-ynov/munch-front
   ORGANIZATION: ${{ github.repository_owner }}
+  CONTAINER_NAME: munch-front
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
@@ -69,9 +70,9 @@ jobs:
             set -e
             cd ~/${{ secrets.SSH_USERNAME }};
             if docker ps -a | grep -q ${{ env.IMAGE_NAME }}; then
-              docker stop ${{ env.IMAGE_NAME }};
-              docker rm ${{ env.IMAGE_NAME }};
+              docker stop ${{ env.CONTAINER_NAME }};
+              docker rm ${{ env.CONTAINER_NAME}};
             fi
             docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
             docker pull ${{ env.IMAGE_NAME }}:reset;
-            docker run -d --name munch-front --restart always -p 5000:5000 ${{ env.IMAGE_NAME }}
+            docker run -d --name munch-front --restart always -p 5000:5000 ${{ env.IMAGE_NAME }}:reset
