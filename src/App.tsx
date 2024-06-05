@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import PublicPage from "./pages/public";
 import { LoginPage } from "./pages/auth/login.page";
 import { RequireAuth } from "./components/auth/require-auth";
