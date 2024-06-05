@@ -1,31 +1,29 @@
-import { useState } from "react";
-import "./App.css";
+import { Link, Route, Routes } from "react-router-dom";
+import PublicPage from "./pages/public";
+import { LoginPage } from "./pages/auth/login.page";
+import { RequireAuth } from "./components/auth/require-auth";
+import ProtectedPage from "./pages/protected";
+import { AuthProvider } from "./provider/auth.provider";
+import { Layout } from "./components/layout";
 
-function App() {
-  const [responseApi, setResponseApi] = useState("");
-
-  const onClick = () => {
-    // fetch(`http://localhost:3000/health`)
-    fetch(`${import.meta.env.VITE_API_URL}/health`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setResponseApi(`status : ${data.status}`);
-      })
-      .catch((err) => {
-        console.error(err);
-        setResponseApi(`Error : ${err.message}`);
-      });
-  };
-
+export default function App() {
   return (
-    <>
-      <div>
-        <button onClick={onClick}>Check API Health</button>
-      </div>
-      {responseApi && <code>{responseApi}</code>}
-    </>
+    <AuthProvider>
+      <h1>Auth Example</h1>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<PublicPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/protected"
+            element={
+              <RequireAuth>
+                <ProtectedPage />
+              </RequireAuth>
+            }
+          />
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }
-
-export default App;

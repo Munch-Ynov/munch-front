@@ -12,6 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  ORGANIZATION: ${{ github.repository_owner }}
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
@@ -78,6 +79,10 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/${{ secrets.SSH_USERNAME }}
-            echo ${{ secrets.REGISTRY_KEY }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker pull ghcr.io/munch-ynov/munch-front:reset
-            docker-compose up -d
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+            git pull
+            docker stop {{ env.IMAGE_NAME }}
+            docker rm {{ env.IMAGE_NAME }}
+            docker image rm -f ghcr.io/${{ env.ORGANIZATION }}/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            docker compose up -d
