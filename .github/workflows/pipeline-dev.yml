@@ -76,5 +76,5 @@ jobs:
             git remote set-url origin https://${{ secrets.GITHUB_USERNAME }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ env.ORGANIZATION }}/${{ github.event.repository.name }}.git;
             git pull;
             docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
-            docker pull ${{ env.IMAGE_NAME }}:main;
+            docker pull ${{ env.IMAGE_NAME }}:latest;
             docker-compose up -d;
