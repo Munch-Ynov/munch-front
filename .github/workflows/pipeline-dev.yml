@@ -56,34 +56,19 @@ jobs:
   deploy:
     needs: build-and-push-image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: read
+    name: Continuous Deployment
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Push docker-compose.yml
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "docker-compose.yml"
-          target: "~/${{ secrets.SSH_USERNAME }}/"
-          timeout: 120s
-      - name: executing remote ssh commands
+      - name: Deploy using ssh
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
           script: |
-            cd ~/${{ secrets.SSH_USERNAME }}
-            echo ${{ secrets.REGISTRY_KEY }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            echo https://${{ env.ORGANIZATION }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-            git remote set-url origin https://${{ env.ORGANIZATION }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-            git pull
-            docker stop ${{ env.IMAGE_NAME }}
-            docker rm ${{ env.IMAGE_NAME }}
-            docker image rm -f ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            docker compose up -d
+            cd ~/${{ secrets.SSH_USERNAME }};
+            docker stop ${{ env.IMAGE_NAME }};
+            docker rm ${{ env.IMAGE_NAME }};
+            docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
+            docker pull ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:reset;
+            docker-compose up -d
