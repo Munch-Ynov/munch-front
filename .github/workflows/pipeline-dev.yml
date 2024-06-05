@@ -79,10 +79,11 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/${{ secrets.SSH_USERNAME }}
-            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+            echo ${{ secrets.REGISTRY_KEY }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo https://${{ env.ORGANIZATION }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+            git remote set-url origin https://${{ env.ORGANIZATION }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
             git pull
             docker stop ${{ env.IMAGE_NAME }}
             docker rm ${{ env.IMAGE_NAME }}
-            docker image rm -f ghcr.io/${{ env.ORGANIZATION }}/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            docker image rm -f ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
             docker compose up -d
