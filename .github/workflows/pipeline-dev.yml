@@ -67,7 +67,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            set -e$
             cd ~/${{ github.event.repository.name }};
             if docker ps -a | grep -q ${{ env.IMAGE_NAME }}; then
               docker stop ${{ env.CONTAINER_NAME }};
