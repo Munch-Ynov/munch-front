@@ -12,10 +12,10 @@ export default function PublicPage() {
           setResponseApi(`status : ${data.status}`);
         })
         .catch((err) => {
-          setResponseApi("err : ", err);
+          setResponseApi(`${err}`);
         });
     } catch (err) {
-      setResponseApi("error while fetching data");
+      setResponseApi("failed to fetch data");
     }
   };
 
