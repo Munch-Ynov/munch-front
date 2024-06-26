@@ -1,4 +1,4 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/features/auth/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export function LoginPage() {
