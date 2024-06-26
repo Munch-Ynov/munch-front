@@ -1,10 +1,12 @@
-import { useAuth } from "@/features/auth/useAuth";
+import { Label } from "@/components/ui/label";
+import { AuthContext } from "@/features/auth/auth.provider";
+import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export function LoginPage() {
+  const { login } = useContext(AuthContext);
   let navigate = useNavigate();
   let location = useLocation();
-  let auth = useAuth();
 
   let from = location.state?.from?.pathname || "/";
 
@@ -13,26 +15,24 @@ export function LoginPage() {
 
     let formData = new FormData(event.currentTarget);
     let username = formData.get("username") as string;
+    let password = formData.get("password") as string;
 
-    auth.signin(username, () => {
-      // Send them back to the page they tried to visit when they were
-      // redirected to the login page. Use { replace: true } so we don't create
-      // another entry in the history stack for the login page.  This means that
-      // when they get to the protected page and click the back button, they
-      // won't end up back on the login page, which is also really nice for the
-      // user experience.
+    login(username, password).then(() => {
       navigate(from, { replace: true });
     });
   }
 
   return (
-    <div>
+    <div className="mt-10">
       <p>You must log in to view the page at {from}</p>
 
       <form onSubmit={handleSubmit}>
-        <label>
+        <Label>
           Username: <input name="username" type="text" />
-        </label>{" "}
+        </Label>{" "}
+        <Label>
+          Password: <input name="password" type="password" />
+        </Label>{" "}
         <button type="submit">Login</button>
       </form>
     </div>
