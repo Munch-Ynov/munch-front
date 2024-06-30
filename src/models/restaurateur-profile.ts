@@ -1,4 +1,6 @@
-export interface RestaurateurProfile {
+import { Auth } from "./auth.model";
+
+export interface RestaurateurProfile extends Auth {
   id: string;
   authId: string;
   avatar?: string;

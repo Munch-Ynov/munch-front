@@ -1,4 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function PublicPage() {
   const [responseApi, setResponseApi] = useState("");
@@ -22,7 +24,10 @@ export default function PublicPage() {
   return (
     <>
       <div>
-        <button onClick={onClick}>Check API Health</button>
+        <Button onClick={onClick}>Check API Health</Button>
+        <Button>
+          <Link to="/login">Login</Link>
+        </Button>
       </div>
       {responseApi && <code>{responseApi}</code>}
     </>

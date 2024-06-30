@@ -1,11 +1,10 @@
-import { AuthContext } from "@/features/auth/auth.provider";
 import { userAtom } from "@/features/auth/auth.store";
+import { useAuth } from "@/features/auth/useAuth";
 import { useAtom } from "jotai";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function AuthStatus() {
-  const { logout } = useContext(AuthContext);
+  const { logout } = useAuth();
   const [user] = useAtom(userAtom);
   let navigate = useNavigate();
 
@@ -15,7 +14,7 @@ export function AuthStatus() {
 
   return (
     <p>
-      Welcome {user}!{" "}
+      Welcome {user.name}!{" "}
       <button
         onClick={() => {
           logout();

@@ -1,10 +1,11 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AuthContext } from "@/features/auth/auth.provider";
-import { useContext } from "react";
+import { useAuth } from "@/features/auth/useAuth";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export function LoginPage() {
-  const { login } = useContext(AuthContext);
+  const { login } = useAuth();
   let navigate = useNavigate();
   let location = useLocation();
 
@@ -14,26 +15,26 @@ export function LoginPage() {
     event.preventDefault();
 
     let formData = new FormData(event.currentTarget);
-    let username = formData.get("username") as string;
+    let email = formData.get("email") as string;
     let password = formData.get("password") as string;
 
-    login(username, password).then(() => {
+    login(email, password).then(() => {
       navigate(from, { replace: true });
     });
   }
 
   return (
-    <div className="mt-10">
+    <div>
       <p>You must log in to view the page at {from}</p>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
         <Label>
-          Username: <input name="username" type="text" />
+          Email: <Input name="email" type="text" />
         </Label>{" "}
         <Label>
-          Password: <input name="password" type="password" />
+          Password: <Input name="password" type="password" />
         </Label>{" "}
-        <button type="submit">Login</button>
+        <Button type="submit">Log in</Button>
       </form>
     </div>
   );

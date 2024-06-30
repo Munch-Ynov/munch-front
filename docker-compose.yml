@@ -1,7 +1,7 @@
 services:
   web:
     container_name: munch-front
-    image: ghcr.io/munch-ynov/munch-front:reset
+    image: ghcr.io/munch-ynov/munch-front:latest
     restart: always
     ports:
       - "5000:5000"

@@ -1,33 +1,42 @@
-import { createContext, useState } from "react";
-import { atom, createStore } from "jotai";
 import { useAtom } from "jotai";
-import { userAtom, userStore } from "./auth.store";
+import { accessTokenAtom, refreshTokenAtom, userAtom } from "./auth.store";
 import api from "./auth.service";
 import { RoleEnum } from "@/models/enum/role-enum";
-
-export const AuthContext = createContext({
-  user: undefined,
-  register: async (username: string, password: string, role: RoleEnum) => {},
-  login: async (username: string, password: string) => {},
-  logout: () => {},
-});
+import { Auth } from "@/models/auth.model";
+import { AuthContext } from "@/features/auth/auth.context";
+import { UserProfile } from "@/models/user-profile.model";
+import { RestaurateurProfile } from "@/models/restaurateur-profile";
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
   const [user, setUser] = useAtom(userAtom);
+  const [refreshToken, setRefreshToken] = useAtom(refreshTokenAtom);
 
   const register = async (
-    username: string,
-    password: string,
+    email: Auth["email"],
+    password: Auth["password"],
     role: RoleEnum
   ) => {
-    await api.register(username, password, role).then((res) => {
+    await api.register(email, password, role).then((res) => {
       //
     });
   };
 
-  const login = async (username: string, password: string) => {
-    await api.login(username, password).then((user) => {
-      //
+  const login = async (email: string, password: string) => {
+    await api.login(email, password).then((response) => {
+      localStorage.setItem("accessToken", response?.accessToken as string);
+      getUserProfile();
+    });
+  };
+
+  const refresh = async () => {
+    await api.refreshToken().then((response) => {
+      localStorage.setItem("accessToken", response?.accessToken as string);
+    });
+  };
+
+  const getUserProfile = async () => {
+    await api.getUserProfile().then((response) => {
+      console.log(response);
     });
   };
 
@@ -37,7 +46,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout }}>
+    <AuthContext.Provider value={{ register, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

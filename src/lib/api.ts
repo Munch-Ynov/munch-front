@@ -7,10 +7,11 @@ export async function api<T>(
   method: Method = "GET",
   body?: any
 ): Promise<T | null> {
-  return fetch(`${process.env.REACT_APP_API_URL}/${url}`, {
+  return fetch(`${import.meta.env.VITE_API_URL}/${url}`, {
     method,
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
     body: JSON.stringify(body),
   }).then((res) => {

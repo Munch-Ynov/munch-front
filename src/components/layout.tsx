@@ -1,20 +1,30 @@
-import { AuthStatus } from "@/pages/auth/status.page";
+import { userAtom } from "@/features/auth/auth.store";
+import { useAtom } from "jotai";
+import { HomeIcon } from "lucide-react";
 import { Link, Outlet } from "react-router-dom";
 
 export function Layout() {
+  const [user] = useAtom(userAtom);
   return (
     <div>
-      {/* <AuthStatus /> */}
-
-      <ul>
-        <li>
-          <Link to="/">Public Page</Link>
-        </li>
-        <li>
-          <Link to="/protected">Protected Page</Link>
-        </li>
-      </ul>
-
+      <nav>
+        <ul>
+          <li>
+            <span>Logged in as: {user?.email}</span>
+          </li>
+          <li>
+            <Link to="/">
+              <HomeIcon />
+            </Link>
+          </li>
+          <li>
+            <Link to="/login">Protected</Link>
+          </li>
+          <li>
+            <Link to="/auth-status">Auth Status</Link>
+          </li>
+        </ul>
+      </nav>
       <Outlet />
     </div>
   );
