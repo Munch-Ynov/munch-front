@@ -27,7 +27,7 @@ export async function refreshToken() {
 }
 
 export async function getUserProfile() {
-  return api(`${prefix}/profile`, "GET");
+  return api(`${prefix}/profile`, "POST");
 }
 
 export default {

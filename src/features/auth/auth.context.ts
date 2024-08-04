@@ -1,7 +1,4 @@
-import { Auth } from "@/models/auth.model";
 import { RoleEnum } from "@/models/enum/role-enum";
-import { RestaurateurProfile } from "@/models/restaurateur-profile";
-import { UserProfile } from "@/models/user-profile.model";
 import { createContext } from "react";
 
 export const AuthContext = createContext({

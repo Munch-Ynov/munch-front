@@ -1,5 +1,6 @@
 import { userAtom } from "@/features/auth/auth.store";
 import { LoginPage } from "@/pages/auth/login.page";
+import { RegisterPage } from "@/pages/auth/register.page";
 import ProtectedPages from "@/pages/private";
 import PublicPage from "@/pages/public";
 import { NotFoundPage } from "@/pages/public/not-found.page";
@@ -12,6 +13,7 @@ export const MainRoutes = () => {
     <Routes>
       <Route path="/" element={user ? <ProtectedPages /> : <PublicPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

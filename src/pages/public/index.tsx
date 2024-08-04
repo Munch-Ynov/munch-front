@@ -23,13 +23,15 @@ export default function PublicPage() {
 
   return (
     <>
-      <div>
-        <Button onClick={onClick}>Check API Health</Button>
+      <div className="flex flex-row-reverse my-4 h-full gap-8 px-8">
         <Button>
           <Link to="/login">Login</Link>
         </Button>
+        <Button onClick={onClick}>Check API Health</Button>
       </div>
-      {responseApi && <code>{responseApi}</code>}
+      <div className="flex flex-wrap items-center justify-center min-h-screen gap-8 flex-1">
+        {responseApi && <span className="text-xl">{responseApi}</span>}
+      </div>
     </>
   );
 }

@@ -4,8 +4,7 @@ import api from "./auth.service";
 import { RoleEnum } from "@/models/enum/role-enum";
 import { Auth } from "@/models/auth.model";
 import { AuthContext } from "@/features/auth/auth.context";
-import { UserProfile } from "@/models/user-profile.model";
-import { RestaurateurProfile } from "@/models/restaurateur-profile";
+import { toast } from "sonner";
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
   const [user, setUser] = useAtom(userAtom);
@@ -22,10 +21,15 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   };
 
   const login = async (email: string, password: string) => {
-    await api.login(email, password).then((response) => {
-      localStorage.setItem("accessToken", response?.accessToken as string);
-      getUserProfile();
-    });
+    await api
+      .login(email, password)
+      .then((response) => {
+        localStorage.setItem("accessToken", response?.accessToken as string);
+        getUserProfile();
+      })
+      .catch(async (error) => {
+        toast.error(error.response.data.message);
+      });
   };
 
   const refresh = async () => {
