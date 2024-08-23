@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { RoleEnum } from "@/models/enum/role-enum";
 import { z } from "zod";
-import { useAuth } from "../useAuth";
+import { useAuth } from "../../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";

@@ -1,4 +1,4 @@
-import { userAtom } from "@/features/auth/auth.store";
+import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
 
 export const AdminPage = () => {

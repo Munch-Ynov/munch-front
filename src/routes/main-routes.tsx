@@ -1,4 +1,4 @@
-import { userAtom } from "@/features/auth/auth.store";
+import { userAtom } from "@/store/auth.store";
 import { LoginPage } from "@/pages/auth/login.page";
 import { RegisterPage } from "@/pages/auth/register.page";
 import ProtectedPages from "@/pages/private";

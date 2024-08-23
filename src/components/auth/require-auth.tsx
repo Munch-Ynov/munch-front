@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { Navigate, useLocation } from "react-router-dom";
-import { userAtom } from "./auth.store";
+import { userAtom } from "../../store/auth.store";
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
   const [user] = useAtom(userAtom);

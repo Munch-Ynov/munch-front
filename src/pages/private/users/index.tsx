@@ -1,4 +1,4 @@
-import { userAtom } from "@/features/auth/auth.store";
+import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
 
 export const UserPage = () => {
@@ -6,8 +6,7 @@ export const UserPage = () => {
 
   return (
     <div>
-      <h1>Utilisateur Page</h1>
-      <p>Welcome, {user?.email}</p>
+      <h1>Page Utilisateur</h1>
     </div>
   );
 };

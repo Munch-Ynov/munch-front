@@ -4,12 +4,15 @@ import App from "./App.tsx";
 import "./index.scss";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "./components/ui/sonner.tsx";
+import { ConfirmProvider } from "./providers/confirm.provider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-    <Toaster />
+    <ConfirmProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+      <Toaster />
+    </ConfirmProvider>
   </React.StrictMode>
 );

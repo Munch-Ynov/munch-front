@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -19,11 +18,10 @@ import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { RoleEnum } from "@/models/enum/role-enum";
 import { z } from "zod";
-import { useAuth } from "../useAuth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -43,32 +41,59 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [roleSelected, setRoleSelected] = useState<RoleEnum>(role);
+  const [defaultValues, setDefaultValues] = useState({
+    email: "john.doe@example.com",
+    password: "!Password123",
+    name: "John Doe",
+    phone: "+33123456789",
+  });
 
   useEffect(() => {
     setRoleSelected(role);
+    if (role === RoleEnum.RESTAURATEUR) {
+      setDefaultValues({
+        email: "bernard.loiseau@example.com",
+        password: "!Password123",
+        name: "Bernard Loiseau",
+        phone: "+33234567890",
+      });
+    } else {
+      setDefaultValues({
+        email: "john.doe@example.com",
+        password: "!Password123",
+        name: "John Doe",
+        phone: "+33123456789",
+      });
+    }
   }, [role]);
+
+  useEffect(() => {}, [defaultValues]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "john.doe@example.com",
-      password: "!Password123",
-      name: "John Doe",
-      phone: "+33123456789",
-    },
+    defaultValues: defaultValues,
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const { email, password } = values;
-
-    register(email, password, role)
-      .then(() => {
-        toast.success("Registered successfully");
+    if (role === RoleEnum.RESTAURATEUR) {
+      register("bernard.loiseau@example.com", "!Password123", role, {
+        name: "Bernard Loiseau",
+        phone: "+33234567890",
+      }).then(() => {
         navigate("/", { replace: true });
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
       });
+    } else {
+      ///
+      const { email, password } = values;
+      const profile = {
+        name: values.name,
+        phone: values.phone,
+      };
+
+      register(email, password, role, profile).then(() => {
+        navigate("/", { replace: true });
+      });
+    }
   }
 
   return (
@@ -93,7 +118,7 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
                   <FormItem>
                     <FormLabel>Nom</FormLabel>
                     <FormControl>
-                      <Input placeholder="John Doe" {...field} />
+                      <Input placeholder="John Do" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -129,21 +154,20 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
                   </FormItem>
                 )}
               />
-              {roleSelected === RoleEnum.USER && (
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Téléphone</FormLabel>
-                      <FormControl>
-                        <Input placeholder="+33123456789" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
+
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Téléphone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="+33123456789" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <Button className="w-full" type="submit">
               Register

@@ -1,30 +1,16 @@
-import { userAtom } from "@/features/auth/auth.store";
+import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
-import { HomeIcon } from "lucide-react";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { Header } from "./header";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Layout() {
   const [user] = useAtom(userAtom);
+  const { logout } = useAuth();
+
   return (
-    <div>
-      <nav>
-        <ul>
-          <li>
-            <span>Logged in as: {user?.email}</span>
-          </li>
-          <li>
-            <Link to="/">
-              <HomeIcon />
-            </Link>
-          </li>
-          <li>
-            <Link to="/login">Protected</Link>
-          </li>
-          <li>
-            <Link to="/auth-status">Auth Status</Link>
-          </li>
-        </ul>
-      </nav>
+    <div className="flex flex-col">
+      <Header />
       <Outlet />
     </div>
   );

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function PublicPage() {
@@ -23,11 +23,16 @@ export default function PublicPage() {
 
   return (
     <>
-      <div className="flex flex-row-reverse my-4 h-full gap-8 px-8">
-        <Button>
-          <Link to="/login">Login</Link>
-        </Button>
-        <Button onClick={onClick}>Check API Health</Button>
+      <div className="flex flex-row-reverse my-4 h-full px-8">
+        <div className="flex gap-8">
+          <Button onClick={onClick}>Check API Health</Button>
+          <Button asChild>
+            <Link to="/login">Login</Link>
+          </Button>
+          <Button asChild>
+            <Link to="/register">Register</Link>
+          </Button>
+        </div>
       </div>
       <div className="flex flex-wrap items-center justify-center min-h-screen gap-8 flex-1">
         {responseApi && <span className="text-xl">{responseApi}</span>}

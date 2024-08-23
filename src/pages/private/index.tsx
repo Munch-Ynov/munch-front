@@ -5,11 +5,12 @@ import { AdminPage } from "./admin";
 import { UserPage } from "./users";
 import { RestaurateurPage } from "./restaurateurs";
 import { useAtom } from "jotai";
-import { userAtom } from "@/features/auth/auth.store";
-import { RequireAuth } from "@/features/auth/require-auth";
+import { userAtom } from "@/store/auth.store";
+import { RequireAuth } from "@/components/auth/require-auth";
 
 export default function ProtectedPages() {
   const [user] = useAtom(userAtom);
+  console.log(user);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
