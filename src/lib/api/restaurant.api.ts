@@ -11,7 +11,7 @@ export async function updateRestaurant(restaurant: Restaurant) {
   return api<Restaurant>(prefix, "PUT", restaurant);
 }
 
-export async function getRestaurants() {
+export async function getAllRestaurants() {
   return api<Restaurant[]>(prefix, "GET");
 }
 
@@ -31,5 +31,10 @@ export async function deleteRestaurant(id: string) {
 }
 
 export default {
+  createRestaurant,
+  updateRestaurant,
+  getAllRestaurants,
+  getRestaurantById,
   getRestaurantByOwner,
+  deleteRestaurant,
 };

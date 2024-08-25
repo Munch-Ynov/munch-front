@@ -10,11 +10,14 @@ import { Auth } from "@/models/auth.model";
 import { toast } from "sonner";
 import { ProfileCreate } from "@/models/profile.model";
 import { AuthContext } from "@/providers/context/auth.context";
+import { useState } from "react";
+import { set } from "react-hook-form";
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
   const setUser = useSetAtom(userAtom);
   const setAccessToken = useSetAtom(accessTokenAtom);
   const [refreshToken, setRefreshToken] = useAtom(refreshTokenAtom);
+  const [isLoading, setIsLoading] = useState(false);
 
   const register = async (
     email: Auth["email"],
@@ -35,6 +38,7 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
   };
 
   const login = async (email: string, password: string) => {
+    setIsLoading(true);
     await api
       .login(email, password)
       .then((res) => {
@@ -43,15 +47,9 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
         toast.success("Connexion réussie");
       })
       .catch((error) => {
-        toast.error(error);
+        toast.error(error.message);
       });
   };
-
-  // const refresh = async () => {
-  //   await api.refreshToken().then((response) => {
-  //     setAccessToken(response?.accessToken);
-  //   });
-  // };
 
   const logout = async () => {
     await api.logout().then(() => {

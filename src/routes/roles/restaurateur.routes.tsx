@@ -6,10 +6,10 @@ import { ReservationsPage } from "@/pages/private/restaurateurs/reservations.pag
 import { NotFoundPage } from "@/pages/public/not-found.page";
 import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 const restaurateurRoutes = [
-  { path: "/", element: <DashboardPage />, label: "Accueil" },
+  { path: "/", element: <Navigate to="/dashboard" />, label: "Accueil" },
   { path: "/dashboard", element: <DashboardPage />, label: "Dashboard" },
   {
     path: "/reservations",

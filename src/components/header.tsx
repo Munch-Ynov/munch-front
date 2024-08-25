@@ -6,6 +6,15 @@ import { useAtom } from "jotai";
 import { Link, useLocation } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { RoleEnum } from "@/models/enum/role-enum";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "./ui/menubar";
 
 export const Header = ({
   routes,
@@ -17,6 +26,8 @@ export const Header = ({
   const { confirm } = useConfirm();
   const { logout } = useAuth();
 
+  console.log(location.pathname);
+
   const handleLogout = async () => {
     const isConfirmed = await confirm(
       "Vous êtes sur le point de vous déconnecter. Êtes-vous sûr de vouloir continuer ?"
@@ -27,34 +38,36 @@ export const Header = ({
   };
 
   return (
-    <header className="flex items-center h-16 px-4 border-b shrink-0 md:px-6">
-      <nav className="flex-col hidden gap-4 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-        <Link to="/">
-          <img src="./img/logo.svg" width="96" height="32" alt="Avatar" />
-        </Link>
-        <div className="text-lg font-medium md:flex md:flex-row md:gap-5 md:text-sm lg:gap-6">
-          {routes
-            .filter((route) => route.path !== "/")
-            .map((route) => (
-              <Link
-                key={route.path}
-                to={route.path}
-                className={`text-muted-foreground ${
-                  location.pathname === route.path
-                    ? "text-foreground font-medium"
-                    : ""
-                }`}
-              >
-                {route.label}
-              </Link>
-            ))}
+    <header className="border-b shrink-0">
+      <div className="container flex items-center h-16 ">
+        <nav className="flex-col hidden gap-4 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+          <Link to="/">
+            <img src="./img/logo.svg" width="96" height="32" alt="Avatar" />
+          </Link>
+          <div className="text-lg font-medium md:flex md:flex-row md:gap-5 md:text-sm lg:gap-6">
+            {routes
+              .filter((route) => route.path !== "/")
+              .map((route) => (
+                <Link
+                  key={route.path}
+                  to={route.path}
+                  className={`text-muted-foreground ${
+                    location.pathname === route.path
+                      ? "text-primary font-bold"
+                      : ""
+                  }`}
+                >
+                  {route.label}
+                </Link>
+              ))}
+          </div>
+        </nav>
+        <div className="flex items-center gap-4 ml-auto">
+          <Button variant="ghost">{user.name || "Administrateur"}</Button>
+          <Button variant="outline" onClick={handleLogout}>
+            <LogOut size={16} />
+          </Button>
         </div>
-      </nav>
-      <div className="flex items-center gap-4 ml-auto">
-        <Button variant="ghost">{user.name || "User"}</Button>
-        <Button variant="outline" onClick={handleLogout}>
-          <LogOut size={16} />
-        </Button>
       </div>
     </header>
   );

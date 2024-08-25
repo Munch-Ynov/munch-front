@@ -22,7 +22,7 @@ export const InformationsPage = () => {
   };
 
   return (
-    <div className="flex justify-center my-4">
+    <div className="flex justify-center my-4 gap-4">
       <RegisterRestaurantForm isNew={!data} />
     </div>
   );
