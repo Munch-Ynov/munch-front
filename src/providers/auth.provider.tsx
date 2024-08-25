@@ -1,4 +1,4 @@
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import {
   accessTokenAtom,
   refreshTokenAtom,
@@ -9,11 +9,11 @@ import { RoleEnum } from "@/models/enum/role-enum";
 import { Auth } from "@/models/auth.model";
 import { toast } from "sonner";
 import { ProfileCreate } from "@/models/profile.model";
-import { AuthContext } from "@/context/auth.context";
+import { AuthContext } from "@/providers/context/auth.context";
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
-  const [user, setUser] = useAtom(userAtom);
-  const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
+  const setUser = useSetAtom(userAtom);
+  const setAccessToken = useSetAtom(accessTokenAtom);
   const [refreshToken, setRefreshToken] = useAtom(refreshTokenAtom);
 
   const register = async (
@@ -47,11 +47,11 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       });
   };
 
-  const refresh = async () => {
-    await api.refreshToken().then((response) => {
-      setAccessToken(response?.accessToken);
-    });
-  };
+  // const refresh = async () => {
+  //   await api.refreshToken().then((response) => {
+  //     setAccessToken(response?.accessToken);
+  //   });
+  // };
 
   const logout = async () => {
     await api.logout().then(() => {

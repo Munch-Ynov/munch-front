@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,13 +15,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link, useNavigate } from "react-router-dom";
-import { RoleEnum } from "@/models/enum/role-enum";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { useAuth } from "../../../hooks/useAuth";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Euro } from "lucide-react";
@@ -47,10 +42,7 @@ const formSchema = z.object({
   priceRange: z.number().int().min(1).max(5),
 });
 
-export function RegisterRestaurantForm() {
-  const { register } = useAuth();
-  const navigate = useNavigate();
-
+export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -72,7 +64,9 @@ export function RegisterRestaurantForm() {
   return (
     <Card className="w-full max-w-xl">
       <CardHeader>
-        <CardTitle className="text-2xl">Votre restaurant</CardTitle>
+        <CardTitle className="text-2xl">
+          {isNew ? "Créer un restaurant" : "Modifier votre restaurant"}
+        </CardTitle>
         <CardDescription>
           Renseigner les informations de votre établissement
         </CardDescription>
@@ -252,7 +246,7 @@ export function RegisterRestaurantForm() {
               />
             </div>
             <Button className="w-full col-span-6" type="submit">
-              Enregistrer ce restaurant
+              Enregistrer
             </Button>
           </form>
         </Form>
