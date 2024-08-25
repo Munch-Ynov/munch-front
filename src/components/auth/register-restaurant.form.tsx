@@ -62,13 +62,11 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
   function onSubmit(values: z.infer<typeof formSchema>) {}
 
   return (
-    <Card className="w-full max-w-xl">
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-2xl">
-          {isNew ? "Créer un restaurant" : "Modifier votre restaurant"}
-        </CardTitle>
+        <CardTitle className="text-2xl">Votre restaurant</CardTitle>
         <CardDescription>
-          Renseigner les informations de votre établissement
+          Retrouvez ici toutes les informations concernant votre restaurant.
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -9,7 +9,9 @@ export function Layout({
   return (
     <div className="flex flex-col">
       <Header routes={routes} />
-      <Outlet />
+      <div className="container">
+        <Outlet />
+      </div>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { CardKPI } from "@/components/kpi/card.kpi";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   CalendarIcon,
-  ChefHatIcon,
   ClipboardListIcon,
   InfoIcon,
   UsersIcon,
@@ -24,60 +24,30 @@ export const DashboardPage = () => {
     <div className="flex flex-col min-h-screen">
       <main className="flex-1 p-4 md:p-6">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Total Reservations
-              </CardTitle>
-              <CalendarIcon className="w-4 h-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">128</div>
-              <p className="text-xs text-muted-foreground">
-                +14% from last week
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Available Tables
-              </CardTitle>
-              <ClipboardListIcon className="w-4 h-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">24</div>
-              <p className="text-xs text-muted-foreground">6 tables reserved</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Total Capacity
-              </CardTitle>
-              <UsersIcon className="w-4 h-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">120</div>
-              <p className="text-xs text-muted-foreground">
-                Seats across all rooms
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Avg. Daily Revenue
-              </CardTitle>
-              <InfoIcon className="w-4 h-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$3,240</div>
-              <p className="text-xs text-muted-foreground">
-                +5.2% from last month
-              </p>
-            </CardContent>
-          </Card>
+          <CardKPI
+            title="Réservations Confirmées"
+            value={128}
+            icon="Calendar"
+            subtitle="+14% par rapport à la semaine dernière"
+          />
+          <CardKPI
+            title="Tables Disponibles"
+            value={24}
+            icon="ClipboardList"
+            subtitle="6 tables réservées"
+          />
+          <CardKPI
+            title="Capacité Totale"
+            value={120}
+            icon="Users"
+            subtitle="Nombre de places assises dans tous les espaces"
+          />
+          <CardKPI
+            title="Chiffre d'Affaires Moyen Quotidien"
+            value={3240}
+            icon="Info"
+            subtitle="+5.2% par rapport au mois dernier"
+          />
         </div>
         <Tabs defaultValue="reservations" className="mt-6">
           <TabsList>

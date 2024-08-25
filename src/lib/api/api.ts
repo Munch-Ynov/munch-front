@@ -22,10 +22,9 @@ export async function api<T>(
     body: JSON.stringify(body),
   }).then((res) => {
     if (!res.ok) {
-      throw new Error(res.statusText);
-    }
-    if (res.status === 204) {
-      return null;
+      return res.json().then((error) => {
+        throw new Error(error.message || res.statusText);
+      });
     }
     return res.json() as Promise<T>;
   });
