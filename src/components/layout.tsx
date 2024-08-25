@@ -1,16 +1,14 @@
-import { userAtom } from "@/store/auth.store";
-import { useAtom } from "jotai";
 import { Outlet } from "react-router-dom";
 import { Header } from "./header";
-import { useAuth } from "@/hooks/useAuth";
 
-export function Layout() {
-  const [user] = useAtom(userAtom);
-  const { logout } = useAuth();
-
+export function Layout({
+  routes,
+}: {
+  routes: { path: string; element: JSX.Element; label: string }[];
+}) {
   return (
     <div className="flex flex-col">
-      <Header />
+      <Header routes={routes} />
       <Outlet />
     </div>
   );

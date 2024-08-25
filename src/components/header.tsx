@@ -4,8 +4,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useAtom } from "jotai";
 import { Link, useLocation } from "react-router-dom";
+import { LogOut } from "lucide-react";
+import { RoleEnum } from "@/models/enum/role-enum";
 
-export const Header = () => {
+export const Header = ({
+  routes,
+}: {
+  routes: { path: string; element: JSX.Element; label: string }[];
+}) => {
   const [user] = useAtom(userAtom);
   const location = useLocation();
   const { confirm } = useConfirm();
@@ -22,56 +28,32 @@ export const Header = () => {
 
   return (
     <header className="flex items-center h-16 px-4 border-b shrink-0 md:px-6">
-      <nav className="flex-col hidden gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-lg font-semibold md:text-base"
-        >
-          <img
-            src="./img/logo.png"
-            width="32"
-            height="32"
-            className="rounded-full"
-            alt="Avatar"
-          />
-          <span>Munch</span>
+      <nav className="flex-col hidden gap-4 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+        <Link to="/">
+          <img src="./img/logo.svg" width="96" height="32" alt="Avatar" />
         </Link>
-        <Link
-          to="#"
-          className={`text-muted-foreground ${
-            location.pathname === "/" ? "font-bold" : ""
-          }`}
-        >
-          Dashboard
-        </Link>
-        <Link
-          to="#"
-          className={`text-muted-foreground ${
-            location.pathname === "/reservations" ? "font-bold" : ""
-          }`}
-        >
-          Réservations
-        </Link>
-        <Link
-          to="#"
-          className={`text-muted-foreground ${
-            location.pathname === "/salle" ? "font-bold" : ""
-          }`}
-        >
-          Salle
-        </Link>
-        <Link
-          to="#"
-          className={`text-muted-foreground ${
-            location.pathname === "/informations" ? "font-bold" : ""
-          }`}
-        >
-          Informations
-        </Link>
+        <div className="text-lg font-medium md:flex md:flex-row md:gap-5 md:text-sm lg:gap-6">
+          {routes
+            .filter((route) => route.path !== "/")
+            .map((route) => (
+              <Link
+                key={route.path}
+                to={route.path}
+                className={`text-muted-foreground ${
+                  location.pathname === route.path
+                    ? "text-foreground font-medium"
+                    : ""
+                }`}
+              >
+                {route.label}
+              </Link>
+            ))}
+        </div>
       </nav>
       <div className="flex items-center gap-4 ml-auto">
-        <Button variant="ghost" onClick={handleLogout}>
-          {user.name || "User"}
+        <Button variant="ghost">{user.name || "User"}</Button>
+        <Button variant="outline" onClick={handleLogout}>
+          <LogOut size={16} />
         </Button>
       </div>
     </header>

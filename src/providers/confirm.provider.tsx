@@ -1,5 +1,5 @@
 import { ConfirmModal } from "@/components/confirm-modal";
-import { ConfirmContext } from "@/context/confirm.context";
+import { ConfirmContext } from "@/providers/context/confirm.context";
 import { useCallback, useState } from "react";
 
 export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({

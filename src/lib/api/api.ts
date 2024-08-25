@@ -2,6 +2,12 @@
 
 type Method = "GET" | "POST" | "PUT" | "DELETE";
 
+export interface ErrorMessage {
+  message: string;
+  error: string;
+  statusCode: number;
+}
+
 export async function api<T>(
   url: string,
   method: Method = "GET",

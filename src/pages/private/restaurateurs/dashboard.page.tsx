@@ -19,7 +19,7 @@ import {
   UsersIcon,
 } from "lucide-react";
 
-export const RestaurateurPage = () => {
+export const DashboardPage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1 p-4 md:p-6">
