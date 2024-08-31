@@ -5,16 +5,6 @@ import { useConfirm } from "@/hooks/useConfirm";
 import { useAtom } from "jotai";
 import { Link, useLocation } from "react-router-dom";
 import { LogOut } from "lucide-react";
-import { RoleEnum } from "@/models/enum/role-enum";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarTrigger,
-} from "./ui/menubar";
 
 export const Header = ({
   routes,
@@ -25,8 +15,6 @@ export const Header = ({
   const location = useLocation();
   const { confirm } = useConfirm();
   const { logout } = useAuth();
-
-  console.log(location.pathname);
 
   const handleLogout = async () => {
     const isConfirmed = await confirm(
