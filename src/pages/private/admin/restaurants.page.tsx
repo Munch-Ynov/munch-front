@@ -22,7 +22,6 @@ export const RestaurantsPage = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["restaurants"],
     queryFn: async () => await api.getAllRestaurants(),
-    retry: false,
   });
 
   return (

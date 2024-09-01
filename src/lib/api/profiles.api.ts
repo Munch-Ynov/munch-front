@@ -1,4 +1,4 @@
-import { api, ErrorMessage } from "@/lib/api/api";
+import { api } from "@/lib/api/api";
 import { RoleEnum } from "@/models/enum/role-enum";
 import { Profile } from "@/models/profile.model";
 
@@ -21,7 +21,7 @@ export async function getProfileById(id: string) {
 }
 
 export async function getProfilesByRole(role: RoleEnum) {
-  return api<Profile[]>(`${prefix}/role/${role}`, "GET");
+  return api<Profile[]>(`${prefix}/role`, "POST", { role });
 }
 
 export async function deleteProfile(id: string) {

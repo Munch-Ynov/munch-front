@@ -6,31 +6,27 @@ import { DataTable } from "@/components/table/data-table";
 import { RestaurateurColumns } from "@/components/table/restaurateur.columns";
 import { toast } from "sonner";
 import { Loader } from "@/components/ui/loader";
+import { useState } from "react";
+import { RestaurateurProfile } from "@/components/admin/restaurateurs.profile";
 
 export const ProfilesPage = () => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["profiles"],
-    queryFn: async () => await api.getProfilesByRole(RoleEnum.RESTAURATEUR),
-    retry: false,
-  });
-
-  error &&
-    toast.error("Une erreur s'est produite lors du chargement des données.");
+  const [roleSelected, setRoleSelected] = useState<RoleEnum>(
+    RoleEnum.RESTAURATEUR
+  );
 
   return (
-    <Tabs defaultValue={RoleEnum.RESTAURATEUR}>
+    <Tabs
+      defaultValue={RoleEnum.RESTAURATEUR}
+      onValueChange={(value: string) => setRoleSelected(value as RoleEnum)}
+    >
       <TabsList>
         <TabsTrigger value={RoleEnum.RESTAURATEUR}>Restaurateurs</TabsTrigger>
         <TabsTrigger value={RoleEnum.USER}>Clients</TabsTrigger>
         <TabsTrigger value={RoleEnum.ADMIN}>Administrateurs</TabsTrigger>
       </TabsList>
-      {isLoading && <Loader />}
-      {data && data.length === 0 && <p>Aucune donnée à afficher.</p>}
       <>
         <TabsContent value={RoleEnum.RESTAURATEUR}>
-          {data && data.length > 0 && (
-            <DataTable columns={RestaurateurColumns} data={data} />
-          )}
+          <RestaurateurProfile role={roleSelected} />
         </TabsContent>
         <TabsContent value={RoleEnum.USER}>
           {/* <DataTable columns={UserColumns} data={data} /> */}
