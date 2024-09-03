@@ -18,7 +18,6 @@ import { PlusCircle } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 
 export const RestaurantsPage = () => {
-  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant>();
   const { data, isLoading } = useQuery({
     queryKey: ["restaurants"],
     queryFn: async () => await api.getAllRestaurants(),
@@ -52,7 +51,11 @@ export const RestaurantsPage = () => {
                 <p>Aucun restaurant trouvé.</p>
               )}
               {!isLoading && data && data.length > 0 && (
-                <DataTable columns={RestaurantsColumns} data={data} />
+                <DataTable
+                  columns={RestaurantsColumns}
+                  data={data}
+                  filterName={RestaurantsColumns[0].id}
+                />
               )}
             </CardContent>
           </Card>

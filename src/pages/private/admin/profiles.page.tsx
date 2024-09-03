@@ -1,24 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import api from "@/lib/api/profiles.api";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RoleEnum } from "@/models/enum/role-enum";
-import { DataTable } from "@/components/table/data-table";
-import { RestaurateurColumns } from "@/components/table/restaurateur.columns";
-import { toast } from "sonner";
-import { Loader } from "@/components/ui/loader";
-import { useState } from "react";
-import { RestaurateurProfile } from "@/components/admin/restaurateurs.profile";
+import { RestaurateurProfile } from "@/components/admin/profiles/restaurateurs/restaurateurs.profile";
+import { UsersProfile } from "@/components/admin/profiles/users/users.profile";
+import { AdminProfile } from "@/components/admin/profiles/admin/admin.profile";
 
 export const ProfilesPage = () => {
-  const [roleSelected, setRoleSelected] = useState<RoleEnum>(
-    RoleEnum.RESTAURATEUR
-  );
-
   return (
-    <Tabs
-      defaultValue={RoleEnum.RESTAURATEUR}
-      onValueChange={(value: string) => setRoleSelected(value as RoleEnum)}
-    >
+    <Tabs defaultValue={RoleEnum.RESTAURATEUR}>
       <TabsList>
         <TabsTrigger value={RoleEnum.RESTAURATEUR}>Restaurateurs</TabsTrigger>
         <TabsTrigger value={RoleEnum.USER}>Clients</TabsTrigger>
@@ -26,13 +14,13 @@ export const ProfilesPage = () => {
       </TabsList>
       <>
         <TabsContent value={RoleEnum.RESTAURATEUR}>
-          <RestaurateurProfile role={roleSelected} />
+          <RestaurateurProfile />
         </TabsContent>
         <TabsContent value={RoleEnum.USER}>
-          {/* <DataTable columns={UserColumns} data={data} /> */}
+          <UsersProfile />
         </TabsContent>
         <TabsContent value={RoleEnum.ADMIN}>
-          {/* <DataTable columns={AdminColumns} data={data} /> */}
+          <AdminProfile />
         </TabsContent>
       </>
     </Tabs>

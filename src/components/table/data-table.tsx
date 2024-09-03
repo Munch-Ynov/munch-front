@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import {
   DropdownMenu,
@@ -33,15 +33,19 @@ import { Button } from "../ui/button";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filterName?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filterName = "",
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [selectedColumn, setSelectedColumn] = useState<string>("Nom");
+  const [selectedColumn, setSelectedColumn] = useState(
+    columns[0].id || filterName
+  );
 
   const table = useReactTable({
     data,
@@ -61,6 +65,10 @@ export function DataTable<TData, TValue>({
     setSelectedColumn(columnId);
     table.getColumn(columnId)?.setFilterValue("");
   };
+
+  useEffect(() => {
+    table.reset();
+  }, [data]);
 
   return (
     <div className="rounded-md">
