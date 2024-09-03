@@ -1,3 +1,4 @@
+import { Profile } from "@/models/profile.model";
 import { atom } from "jotai";
 
 // For atoms that need to be persisted in local storage & it's JSON serializable

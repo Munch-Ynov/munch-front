@@ -30,7 +30,7 @@ export async function getAllRestaurants(
 }
 
 
-export async function getRestaurantById(id: string) {
+export async function getRestaurantById(id: string): Promise<Restaurant | ErrorMessage> {
   return api<Restaurant>({
     url: `${prefix}/${id}`,
     method: "GET",

@@ -33,7 +33,7 @@ export const Header = ({
       <div className="container flex items-center h-16 ">
         <nav className="flex-col hidden gap-4 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link to="/">
-            <img src="./img/logo.svg" width="96" height="32" alt="Avatar" />
+            <img src="/img/logo.svg" width="96" height="32" alt="Munch" />
           </Link>
           <div className="text-lg font-medium md:flex md:flex-row md:gap-5 md:text-sm lg:gap-6">
             {routes
@@ -42,11 +42,10 @@ export const Header = ({
                 <Link
                   key={route.path}
                   to={route.path}
-                  className={`text-muted-foreground ${
-                    location.pathname === route.path
-                      ? "text-primary font-bold"
-                      : ""
-                  }`}
+                  className={`text-muted-foreground ${location.pathname === route.path
+                    ? "text-primary font-bold"
+                    : ""
+                    }`}
                 >
                   {route.label}
                 </Link>

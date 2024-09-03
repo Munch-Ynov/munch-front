@@ -5,7 +5,7 @@ import PublicPage from "@/pages/public";
 import { useAtom } from "jotai";
 import { Route, Routes } from "react-router-dom";
 import { ProtectedRoutes } from "./protected.routes";
-import { RestaurantList } from "@/pages/public/restaurant-list.page";
+import { RestaurantList } from "@/pages/public/restaurant/restaurant-list.page";
 
 export const MainRoutes = () => {
   const [user] = useAtom(userAtom);

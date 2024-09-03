@@ -4,7 +4,7 @@ import type { Restaurant } from "@/models/restaurant.model";
 
 const prefix = "reservation";
 
-export async function createReservation(reservation: Reservation) {
+export async function createReservation(reservation: Partial<Reservation>) {
   return api({
     url: prefix,
     method: "POST",
@@ -26,11 +26,11 @@ export async function getReservationById(id: string) {
   });
 }
 
-export async function getReservationByUser(userId: string) {
-  return api({
+export async function getReservationByUser(userId: string): Promise<Reservation[]> {
+  return await api({
     url: `${prefix}/user/${userId}`,
     method: "GET",
-  });
+  }) || [];
 }
 
 export async function getReservationByRestaurant(restaurantId: string) {
@@ -55,4 +55,12 @@ export async function deleteReservation(id: string) {
   });
 }
 
-export default {};
+export default {
+  createReservation,
+  getReservations,
+  getReservationById,
+  getReservationByUser,
+  getReservationByRestaurant,
+  updateReservation,
+  deleteReservation,
+}

@@ -3,7 +3,8 @@ import { FavoritesPage } from "@/pages/private/users/favorites.page";
 import { Home } from "@/pages/private/users/home.page";
 import { ReservationsPage } from "@/pages/private/users/reservations.page";
 import { NotFoundPage } from "@/pages/public/not-found.page";
-import { RestaurantList } from "@/pages/public/restaurant-list.page";
+import RestaurantDetail from "@/pages/public/restaurant/restaurant-details.page";
+import { RestaurantList } from "@/pages/public/restaurant/restaurant-list.page";
 import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -31,6 +32,7 @@ export const UserRoutes = () => {
         {userRoutes.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
+        <Route path="/restaurants/:id" element={<RestaurantDetail />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

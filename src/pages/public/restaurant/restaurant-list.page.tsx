@@ -15,6 +15,7 @@ import usePage from "@/hooks/usePage";
 import useSearch from "@/hooks/useSearch";
 import { useRef } from "react";
 import RestaurantCard from "@/components/restaurant/restaurant-card";
+import { useNavigate } from "react-router-dom";
 
 export const RestaurantList = () => {
 
@@ -38,6 +39,8 @@ export const RestaurantList = () => {
     ),
   });
   const content = data?.content || [];
+
+  const navigate = useNavigate();
 
   return (
     <main className="flex-1 items-start gap-4 md:gap-8 ">
@@ -72,7 +75,7 @@ export const RestaurantList = () => {
                   <RestaurantCard
                     key={restaurant.id}
                     restaurant={restaurant}
-                    onClick={() => console.log('clicked')}
+                    onClick={() => navigate(`/restaurants/${restaurant.id}`)}
                     className="mb-4"
                   />
                 ))
