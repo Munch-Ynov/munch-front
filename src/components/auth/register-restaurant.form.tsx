@@ -117,7 +117,7 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
                       <ToggleGroup
                         type="single"
                         variant={"outline"}
-                        className="flex justify-between"
+                        className="flex justify-around"
                       >
                         <ToggleGroupItem value="1" aria-label="Toggle €">
                           <Euro className="h-4 w-4" />

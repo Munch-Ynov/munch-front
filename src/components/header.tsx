@@ -5,28 +5,19 @@ import { useConfirm } from "@/hooks/useConfirm";
 import { useAtom } from "jotai";
 import { Link, useLocation } from "react-router-dom";
 import { LogOut } from "lucide-react";
-import { RoleEnum } from "@/models/enum/role-enum";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarTrigger,
-} from "./ui/menubar";
+import { useState } from "react";
+import { EditProfile } from "./admin/profiles/users/edit.profil";
 
 export const Header = ({
   routes,
 }: {
   routes: { path: string; element: JSX.Element; label: string }[];
 }) => {
+  const [open, setOpen] = useState(false);
   const [user] = useAtom(userAtom);
   const location = useLocation();
   const { confirm } = useConfirm();
   const { logout } = useAuth();
-
-  console.log(location.pathname);
 
   const handleLogout = async () => {
     const isConfirmed = await confirm(
@@ -63,12 +54,15 @@ export const Header = ({
           </div>
         </nav>
         <div className="flex items-center gap-4 ml-auto">
-          <Button variant="ghost">{user.name || "Administrateur"}</Button>
+          <Button variant="ghost" onClick={() => setOpen(!open)}>
+            {user.name || "Administrateur"}
+          </Button>
           <Button variant="outline" onClick={handleLogout}>
             <LogOut size={16} />
           </Button>
         </div>
       </div>
+      <EditProfile open={open} onOpenChange={() => setOpen(false)} />
     </header>
   );
 };

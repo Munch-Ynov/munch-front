@@ -122,13 +122,13 @@ export function LoginPage() {
             </form>
           </Form>
 
-          <Button variant="outline" className="w-full">
+          {/* <Button variant="outline" className="w-full">
             Login with Google
-          </Button>
+          </Button> */}
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{" "}
+            Vous n'avez pas de compte ?{" "}
             <Link to="/register" className="underline">
-              Sign up
+              Créer en un ici
             </Link>
           </div>
         </CardContent>

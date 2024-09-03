@@ -10,7 +10,6 @@ export default function PublicPage() {
       fetch(`${import.meta.env.VITE_API_URL}/health`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setResponseApi(`status : ${data.status}`);
         })
         .catch((err) => {
