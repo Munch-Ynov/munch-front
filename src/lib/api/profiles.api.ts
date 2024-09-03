@@ -1,31 +1,56 @@
 import { api } from "@/lib/api/api";
-import { RoleEnum } from "@/models/enum/role-enum";
-import { Profile } from "@/models/profile.model";
+import type { RoleEnum } from "@/models/enum/role-enum";
+import type { Profile } from "@/models/profile.model";
 
 const prefix = "profile";
 
 export async function createProfile(profile: Profile) {
-  return api<Profile>(prefix, "POST", profile);
+  return api<Profile>({
+    url: prefix,
+    method: "POST",
+    body: profile
+  });
 }
 
 export async function updateProfile(profile: Profile) {
-  return api<Profile>(prefix, "PUT", profile);
+  return api<Profile>({
+    url: prefix,
+    method: "PUT",
+    body: profile,
+  });
 }
 
 export async function getAllProfiles() {
-  return api<Profile[]>(prefix, "GET");
+  return api<Profile[]>({
+    url: prefix,
+    method: "GET",
+  });
 }
 
 export async function getProfileById(id: string) {
-  return api<Profile>(`${prefix}/${id}`, "GET");
+  return api<Profile>({
+    url: `${prefix}/${id}`,
+    method: "GET",
+  });
 }
 
 export async function getProfilesByRole(role: RoleEnum) {
-  return api<Profile[]>(`${prefix}/role`, "POST", { role });
+  return api<Profile[]>(
+    {
+      url: `${prefix}/role/${role}`,
+      method: "GET",
+      body: { role }, // a GET request should not have a body
+    }
+  );
 }
 
 export async function deleteProfile(id: string) {
-  return api<Profile>(`${prefix}/${id}`, "DELETE");
+  return api<Profile>(
+    {
+      url: `${prefix}/${id}`,
+      method: "DELETE",
+    }
+  );
 }
 
 export default {

@@ -1,6 +1,6 @@
 import { api } from "@/lib/api/api";
-import { RoleEnum } from "@/models/enum/role-enum";
-import { Profile, ProfileCreate } from "@/models/profile.model";
+import type { RoleEnum } from "@/models/enum/role-enum";
+import type { Profile, ProfileCreate } from "@/models/profile.model";
 
 const prefix = "auth";
 
@@ -13,35 +13,49 @@ export async function register(
   return api<{
     accessToken: string;
     user: Profile;
-  }>(`${prefix}/register`, "POST", {
-    email,
-    password,
-    role,
-    profile,
+  }>({
+    url: `${prefix}/register`,
+    method: "POST",
+    body: {
+      email,
+      password,
+      role,
+      profile,
+    },
   });
 }
 
 export async function login(email: string, password: string) {
   return api<{ accessToken: string; user: Profile }>(
-    `${prefix}/login`,
-    "POST",
     {
-      email,
-      password,
-    }
-  );
+      url: `${prefix}/login`,
+      method: "POST",
+      body: {
+        email,
+        password,
+      }
+    });
 }
 
 export async function refreshToken() {
-  return api<{ accessToken: string }>(`${prefix}/refresh-token`, "POST");
+  return api<{ accessToken: string }>({
+    url: `${prefix}/refresh-token`,
+    method: "POST",
+  });
 }
 
 export async function logout() {
-  return api(`${prefix}/logout`, "POST");
+  return api({
+    url: `${prefix}/logout`,
+    method: "POST"
+  });
 }
 
 export async function getUserProfile() {
-  return api<Profile>(`${prefix}/profile`, "GET");
+  return api<Profile>({
+    url: `${prefix}/profile`,
+    method: "GET",
+  });
 }
 
 export default {

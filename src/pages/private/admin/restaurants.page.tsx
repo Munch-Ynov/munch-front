@@ -1,5 +1,3 @@
-import { Restaurant } from "@/models/restaurant.model";
-import { useState } from "react";
 import api from "@/lib/api/restaurant.api";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -16,12 +14,27 @@ import { DataTable } from "@/components/table/data-table";
 import { RestaurantsColumns } from "@/components/table/restaurants.columns";
 import { PlusCircle } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
+import usePage from "@/hooks/usePage";
+import useSearch from "@/hooks/useSearch";
 
 export const RestaurantsPage = () => {
+
+  const page = usePage();
+
+  const [search, setSearch] = useSearch({
+    param: "name",
+  });
+
   const { data, isLoading } = useQuery({
     queryKey: ["restaurants"],
-    queryFn: async () => await api.getAllRestaurants(),
+    queryFn: async () => await api.getAllRestaurants(
+      {
+        page,
+        name: search,
+      }
+    ),
   });
+  const content = data?.content || [];
 
   return (
     <main className="flex-1 items-start gap-4 md:gap-8 ">
@@ -47,13 +60,13 @@ export const RestaurantsPage = () => {
             </CardHeader>
             <CardContent>
               {isLoading && <Loader />}
-              {!isLoading && data && data.length === 0 && (
+              {!isLoading && content && content.length === 0 && (
                 <p>Aucun restaurant trouvé.</p>
               )}
-              {!isLoading && data && data.length > 0 && (
+              {!isLoading && content && content.length > 0 && (
                 <DataTable
                   columns={RestaurantsColumns}
-                  data={data}
+                  data={content}
                   filterName={RestaurantsColumns[0].id}
                 />
               )}

@@ -1,4 +1,4 @@
-import { PriceCategoryEnum } from "./enum/price-category.enum";
+import type { PriceCategoryEnum } from "./enum/price-category.enum";
 
 export interface Restaurant {
   id: string;

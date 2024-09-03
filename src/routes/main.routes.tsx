@@ -2,10 +2,10 @@ import { userAtom } from "@/store/auth.store";
 import { LoginPage } from "@/pages/auth/login.page";
 import { RegisterPage } from "@/pages/auth/register.page";
 import PublicPage from "@/pages/public";
-import { NotFoundPage } from "@/pages/public/not-found.page";
 import { useAtom } from "jotai";
 import { Route, Routes } from "react-router-dom";
 import { ProtectedRoutes } from "./protected.routes";
+import { RestaurantList } from "@/pages/public/restaurant-list.page";
 
 export const MainRoutes = () => {
   const [user] = useAtom(userAtom);
@@ -14,6 +14,7 @@ export const MainRoutes = () => {
       <Route path="/*" element={user ? <ProtectedRoutes /> : <PublicPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+
     </Routes>
   );
 };
