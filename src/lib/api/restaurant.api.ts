@@ -9,7 +9,7 @@ export async function createRestaurant(restaurant: Restaurant) {
 }
 
 export async function updateRestaurant(restaurant: Restaurant) {
-  return api<Restaurant>({ url: prefix, method: "PUT", body: restaurant });
+  return api<Restaurant>({ url: prefix, method: "PATCH", body: restaurant });
 }
 
 export async function getAllRestaurants(
@@ -18,9 +18,9 @@ export async function getAllRestaurants(
     limit?: number;
     name?: string;
   } = {
-      page: 0,
-      limit: 10,
-    }
+    page: 0,
+    limit: 10,
+  }
 ) {
   return api<Pagination<Restaurant>>({
     url: prefix,
@@ -29,8 +29,7 @@ export async function getAllRestaurants(
   });
 }
 
-
-export async function getRestaurantById(id: string): Promise<Restaurant | ErrorMessage> {
+export async function getRestaurantById(id: string) {
   return api<Restaurant>({
     url: `${prefix}/${id}`,
     method: "GET",
@@ -38,21 +37,17 @@ export async function getRestaurantById(id: string): Promise<Restaurant | ErrorM
 }
 
 export async function getRestaurantByOwner(restaurateurId: string) {
-  return api<Restaurant | ErrorMessage>(
-    {
-      url: `${prefix}/owner/${restaurateurId}`,
-      method: "GET",
-    }
-  );
+  return api<Restaurant | ErrorMessage>({
+    url: `${prefix}/owner/${restaurateurId}`,
+    method: "GET",
+  });
 }
 
 export async function deleteRestaurant(id: string) {
-  return api<Restaurant>(
-    {
-      url: `${prefix}/${id}`,
-      method: "DELETE",
-    }
-  );
+  return api<Restaurant>({
+    url: `${prefix}/${id}`,
+    method: "DELETE",
+  });
 }
 
 export default {

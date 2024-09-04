@@ -11,14 +11,13 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 
 import { DataTable } from "@/components/table/data-table";
-import { RestaurantsColumns } from "@/components/table/restaurants.columns";
+import { RestaurantsColumns } from "@/components/restaurant/restaurants.columns";
 import { PlusCircle } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import usePage from "@/hooks/usePage";
 import useSearch from "@/hooks/useSearch";
 
 export const RestaurantsPage = () => {
-
   const page = usePage();
 
   const [search, setSearch] = useSearch({
@@ -27,12 +26,11 @@ export const RestaurantsPage = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["restaurants"],
-    queryFn: async () => await api.getAllRestaurants(
-      {
+    queryFn: async () =>
+      await api.getAllRestaurants({
         page,
         name: search,
-      }
-    ),
+      }),
   });
   const content = data?.content || [];
 

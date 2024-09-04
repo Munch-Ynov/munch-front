@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,11 +11,32 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import { userAtom } from "@/store/auth.store";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { RoleEnum } from "@/models/enum/role-enum";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "@/main";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import ChangePassword from "@/components/auth/change-password";
+import api from "@/lib/api/images.api";
+import { updateProfile, updateProfileToken } from "@/lib/api/profiles.api";
+import { json } from "stream/consumers";
+import { toast } from "sonner";
+
+const profileSchema = z.object({
+  avatar: z.string().optional(),
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().optional(),
+});
 
 interface EditProfileProps {
   open: boolean;
@@ -20,41 +44,50 @@ interface EditProfileProps {
 }
 
 export const EditProfile = ({ open, onOpenChange }: EditProfileProps) => {
-  const [user] = useAtom(userAtom);
-  const [profile, setProfile] = useState(user);
+  const [user, setUser] = useAtom(userAtom);
+  const [file, setFile] = useState<File | null>(null);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log("Updated profile:", profile);
-    // Here you would typically send the updated profile to your backend
-  };
+  const form = useForm<z.infer<typeof profileSchema>>({
+    defaultValues: user,
+    resolver: zodResolver(profileSchema),
+  });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setProfile((prev: any) => ({ ...prev, [name]: value }));
-  };
-
-  const handleRoleChange = (value: string) => {
-    setProfile((prev: any) => ({ ...prev, role: value }));
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const onSubmit = async (values: z.infer<typeof profileSchema>) => {
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfile((prev: any) => ({
-          ...prev,
-          [event.target.name]: reader.result as string,
-        }));
-      };
-      reader.readAsDataURL(file);
+      await uploadAvatar()
+        .then((res) => {
+          console.log("Avatar uploaded", res.public_id);
+          values.avatar = res.public_id;
+        })
+        .catch((err) => {
+          toast.error("Erreur lors de l'enregistrement de l'avatar");
+        });
     }
+    await updateProfileToken({ ...values })
+      .then((res) => {
+        setUser(res);
+        toast.success("Profil mis à jour");
+      })
+      .catch((err) => {
+        toast.error("Erreur lors de la mise à jour du profil");
+      });
+  };
+
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFile(event.target.files?.[0] || null);
+  };
+
+  const uploadAvatar = async () => {
+    const formData = new FormData();
+    formData.append("file", file as Blob);
+    formData.append("upload_preset", "avatar");
+
+    return api.uploadAvatar(formData);
   };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-[400px] sm:w-[540px]">
+      <SheetContent className="w-[400px] sm:w-[540px] flex flex-col gap-4 overflow-y-scroll">
         <SheetHeader>
           <SheetTitle>Modifier vos informations</SheetTitle>
           <SheetDescription>
@@ -62,73 +95,86 @@ export const EditProfile = ({ open, onOpenChange }: EditProfileProps) => {
             sauvegarder avant de quitter.
           </SheetDescription>
         </SheetHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          {user.role != RoleEnum.ADMIN && (
-            <>
-              <div className="space-y-2">
-                <Label htmlFor="avatar">Avatar</Label>
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={profile.avatar}
-                    alt="avatar"
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <Input
-                    id="avatar"
-                    name="avatar"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 mt-4"
+          >
+            {user.role != RoleEnum.ADMIN && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="avatar">Avatar</Label>
+                  <div className="flex items-center space-x-4">
+                    <AdvancedImage
+                      cldImg={cld.image(user.avatar)}
+                      alt="avatar"
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <Input
+                      id="avatar"
+                      name="avatar"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAvatarChange}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <FormField
+                    name="name"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nom</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="name">Nom</Label>
-                <Input
-                  id="name"
-                  name="name"
-                  value={profile.name}
-                  onChange={handleChange}
-                />
-              </div>
-            </>
-          )}
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={profile.email}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="role">Mot de passe</Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              value={profile.password}
-              onChange={handleChange}
-            />
-          </div>
-          {user.role != RoleEnum.ADMIN && (
+              </>
+            )}
             <div className="space-y-2">
-              <Label htmlFor="phone">Téléphone</Label>
-              <Input
-                id="phone"
-                name="phone"
-                type="tel"
-                value={profile.phone}
-                onChange={handleChange}
+              <FormField
+                name="email"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-          )}
-          <Button type="submit" className="w-full">
-            Enregistrer les modifications
-          </Button>
-        </form>
+            {user.role != RoleEnum.ADMIN && (
+              <div className="space-y-2">
+                <FormField
+                  name="phone"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Téléphone</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+            <Button type="submit" className="w-full">
+              Enregistrer les modifications
+            </Button>
+          </form>
+        </Form>
+
+        <ChangePassword />
       </SheetContent>
     </Sheet>
   );

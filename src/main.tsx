@@ -7,6 +7,13 @@ import { Toaster } from "./components/ui/sonner.tsx";
 import { ConfirmProvider } from "./providers/confirm.provider.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "./components/ui/tooltip.tsx";
+import { Cloudinary } from "@cloudinary/url-gen";
+
+export const cld = new Cloudinary({
+  cloud: {
+    cloudName: import.meta.env.VITE_CLOUDINARY_NAME,
+  },
+});
 
 const queryClient = new QueryClient();
 

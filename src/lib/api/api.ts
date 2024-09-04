@@ -1,6 +1,6 @@
 // define general api call function here
 
-type Method = "GET" | "POST" | "PUT" | "DELETE";
+type Method = "GET" | "POST" | "PATCH" | "DELETE";
 
 export interface ErrorMessage {
   message: string;
@@ -9,12 +9,15 @@ export interface ErrorMessage {
 }
 
 export async function api<T>({
-  url, method = "GET", body, params,
+  url,
+  method = "GET",
+  body,
+  params,
 }: {
-  url: string,
-  method: Method,
-  body?: unknown,
-  params?: { [key: string]: string | number }
+  url: string;
+  method: Method;
+  body?: unknown;
+  params?: { [key: string]: string | number };
 }): Promise<T | null> {
   let uri = url;
   if (params) {

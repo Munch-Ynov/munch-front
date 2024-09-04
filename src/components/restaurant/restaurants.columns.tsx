@@ -3,7 +3,7 @@ import { Restaurant } from "@/models/restaurant.model";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, Euro } from "lucide-react";
 import { Button } from "../ui/button";
-import { SortBtn } from "./sort.btn";
+import { SortBtn } from "../table/sort.btn";
 
 export const RestaurantsColumns: ColumnDef<Restaurant>[] = [
   {
