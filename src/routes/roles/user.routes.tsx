@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import DashboardPage from "@/pages/private/users/dashboard.page";
 import { FavoritesPage } from "@/pages/private/users/favorites.page";
 import { Home } from "@/pages/private/users/home.page";
 import { ReservationsPage } from "@/pages/private/users/reservations.page";
@@ -9,7 +10,7 @@ import { useAtom } from "jotai";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 const userRoutes = [
-  { path: "/", element: <Home />, label: "Accueil" },
+  { path: "/", element: <DashboardPage />, label: "Accueil" },
   {
     path: "/restaurants",
     element: <RestaurantList />,

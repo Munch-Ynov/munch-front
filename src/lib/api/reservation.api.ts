@@ -43,7 +43,7 @@ export async function getReservationByRestaurant(restaurantId: string) {
 export async function updateReservation(reservation: Partial<Restaurant>) {
   return api({
     url: prefix,
-    method: "PUT",
+    method: "PATCH",
     body: reservation,
   });
 }

@@ -7,28 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarDays, Star, Utensils } from "lucide-react";
+import { CalendarDays, Star } from "lucide-react";
 import { CardKPI } from "@/components/kpi/card.kpi";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/auth.store";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "@/main";
+import { Resize } from "@cloudinary/url-gen/actions";
+import { fill } from "@cloudinary/url-gen/actions/resize";
 
 export default function DashboardPage() {
   const [user] = useAtom(userAtom);
@@ -69,13 +56,9 @@ export default function DashboardPage() {
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-4">
-          <img
-            src={profile.avatar}
-            alt="avatar"
-            className="rounded-full h-16 opacity-0 transition-opacity duration-300"
-            onLoad={(e) => {
-              e.currentTarget.classList.remove("opacity-0");
-            }}
+          <AdvancedImage
+            cldImg={cld.image(profile.avatar)}
+            className="rounded-full h-16 w-16 object-cover"
           />
           <div>
             <h1 className="text-2xl font-bold">{profile.name}</h1>

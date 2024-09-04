@@ -3,6 +3,8 @@ import { SortBtn } from "@/components/table/sort.btn";
 import { Profile } from "@/models/profile.model";
 import { ColumnDef } from "@tanstack/react-table";
 import api from "@/lib/api/profiles.api";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "@/main";
 
 export const UsersColumns: ColumnDef<Profile>[] = [
   {
@@ -11,14 +13,11 @@ export const UsersColumns: ColumnDef<Profile>[] = [
     header: "Avatar",
     cell: ({ cell }) => {
       return (
-        <img
+        <AdvancedImage
+          cldImg={cld.image(cell.getValue() as string)}
           src={cell.getValue() as string}
           alt="avatar"
-          className="rounded-md mx-auto opacity-0 transition-opacity duration-300"
-          width={60}
-          onLoad={(e) => {
-            e.currentTarget.classList.remove("opacity-0");
-          }}
+          className="rounded-md w-16 h-16 object-cover mx-auto transition-opacity duration-300"
         />
       );
     },
