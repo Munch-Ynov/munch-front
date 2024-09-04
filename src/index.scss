@@ -25,6 +25,7 @@
     --ring: 174 38.5% 42.7%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 174 10% 10%;
     --foreground: 174 0% 100%;
@@ -53,6 +54,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
@@ -65,4 +67,9 @@
   .active {
     @apply font-bold text-foreground;
   }
+}
+
+
+html {
+  scroll-behavior: smooth;
 }
