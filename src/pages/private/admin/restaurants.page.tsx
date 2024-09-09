@@ -18,15 +18,14 @@ import useParam from "@/hooks/useParam/useParam";
 
 
 export const RestaurantsPage = () => {
-  const [page, setPage] = useParam<number>('page');
+  const [page, setPage] = useParam<number>('page', { default: 0 });
 
 
   const { data, isLoading } = useQuery({
-    queryKey: ["restaurants"],
+    queryKey: ["restaurants", page],
     queryFn: async () =>
       await api.getAllRestaurants({
         page: page,
-        name: search,
       }),
   });
   const content = data?.content || [];
@@ -69,6 +68,23 @@ export const RestaurantsPage = () => {
           </Card>
         </TabsContent>
       </Tabs>
+      <div className="flex justify-end">
+        <Button
+          onClick={() => setPage(page - 1)}
+          disabled={!data || page <= 0}
+          className="h-10 px-3 mr-2"
+        >
+          Précédent
+        </Button>
+        <Button
+          onClick={() => setPage(page + 1)}
+          disabled={!data || data.totalPages <= page + 1}
+          className="h-10 px-3"
+        >
+          Suivant
+        </Button>
+      </div>
+
     </main>
   );
 };

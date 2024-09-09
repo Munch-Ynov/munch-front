@@ -49,105 +49,99 @@ function ReservationForm({
 
 
   return (
-    <div className="container">
-      <div className="max-w-md mx-auto space-y-6">
-        <h2 className="text-3xl font-bold text-center">
-          Réserver une table
-        </h2>
-        <FormProvider {...form} >
 
-          <div className="grid grid-cols-2 gap-4">
+    <FormProvider {...form} >
 
-            <CalendarPopUp
-              control={form.control}
-              name="date"
-              mode="single"
-              id="date"
-              label="Selectionner une date"
-              fromDate={new Date()}
-              locale={fr}
-              toDate={new Date(new Date(new Date().setMonth(new Date().getMonth() + 3)).setDate(0))}
-              modifiers={{
-                we: (date) => date.getDay() === 0 || date.getDay() === 6,
-                closed: isClosed
-              }}
-              modifiersClassNames={{
-                // we: "bg-primary/10 text-primary",
-                closed: "bg-red-500/10 text-red-500",
-              }}
-              disabled={isClosed}
-            >
-            </CalendarPopUp>
+      <div className="grid grid-cols-2 gap-4">
+        <CalendarPopUp
+          control={form.control}
+          name="date"
+          mode="single"
+          id="date"
+          label="Selectionner une date"
+          fromDate={new Date()}
+          locale={fr}
+          toDate={new Date(new Date(new Date().setMonth(new Date().getMonth() + 3)).setDate(0))}
+          modifiers={{
+            we: (date) => date.getDay() === 0 || date.getDay() === 6,
+            closed: isClosed
+          }}
+          modifiersClassNames={{
+            // we: "bg-primary/10 text-primary",
+            closed: "bg-red-500/10 text-red-500",
+          }}
+          disabled={isClosed}
+        >
+        </CalendarPopUp>
 
-            <FormField
-              control={form.control}
-              name="time"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel>Heure</FormLabel>
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                    }}
-                    value={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Séléctionner l'heure" />
-                      <ClockIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.keys(timespots).map((time) => (
-                        <SelectItem
-                          key={time}
-                          value={time}
-                          disabled={!timespots[time]}>
-                          {time}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div>
-            <FormField
-              control={form.control}
-              name="nb_people"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nombre de personnes</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(value)}
-                    value={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Séléctionner le nombre de personnes" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1 personne</SelectItem>
-                      <SelectItem value="2">2 personnes</SelectItem>
-                      <SelectItem value="3">3 personnes</SelectItem>
-                      <SelectItem value="4">4 personnes</SelectItem>
-                      <SelectItem value="5">5 personnes</SelectItem>
-                      <SelectItem value="6">6 personnes</SelectItem>
-                      <SelectItem value="7">7 personnes</SelectItem>
-                      <SelectItem value="8+">Plus de 8 personnes</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-          </div>
-          <Button onClick={() => confirm({ content: "Êtes-vous sûr de vouloir réserver ?" }).then((confirmed) => {
-            confirmed && form.handleSubmit(onSubmit)();
-          })} type="button" className="w-full">
-            Réserver
-          </Button>
-        </FormProvider>
+        <FormField
+          control={form.control}
+          name="time"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Heure</FormLabel>
+              <Select
+                onValueChange={(value) => {
+                  field.onChange(value);
+                }}
+                value={field.value}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Séléctionner l'heure" />
+                  <ClockIcon className="ml-auto h-4 w-4 opacity-50" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(timespots).map((time) => (
+                    <SelectItem
+                      key={time}
+                      value={time}
+                      disabled={!timespots[time]}>
+                      {time}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
       </div>
-    </div >
+
+      <div>
+        <FormField
+          control={form.control}
+          name="nb_people"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nombre de personnes</FormLabel>
+              <Select
+                onValueChange={(value) => field.onChange(value)}
+                value={field.value}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Séléctionner le nombre de personnes" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1 personne</SelectItem>
+                  <SelectItem value="2">2 personnes</SelectItem>
+                  <SelectItem value="3">3 personnes</SelectItem>
+                  <SelectItem value="4">4 personnes</SelectItem>
+                  <SelectItem value="5">5 personnes</SelectItem>
+                  <SelectItem value="6">6 personnes</SelectItem>
+                  <SelectItem value="7">7 personnes</SelectItem>
+                  <SelectItem value="8+">Plus de 8 personnes</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
+      </div>
+      <Button onClick={() => confirm({ content: "Êtes-vous sûr de vouloir réserver ?" }).then((confirmed) => {
+        confirmed && form.handleSubmit(onSubmit)();
+      })} type="button" className="w-full">
+        Réserver
+      </Button>
+    </FormProvider>
+
   )
 }
 

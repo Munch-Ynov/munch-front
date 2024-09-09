@@ -105,14 +105,18 @@ const RestaurantDetail = () => {
       </section >
       <section className="py-12 md:py-24 bg-muted">
         <div className="container">
-          <h2 className="text-3xl font-bold text-center">Réserver une table</h2>
-          <ReservationForm
-            restaurant={restaurant}
-            isClosed={isClosed}
-            timespots={timespots}
-            onSubmit={onSubmit}
-          />
-        </div>
+          <div className="max-w-md mx-auto space-y-6">
+            <h2 className="text-3xl font-bold text-center">
+              Réserver une table
+            </h2>
+            <ReservationForm
+              restaurant={restaurant}
+              isClosed={isClosed}
+              timespots={timespots}
+              onSubmit={onSubmit}
+            />
+          </div>
+        </div >
       </section>
     </div >
   );
