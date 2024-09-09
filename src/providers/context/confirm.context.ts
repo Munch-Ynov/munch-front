@@ -1,7 +1,13 @@
 import { createContext } from "react";
 
 interface ConfirmContextType {
-  confirm: (message: string) => Promise<boolean>;
+  confirm: ({
+    title,
+    content,
+  }: {
+    title?: string;
+    content?: string;
+  }) => Promise<boolean>;
 }
 
 export const ConfirmContext = createContext<ConfirmContextType | undefined>(

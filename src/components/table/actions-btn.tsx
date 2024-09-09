@@ -35,14 +35,14 @@ export const ActionButtons = ({
     if (!onDelete) {
       console.warn("onDelete is not defined");
     }
-  }, [onView, onEdit, onDelete]);
+  }, [onView, onEdit, onDelete, showViewButton]);
 
   const handleDelete = async (id: string) => {
-    const isConfirmed = await confirm(
-      "Êtes-vous sûr de vouloir supprimer cet élément ?"
-    );
+    const isConfirmed = await confirm({
+      content: "Êtes-vous sûr de vouloir supprimer cet élément ?"
+    });
     if (isConfirmed) {
-      onDelete!(id);
+      onDelete?.(id);
     }
   };
 

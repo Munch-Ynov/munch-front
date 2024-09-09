@@ -1,4 +1,5 @@
 import { api } from "@/lib/api/api";
+import type { Pagination } from "@/models/pagination.model";
 import type { Reservation } from "@/models/reservation.model";
 import type { Restaurant } from "@/models/restaurant.model";
 
@@ -12,31 +13,33 @@ export async function createReservation(reservation: Partial<Reservation>) {
   });
 }
 
-export async function getReservations() {
-  return api({
-    url: prefix,
-    method: "GET",
-  });
-}
 
 export async function getReservationById(id: string) {
-  return api({
+  return api<Reservation>({
     url: `${prefix}/${id}`,
     method: "GET",
   });
 }
 
-export async function getReservationByUser(userId: string): Promise<Reservation[]> {
-  return await api({
+export async function getReservationByUser(
+  userId: string,
+  pagination: { page?: number; limit?: number } = { page: 0, limit: 10 }
+) {
+  return api<Pagination<Reservation>>({
     url: `${prefix}/user/${userId}`,
     method: "GET",
-  }) || [];
+    params: pagination,
+  });
 }
 
-export async function getReservationByRestaurant(restaurantId: string) {
-  return api({
+export async function getReservationByRestaurant(
+  restaurantId: string,
+  pagination: { page?: number; limit?: number } = { page: 0, limit: 10 }
+) {
+  return api<Pagination<Reservation>>({
     url: `${prefix}/restaurant/${restaurantId}`,
     method: "GET",
+    params: pagination,
   });
 }
 
@@ -57,7 +60,6 @@ export async function deleteReservation(id: string) {
 
 export default {
   createReservation,
-  getReservations,
   getReservationById,
   getReservationByUser,
   getReservationByRestaurant,

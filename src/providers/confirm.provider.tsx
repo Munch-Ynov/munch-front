@@ -6,12 +6,19 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<{
+    title?: string;
+    content?: string;
+  }>({});
+
   const [resolve, setResolve] = useState<(value: boolean) => void>(
-    () => () => {}
+    () => () => { }
   );
 
-  const confirm = useCallback((message: string) => {
+  const confirm = useCallback((message: {
+    title?: string;
+    content?: string;
+  }) => {
     setMessage(message);
     setIsOpen(true);
     return new Promise<boolean>((res) => {
@@ -28,7 +35,8 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({
     <ConfirmContext.Provider value={{ confirm }}>
       {children}
       <ConfirmModal
-        message={message}
+        title={message.title}
+        content={message.content}
         isOpen={isOpen}
         onConfirm={() => handleConfirm(true)}
         onCancel={() => handleConfirm(false)}

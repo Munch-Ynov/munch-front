@@ -10,14 +10,16 @@ import {
 } from "@/components/ui/alert-dialog";
 
 interface ConfirmModalProps {
-  message: string;
+  title?: string;
+  content?: string;
   isOpen: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
 export const ConfirmModal = ({
-  message,
+  title = "Etes-vous sûr ?",
+  content,
   isOpen,
   onConfirm,
   onCancel,
@@ -26,8 +28,8 @@ export const ConfirmModal = ({
     <AlertDialog open={isOpen} onOpenChange={onCancel}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
-          <AlertDialogDescription>{message}</AlertDialogDescription>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{content}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onCancel}>Annuler</AlertDialogCancel>

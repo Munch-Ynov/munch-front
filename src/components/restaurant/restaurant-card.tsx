@@ -15,7 +15,8 @@ const RestaurantCard = ({
   return (
     <div
       onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}
-      onClick={onClick} className={cn(onClick ? "cursor-pointer hover:bg-gray-100" : '', 'flex row-auto', 'h-[200px] rounded-sm', className)}>
+      onClick={onClick}
+      className={cn(onClick ? "cursor-pointer hover:bg-gray-100" : '', 'flex row-auto', 'h-[200px] rounded-sm', className)}>
       {/* image */}
       <div className="flex-2">
         <img src={

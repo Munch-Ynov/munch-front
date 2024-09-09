@@ -15,12 +15,12 @@ export async function updateRestaurant(restaurant: Restaurant) {
 export async function getAllRestaurants(
   params: {
     page?: number;
-    limit?: number;
+    size?: number;
     name?: string;
   } = {
-    page: 0,
-    limit: 10,
-  }
+      page: 0,
+      size: 10,
+    }
 ) {
   return api<Pagination<Restaurant>>({
     url: prefix,
@@ -30,7 +30,7 @@ export async function getAllRestaurants(
 }
 
 export async function getRestaurantById(id: string) {
-  return api<Restaurant>({
+  return api<Restaurant | ErrorMessage>({
     url: `${prefix}/${id}`,
     method: "GET",
   });

@@ -20,9 +20,10 @@ export const Header = ({
   const { logout } = useAuth();
 
   const handleLogout = async () => {
-    const isConfirmed = await confirm(
-      "Vous êtes sur le point de vous déconnecter. Êtes-vous sûr de vouloir continuer ?"
-    );
+    const isConfirmed = await confirm({
+      content:
+        "Vous êtes sur le point de vous déconnecter. Êtes-vous sûr de vouloir continuer ?",
+    });
     if (isConfirmed) {
       logout();
     }

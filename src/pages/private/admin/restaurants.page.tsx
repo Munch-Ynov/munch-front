@@ -14,21 +14,18 @@ import { DataTable } from "@/components/table/data-table";
 import { RestaurantsColumns } from "@/components/restaurant/restaurants.columns";
 import { PlusCircle } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
-import usePage from "@/hooks/usePage";
-import useSearch from "@/hooks/useSearch";
+import useParam from "@/hooks/useParam/useParam";
+
 
 export const RestaurantsPage = () => {
-  const page = usePage();
+  const [page, setPage] = useParam<number>('page');
 
-  const [search, setSearch] = useSearch({
-    param: "name",
-  });
 
   const { data, isLoading } = useQuery({
     queryKey: ["restaurants"],
     queryFn: async () =>
       await api.getAllRestaurants({
-        page,
+        page: page,
         name: search,
       }),
   });
