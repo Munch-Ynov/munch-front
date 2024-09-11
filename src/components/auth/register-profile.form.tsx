@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/hooks/useAuth";
+import { Badge } from "../ui/badge";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -99,7 +100,17 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle className="text-2xl">S'inscrire</CardTitle>
+        <CardTitle>
+          <div className="flex flex-col gap-2">
+            <div className="w-full flex justify-between">
+              <span>👋</span>
+              {roleSelected === RoleEnum.RESTAURATEUR && (
+                <Badge variant="outline">Restaurateur</Badge>
+              )}
+            </div>
+            <span className="text-3xl text-primary font-bold">S'inscrire</span>
+          </div>
+        </CardTitle>
         <CardDescription>
           Créer un compte pour accéder à votre espace personnel{" "}
           {roleSelected === RoleEnum.USER

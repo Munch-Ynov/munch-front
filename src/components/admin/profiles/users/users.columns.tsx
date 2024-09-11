@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import api from "@/lib/api/profiles.api";
 import { AdvancedImage } from "@cloudinary/react";
 import { cld } from "@/main";
+import { UserCircle2Icon } from "lucide-react";
 
 export const UsersColumns: ColumnDef<Profile>[] = [
   {
@@ -12,13 +13,15 @@ export const UsersColumns: ColumnDef<Profile>[] = [
     accessorKey: "avatar",
     header: "Avatar",
     cell: ({ cell }) => {
-      return (
+      return cell.getValue() ? (
         <AdvancedImage
           cldImg={cld.image(cell.getValue() as string)}
           src={cell.getValue() as string}
           alt="avatar"
           className="rounded-md w-16 h-16 object-cover mx-auto transition-opacity duration-300"
         />
+      ) : (
+        <UserCircle2Icon className="w-16 h-16 mx-auto" />
       );
     },
   },

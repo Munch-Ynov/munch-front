@@ -11,8 +11,14 @@ export async function createRestaurant(restaurant: Restaurant) {
   return api<Restaurant>({ url: prefix, method: "POST", body: restaurant });
 }
 
-export async function updateRestaurant(restaurant: Restaurant) {
-  return api<Restaurant>({ url: prefix, method: "PATCH", body: restaurant });
+export async function updateRestaurant(
+  restaurant: Omit<Restaurant, "createdAt" | "updatedAt">
+) {
+  return api<Restaurant>({
+    url: `${prefix}/${restaurant.id}`,
+    method: "PATCH",
+    body: restaurant,
+  });
 }
 
 export async function getAllRestaurants(

@@ -12,12 +12,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  CalendarIcon,
-  ClipboardListIcon,
-  InfoIcon,
-  UsersIcon,
-} from "lucide-react";
 
 export const DashboardPage = () => {
   return (

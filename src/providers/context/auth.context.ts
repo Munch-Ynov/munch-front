@@ -10,5 +10,5 @@ export const AuthContext = createContext({
     profile: ProfileCreate
   ) => {},
   login: async (email: string, password: string) => {},
-  logout: () => {},
+  logout: async () => {},
 });

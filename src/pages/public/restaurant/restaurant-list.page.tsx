@@ -1,12 +1,7 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import api from "@/lib/api/restaurant.api";
 import { useQuery } from "@tanstack/react-query";
-
 
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
@@ -14,19 +9,19 @@ import RestaurantCard from "@/components/restaurant/restaurant-card";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import useParam from "@/hooks/useParam/useParam";
+import { Filter, Search } from "lucide-react";
+import { useState } from "react";
 
 export const RestaurantList = () => {
-
-
-  const [page, setPage] = useParam<number>('page', { default: 0 });
+  const [page, setPage] = useParam<number>("page", { default: 0 });
+  const [searchTerm, setSearchTerm] = useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["restaurants", page],
-    queryFn: async () => await api.getAllRestaurants(
-      {
+    queryFn: async () =>
+      await api.getAllRestaurants({
         page: page,
-      }
-    ),
+      }),
   });
 
   const content = data?.content || [];
@@ -45,37 +40,60 @@ export const RestaurantList = () => {
                 </div>
               </CardTitle>
             </CardHeader>
-            {/* search input */}
-            <div className="flex justify-between">
-              <Input
-                type="search"
-                placeholder="Rechercher un restaurant"
-                className="w-[200px] h-10 px-3
-                placeholder-gray-400 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-primary-500"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-8 mt-4">
-              {isLoading && <Loader />}
-              {!isLoading && content && content.length === 0 && (
-                <p>Aucun restaurant trouvé.</p>
-              )}
-              {!isLoading && content && content.length > 0 &&
-                content.map((restaurant) => (
-                  <RestaurantCard
-                    key={restaurant.id}
-                    restaurant={restaurant}
-                    onClick={() => navigate(`/restaurants/${restaurant.id}`)}
-                    className="mb-4"
-                  />
-                ))
-              }
-            </div>
+            <CardContent>
+              {/* search input */}
+              <div className="mt-4 relative">
+                <Input
+                  type="text"
+                  placeholder="Rechercher un restaurant, style culinaire..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 pr-10 py-2 w-full"
+                />
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={20}
+                />
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                >
+                  <Filter size={18} />
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mt-4">
+                {isLoading && <Loader />}
+                {!isLoading && content && content.length === 0 && (
+                  <p>Aucun restaurant trouvé.</p>
+                )}
+                {!isLoading &&
+                  content &&
+                  content.length > 0 &&
+                  content
+                    .filter((restaurant) =>
+                      restaurant.name
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase())
+                    )
+                    .map((restaurant) => (
+                      <RestaurantCard
+                        key={restaurant.id}
+                        restaurant={restaurant}
+                        onClick={() =>
+                          navigate(`/restaurants/${restaurant.id}`)
+                        }
+                        className="mb-4"
+                      />
+                    ))}
+              </div>
+            </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
 
       {/* page */}
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-3">
         <Button
           onClick={() => setPage(page - 1)}
           disabled={!data || page <= 0}
@@ -91,9 +109,6 @@ export const RestaurantList = () => {
           Suivant
         </Button>
       </div>
-
     </main>
-
   );
-}
-
+};

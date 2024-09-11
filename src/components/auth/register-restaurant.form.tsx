@@ -15,22 +15,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { string, z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Textarea } from "../ui/textarea";
+import MultipleSelector from "@/components/ui/multiselect";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import MultipleSelector from "../ui/multiselect";
-import { RestaurantWithFeatures } from "@/models/restaurant.model";
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useConfirm } from "@/hooks/useConfirm";
 import { PriceCategoryEnum } from "@/models/enum/price-category.enum";
-import { useEffect, useState } from "react";
 import { RestaurantFeatureWithCategory } from "@/models/restaurant-feature.model";
+import { RestaurantWithFeatures } from "@/models/restaurant.model";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import restaurantApi from "@/lib/api/restaurant.api";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string(),
@@ -40,16 +43,16 @@ const formSchema = z.object({
     .string()
     .min(10, { message: "Phone number must be at least 10 characters long" }),
   address: z.string(),
-  siretNumber: z
+  n_siret: z
     .string()
     .length(14, { message: "Siret number must be 14 characters long" }),
-  postalCode: z
+  code_postal: z
     .string()
     .length(5, { message: "Postal code must be 5 characters long" }),
   city: z.string(),
   country: z.string(),
-  priceRange: z.string(),
-  features: z.array(string()),
+  price: z.string(),
+  features: z.array(z.string()),
 });
 
 export function RegisterRestaurantForm({
@@ -59,6 +62,7 @@ export function RegisterRestaurantForm({
   restaurant: RestaurantWithFeatures;
   features: RestaurantFeatureWithCategory[];
 }) {
+  const { confirm } = useConfirm();
   const [featuresValue, setFeaturesValue] = useState(
     restaurant?.features.map((f) => ({
       label: features.find((feature) => feature.id === f.id)?.name ?? "",
@@ -78,24 +82,49 @@ export function RegisterRestaurantForm({
   }, [featuresValue]);
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
     defaultValues: {
-      name: restaurant?.name,
-      description: restaurant?.description,
-      email: restaurant?.email,
-      phone: restaurant?.phone,
-      address: restaurant?.address,
-      siretNumber: restaurant?.n_siret,
-      postalCode: restaurant?.code_postal,
-      city: restaurant?.city,
-      priceRange: restaurant?.price,
+      name: restaurant?.name ?? "",
+      description: restaurant?.description ?? "",
+      email: restaurant?.email ?? "",
+      phone: restaurant?.phone ?? "",
+      address: restaurant?.address ?? "",
+      n_siret: restaurant?.n_siret ?? "",
+      code_postal: restaurant?.code_postal ?? "",
+      city: restaurant?.city ?? "",
+      price: restaurant?.price ?? "",
       features: restaurant?.features.map((f) => f.id) ?? [],
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    confirm("Êtes-vous sûr de vouloir enregistrer ces informations ?");
-    console.log("Form values:", values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const isConfirm = await confirm({
+      content: "Êtes-vous sûr de vouloir enregistrer ces informations ?",
+    });
+    if (isConfirm) {
+      restaurantApi
+        .updateRestaurant({
+          ...values,
+          id: restaurant.id,
+          price: values.price as PriceCategoryEnum,
+          name: values.name,
+          description: values.description,
+          email: values.email,
+          phone: values.phone,
+          address: values.address,
+          n_siret: values.n_siret,
+          code_postal: values.code_postal,
+          city: values.city,
+        })
+        .then(() => {
+          toast.success("Informations enregistrées avec succès");
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error(
+            "Une erreur s'est produite lors de l'enregistrement des informations"
+          );
+        });
+    }
   };
 
   return (
@@ -112,7 +141,7 @@ export function RegisterRestaurantForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="grid grid-cols-6 gap-4"
           >
-            <div className="col-span-2">
+            <div className="col-span-6 md:col-span-2">
               <FormField
                 control={form.control}
                 name="email"
@@ -127,7 +156,7 @@ export function RegisterRestaurantForm({
                 )}
               />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-6 md:col-span-2">
               <FormField
                 control={form.control}
                 name="name"
@@ -142,7 +171,7 @@ export function RegisterRestaurantForm({
                 )}
               />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-6 md:col-span-2">
               <FormField
                 control={form.control}
                 name="phone"
@@ -157,10 +186,10 @@ export function RegisterRestaurantForm({
                 )}
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-6 md:col-span-1">
               <FormField
                 control={form.control}
-                name="priceRange"
+                name="price"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Gamme de prix</FormLabel>
@@ -194,42 +223,42 @@ export function RegisterRestaurantForm({
               />
             </div>
 
-            {features && (
-              <div className="col-span-5 mb-2">
-                <FormField
-                  name={`features`}
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>Caractéristiques</FormLabel>
-                      <FormControl>
-                        <MultipleSelector
-                          placeholder="Sélectionner les caractéristiques"
-                          options={features?.map((f) => ({
-                            label: f.name,
-                            value: f.id,
-                            categoryName: f.category.name,
-                          }))}
-                          value={featuresValue}
-                          onChange={(values) =>
-                            setFeaturesValue(
-                              values.map((v) => ({
-                                ...v,
-                                categoryName:
-                                  features.find((f) => f.id === v.value)
-                                    ?.category.name ?? "",
-                              }))
-                            )
-                          }
-                          groupBy="categoryName"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            )}
-            <div className="col-span-6">
+            <div className="col-span-6 md:col-span-5 mb-2">
+              <FormField
+                control={form.control}
+                name={`features`}
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Caractéristiques</FormLabel>
+                    <FormControl>
+                      <MultipleSelector
+                        placeholder="Sélectionner les caractéristiques"
+                        options={features?.map((f) => ({
+                          label: f.name,
+                          value: f.id,
+                          categoryName: f.category.name,
+                        }))}
+                        value={featuresValue}
+                        onChange={(values) =>
+                          setFeaturesValue(
+                            values.map((v) => ({
+                              ...v,
+                              categoryName:
+                                features.find((f) => f.id === v.value)?.category
+                                  .name ?? "",
+                            }))
+                          )
+                        }
+                        groupBy="categoryName"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="col-span-6 md:col-span-6">
               <FormField
                 control={form.control}
                 name="description"
@@ -248,10 +277,10 @@ export function RegisterRestaurantForm({
                 )}
               />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-6 md:col-span-2">
               <FormField
                 control={form.control}
-                name="siretNumber"
+                name="n_siret"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Numéro SIRET</FormLabel>
@@ -263,7 +292,7 @@ export function RegisterRestaurantForm({
                 )}
               />
             </div>
-            <div className="col-span-2">
+            <div className="col-span-6 md:col-span-2">
               <FormField
                 control={form.control}
                 name="address"
@@ -278,10 +307,10 @@ export function RegisterRestaurantForm({
                 )}
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-6 md:col-span-1">
               <FormField
                 control={form.control}
-                name="postalCode"
+                name="code_postal"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Code Postal</FormLabel>
@@ -293,7 +322,7 @@ export function RegisterRestaurantForm({
                 )}
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-6 md:col-span-1">
               <FormField
                 control={form.control}
                 name="city"

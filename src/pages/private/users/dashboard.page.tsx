@@ -8,14 +8,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarDays, Star } from "lucide-react";
+import { CalendarDays, Star, UserCircle2 } from "lucide-react";
 import { CardKPI } from "@/components/kpi/card.kpi";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/auth.store";
 import { AdvancedImage } from "@cloudinary/react";
 import { cld } from "@/main";
-import { Resize } from "@cloudinary/url-gen/actions";
-import { fill } from "@cloudinary/url-gen/actions/resize";
 
 export default function DashboardPage() {
   const [user] = useAtom(userAtom);
@@ -56,10 +54,14 @@ export default function DashboardPage() {
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-4">
-          <AdvancedImage
-            cldImg={cld.image(profile.avatar)}
-            className="rounded-full h-16 w-16 object-cover"
-          />
+          {profile.avatar ? (
+            <AdvancedImage
+              cldImg={cld.image(profile.avatar)}
+              className="rounded-full h-16 w-16 object-cover"
+            />
+          ) : (
+            <UserCircle2 className="h-16 w-16 text-primary" />
+          )}
           <div>
             <h1 className="text-2xl font-bold">{profile.name}</h1>
             <p className="text-muted-foreground">{profile.email}</p>

@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import { ProfileCreate } from "@/models/profile.model";
 import { AuthContext } from "@/providers/context/auth.context";
 import { useState } from "react";
-import { set } from "react-hook-form";
 
 export function AuthProvider({ children }: { children: JSX.Element }) {
   const setUser = useSetAtom(userAtom);

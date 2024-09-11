@@ -4,9 +4,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useAtom } from "jotai";
 import { Link, useLocation } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, UserCircle2Icon } from "lucide-react";
 import { useState } from "react";
-import { EditProfile } from "./admin/profiles/users/edit.profil";
+import { EditProfile } from "./auth/edit.profil";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld } from "@/main";
 
 export const Header = ({
   routes,
@@ -16,18 +18,6 @@ export const Header = ({
   const [open, setOpen] = useState(false);
   const [user] = useAtom(userAtom);
   const location = useLocation();
-  const { confirm } = useConfirm();
-  const { logout } = useAuth();
-
-  const handleLogout = async () => {
-    const isConfirmed = await confirm({
-      content:
-        "Vous êtes sur le point de vous déconnecter. Êtes-vous sûr de vouloir continuer ?",
-    });
-    if (isConfirmed) {
-      logout();
-    }
-  };
 
   return (
     <header className="border-b shrink-0">
@@ -43,10 +33,11 @@ export const Header = ({
                 <Link
                   key={route.path}
                   to={route.path}
-                  className={`text-muted-foreground ${location.pathname === route.path
-                    ? "text-primary font-bold"
-                    : ""
-                    }`}
+                  className={`text-muted-foreground ${
+                    location.pathname === route.path
+                      ? "text-primary font-bold"
+                      : ""
+                  }`}
                 >
                   {route.label}
                 </Link>
@@ -54,11 +45,23 @@ export const Header = ({
           </div>
         </nav>
         <div className="flex items-center gap-4 ml-auto">
-          <Button variant="ghost" onClick={() => setOpen(!open)}>
-            {user.name || "Administrateur"}
-          </Button>
-          <Button variant="outline" onClick={handleLogout}>
-            <LogOut size={16} />
+          <Button
+            variant="secondary"
+            size="icon"
+            className="rounded-full"
+            onClick={() => setOpen(!open)}
+          >
+            {user.role === "ADMIN" ? (
+              "Admin"
+            ) : user.avatar ? (
+              <AdvancedImage
+                cldImg={cld.image(user.avatar)}
+                alt="avatar"
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            ) : (
+              <UserCircle2Icon className="w-10 h-10 text-primary" />
+            )}
           </Button>
         </div>
       </div>
