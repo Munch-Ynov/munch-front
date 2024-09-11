@@ -15,13 +15,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useNavigate } from "react-router-dom";
-import { z } from "zod";
+import { string, z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Euro } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "../ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import MultipleSelector from "../ui/multiselect";
+import { RestaurantWithFeatures } from "@/models/restaurant.model";
+import { PriceCategoryEnum } from "@/models/enum/price-category.enum";
+import { useEffect, useState } from "react";
+import { RestaurantFeatureWithCategory } from "@/models/restaurant-feature.model";
 
 const formSchema = z.object({
   name: z.string(),
@@ -39,27 +48,55 @@ const formSchema = z.object({
     .length(5, { message: "Postal code must be 5 characters long" }),
   city: z.string(),
   country: z.string(),
-  priceRange: z.number().int().min(1).max(5),
+  priceRange: z.string(),
+  features: z.array(string()),
 });
 
-export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
+export function RegisterRestaurantForm({
+  restaurant,
+  features,
+}: {
+  restaurant: RestaurantWithFeatures;
+  features: RestaurantFeatureWithCategory[];
+}) {
+  const [featuresValue, setFeaturesValue] = useState(
+    restaurant?.features.map((f) => ({
+      label: features.find((feature) => feature.id === f.id)?.name ?? "",
+      value: f.id,
+      categoryName:
+        features.find((feature) => feature.id === f.id)?.category.name ?? "",
+    })) ?? []
+  );
+
+  useEffect(() => {
+    console.log("featuresValue", featuresValue);
+    form.setValue(
+      "features",
+      featuresValue.map((f) => f.value)
+    );
+    console.log("form", form.getValues());
+  }, [featuresValue]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "Chez John",
-      description: "Restaurant de qualité",
-      email: "chez-john@gmail.com",
-      phone: "+33123456789",
-      address: "1 rue de la paix",
-      siretNumber: "12345678901234",
-      postalCode: "31500",
-      city: "Toulouse",
-      country: "France",
-      priceRange: 3,
+      name: restaurant?.name,
+      description: restaurant?.description,
+      email: restaurant?.email,
+      phone: restaurant?.phone,
+      address: restaurant?.address,
+      siretNumber: restaurant?.n_siret,
+      postalCode: restaurant?.code_postal,
+      city: restaurant?.city,
+      priceRange: restaurant?.price,
+      features: restaurant?.features.map((f) => f.id) ?? [],
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    confirm("Êtes-vous sûr de vouloir enregistrer ces informations ?");
+    console.log("Form values:", values);
+  };
 
   return (
     <Card className="w-full">
@@ -75,7 +112,7 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="grid grid-cols-6 gap-4"
           >
-            <div className="col-span-3">
+            <div className="col-span-2">
               <FormField
                 control={form.control}
                 name="email"
@@ -83,14 +120,14 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
                   <FormItem>
                     <FormLabel>Email associé à l'établissement</FormLabel>
                     <FormControl>
-                      <Input placeholder="john.doe@example.com" {...field} />
+                      <Input placeholder="chez.john@example.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <div className="col-span-3">
+            <div className="col-span-2">
               <FormField
                 control={form.control}
                 name="name"
@@ -98,47 +135,14 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
                   <FormItem>
                     <FormLabel>Nom du restaurant</FormLabel>
                     <FormControl>
-                      <Input placeholder="John Doe" {...field} />
+                      <Input placeholder="Chez John" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <div className="col-span-3">
-              <FormField
-                control={form.control}
-                name="priceRange"
-                render={() => (
-                  <FormItem>
-                    <FormLabel>Gamme de prix</FormLabel>
-                    <FormControl>
-                      {/* button group */}
-                      <ToggleGroup
-                        type="single"
-                        variant={"outline"}
-                        className="flex justify-around"
-                      >
-                        <ToggleGroupItem value="1" aria-label="Toggle €">
-                          <Euro className="h-4 w-4" />
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="2" aria-label="Toggle €">
-                          <Euro className="h-4 w-4" />
-                          <Euro className="h-4 w-4" />
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="3" aria-label="Toggle €">
-                          <Euro className="h-4 w-4" />
-                          <Euro className="h-4 w-4" />
-                          <Euro className="h-4 w-4" />
-                        </ToggleGroupItem>
-                      </ToggleGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="col-span-3">
+            <div className="col-span-2">
               <FormField
                 control={form.control}
                 name="phone"
@@ -153,6 +157,78 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
                 )}
               />
             </div>
+            <div className="col-span-1">
+              <FormField
+                control={form.control}
+                name="priceRange"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Gamme de prix</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionner la gamme de prix" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={PriceCategoryEnum.ECO}>
+                            €
+                          </SelectItem>
+                          <SelectItem value={PriceCategoryEnum.MODERATE}>
+                            €€
+                          </SelectItem>
+                          <SelectItem value={PriceCategoryEnum.EXPENSIVE}>
+                            €€€
+                          </SelectItem>
+                          <SelectItem value={PriceCategoryEnum.VERY_EXPENSIVE}>
+                            €€€€
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {features && (
+              <div className="col-span-5 mb-2">
+                <FormField
+                  name={`features`}
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Caractéristiques</FormLabel>
+                      <FormControl>
+                        <MultipleSelector
+                          placeholder="Sélectionner les caractéristiques"
+                          options={features?.map((f) => ({
+                            label: f.name,
+                            value: f.id,
+                            categoryName: f.category.name,
+                          }))}
+                          value={featuresValue}
+                          onChange={(values) =>
+                            setFeaturesValue(
+                              values.map((v) => ({
+                                ...v,
+                                categoryName:
+                                  features.find((f) => f.id === v.value)
+                                    ?.category.name ?? "",
+                              }))
+                            )
+                          }
+                          groupBy="categoryName"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
             <div className="col-span-6">
               <FormField
                 control={form.control}
@@ -161,14 +237,18 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Description" {...field} />
+                      <Textarea
+                        placeholder="Description"
+                        {...field}
+                        className="min-h-3"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <div className="col-span-3">
+            <div className="col-span-2">
               <FormField
                 control={form.control}
                 name="siretNumber"
@@ -183,7 +263,7 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
                 )}
               />
             </div>
-            <div className="col-span-3">
+            <div className="col-span-2">
               <FormField
                 control={form.control}
                 name="address"
@@ -198,7 +278,7 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
                 )}
               />
             </div>
-            <div className="col-span-2 flex flex-col gap-4">
+            <div className="col-span-1">
               <FormField
                 control={form.control}
                 name="postalCode"
@@ -213,7 +293,7 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
                 )}
               />
             </div>
-            <div className="col-span-2 flex flex-col gap-4">
+            <div className="col-span-1">
               <FormField
                 control={form.control}
                 name="city"
@@ -228,22 +308,8 @@ export function RegisterRestaurantForm({ isNew }: { isNew?: boolean }) {
                 )}
               />
             </div>
-            <div className="col-span-2 flex flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="country"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Pays</FormLabel>
-                    <FormControl>
-                      <Input placeholder="France" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <Button className="w-full col-span-6" type="submit">
+
+            <Button type="submit" className="w-full col-span-6">
               Enregistrer
             </Button>
           </form>

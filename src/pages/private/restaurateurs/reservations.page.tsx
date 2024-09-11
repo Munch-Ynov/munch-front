@@ -96,9 +96,6 @@ export const ReservationsPage = () => {
               <TabsTrigger value="all">Tous</TabsTrigger>
               <TabsTrigger value="active">À venir</TabsTrigger>
               <TabsTrigger value="draft">Passées</TabsTrigger>
-              <TabsTrigger value="archived" className="hidden sm:flex">
-                Archivées
-              </TabsTrigger>
             </TabsList>
             <div className="ml-auto flex items-center gap-2">
               <DropdownMenu>

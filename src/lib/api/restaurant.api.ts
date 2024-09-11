@@ -1,6 +1,9 @@
 import { api, type ErrorMessage } from "@/lib/api/api";
 import type { Pagination } from "@/models/pagination.model";
-import type { Restaurant } from "@/models/restaurant.model";
+import type {
+  Restaurant,
+  RestaurantWithFeatures,
+} from "@/models/restaurant.model";
 
 const prefix = "restaurant";
 
@@ -18,9 +21,9 @@ export async function getAllRestaurants(
     size?: number;
     name?: string;
   } = {
-      page: 0,
-      size: 10,
-    }
+    page: 0,
+    size: 10,
+  }
 ) {
   return api<Pagination<Restaurant>>({
     url: prefix,
@@ -30,14 +33,14 @@ export async function getAllRestaurants(
 }
 
 export async function getRestaurantById(id: string) {
-  return api<Restaurant | ErrorMessage>({
+  return api<Restaurant>({
     url: `${prefix}/${id}`,
     method: "GET",
   });
 }
 
 export async function getRestaurantByOwner(restaurateurId: string) {
-  return api<Restaurant | ErrorMessage>({
+  return api<RestaurantWithFeatures>({
     url: `${prefix}/owner/${restaurateurId}`,
     method: "GET",
   });
