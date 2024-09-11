@@ -2,6 +2,7 @@ import ReservationCard from "@/components/reservation/reservation-card";
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardFooter,
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
@@ -9,7 +10,7 @@ import { Loader } from '@/components/ui/loader';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import useParam from "@/hooks/useParam/useParam";
 import reservationApi from "@/lib/api/reservation.api";
-import type { Profile } from "@/models/profile.model";
+import type { UserProfile } from "@/models/profile.model";
 import { userAtom } from "@/store/auth.store";
 import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
@@ -18,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 export const ReservationsPage = () => {
 
-  const [user] = useAtom<Profile | undefined>(userAtom);
+  const [user] = useAtom<UserProfile | undefined>(userAtom);
 
   if (!user) throw new Error('User not found');
 
@@ -75,28 +76,31 @@ export const ReservationsPage = () => {
                 ))
               }
             </div>
+            <CardFooter className="flex justify-between">
+              <div className="text-xs text-muted-foreground mt-2 ">
+                Affichage de <strong>{data?.numberOfElements || 0}</strong> sur <strong>{data?.totalElements || 0}</strong> réservations
+              </div>
+              <div className="flex justify-end">
+                <Button
+                  onClick={() => setPage(page - 1)}
+                  disabled={!data || page <= 0}
+                  className="h-10 px-3 mr-2"
+                >
+                  Précédent
+                </Button>
+                <Button
+                  onClick={() => setPage(page + 1)}
+                  disabled={!data || data.totalPages <= page + 1}
+                  className="h-10 px-3"
+                >
+                  Suivant
+                </Button>
+              </div>
+            </CardFooter>
+
           </Card>
         </TabsContent>
       </Tabs>
-
-      {/* page */}
-      <div className="flex justify-end">
-        <Button
-          onClick={() => setPage(page - 1)}
-          disabled={!data || page <= 0}
-          className="h-10 px-3 mr-2"
-        >
-          Précédent
-        </Button>
-        <Button
-          onClick={() => setPage(page + 1)}
-          disabled={!data || data.totalPages <= page + 1}
-          className="h-10 px-3"
-        >
-          Suivant
-        </Button>
-      </div>
-
     </main>
   );
 }

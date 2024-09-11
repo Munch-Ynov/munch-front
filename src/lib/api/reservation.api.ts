@@ -23,23 +23,37 @@ export async function getReservationById(id: string) {
 
 export async function getReservationByUser(
   userId: string,
-  pagination: { page?: number; limit?: number } = { page: 0, limit: 10 }
+  pagination: { page?: number; limit?: number } = { page: 0, limit: 10 },
+  filters: {
+    past?: boolean;
+    upcoming?: boolean;
+  } = {}
 ) {
   return api<Pagination<Reservation>>({
     url: `${prefix}/user/${userId}`,
     method: "GET",
-    params: pagination,
+    params: {
+      ...pagination,
+      ...filters,
+    }
   });
 }
 
 export async function getReservationByRestaurant(
   restaurantId: string,
-  pagination: { page?: number; limit?: number } = { page: 0, limit: 10 }
+  pagination: { page?: number; limit?: number } = { page: 0, limit: 10 },
+  filters: {
+    past?: boolean;
+    upcoming?: boolean;
+  } = {}
 ) {
   return api<Pagination<Reservation>>({
     url: `${prefix}/restaurant/${restaurantId}`,
     method: "GET",
-    params: pagination,
+    params: {
+      ...pagination,
+      ...filters,
+    }
   });
 }
 
@@ -51,10 +65,38 @@ export async function updateReservation(reservation: Partial<Restaurant>) {
   });
 }
 
-export async function deleteReservation(id: string) {
+export async function cancelReservation(id: string) {
   return api({
     url: `${prefix}/${id}`,
-    method: "DELETE",
+    method: "PATCH",
+    body: { status: "CANCELED" },
+  });
+}
+
+// accept a reservation
+export async function acceptReservation(id: string) {
+  return api({
+    url: `${prefix}/${id}`,
+    method: "PATCH",
+    body: { status: "ACCEPTED" },
+  });
+}
+
+// reject a reservation
+export async function rejectReservation(id: string) {
+  return api({
+    url: `${prefix}/${id}`,
+    method: "PATCH",
+    body: { status: "REFUSED" },
+  });
+}
+
+export async function getUpcomingReservationsForRestaurant(
+  restaurantId: string
+) {
+  return api<Pagination<Reservation>>({
+    url: `${prefix}/restaurant/${restaurantId}/upcoming`,
+    method: "GET",
   });
 }
 
@@ -64,5 +106,8 @@ export default {
   getReservationByUser,
   getReservationByRestaurant,
   updateReservation,
-  deleteReservation,
+  cancelReservation,
+  acceptReservation,
+  rejectReservation,
+  getUpcomingReservationsForRestaurant,
 }

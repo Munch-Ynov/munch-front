@@ -2,7 +2,8 @@ import { Layout } from "@/components/layout";
 import { DashboardPage } from "@/pages/private/restaurateurs/dashboard.page";
 import { DinningRoomsPage } from "@/pages/private/restaurateurs/dinning-rooms.page";
 import { InformationsPage } from "@/pages/private/restaurateurs/informations.page";
-import { ReservationsPage } from "@/pages/private/restaurateurs/reservations.page";
+import ReservationDetail from "@/pages/private/restaurateurs/reservations/reservation-details.page";
+import { ReservationsPage } from "@/pages/private/restaurateurs/reservations/reservations.page";
 import { NotFoundPage } from "@/pages/public/not-found.page";
 import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
@@ -32,6 +33,8 @@ export const RestaurateurRoutes = () => {
         {restaurateurRoutes.map((route) => (
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
+        <Route path="/reservations/:id" element={<ReservationDetail />} />
+
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

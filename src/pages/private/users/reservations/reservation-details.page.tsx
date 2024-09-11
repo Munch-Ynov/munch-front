@@ -52,7 +52,7 @@ const ReservationDetail = () => {
       content: 'Êtes-vous sûr de vouloir annuler cette réservation ?',
     }).then((confirmed) => {
       if (confirmed) {
-        reservationApi.deleteReservation(reservation.id).then(() => {
+        reservationApi.cancelReservation(reservation.id).then(() => {
           toast.success('Votre réservation a été annulée avec succès');
           navigate('/reservations');
         });

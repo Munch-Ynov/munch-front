@@ -26,7 +26,10 @@ export interface RestaurateurProfile extends Auth {
   phone?: string;
   avatar?: string;
   banner?: string;
-  restaurantId: string;
+  restaurants: {
+    id: string;
+    name: string;
+  }[];
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
