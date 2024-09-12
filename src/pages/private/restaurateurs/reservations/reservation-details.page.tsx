@@ -5,20 +5,16 @@ import { Loader } from '@/components/ui/loader';
 import { useConfirm } from '@/hooks/useConfirm';
 import type { ErrorMessage } from '@/lib/api/api';
 import reservationApi from '@/lib/api/reservation.api';
-import restaurantApi from '@/lib/api/restaurant.api';
 import type { Reservation } from '@/models/reservation.model';
-import type { Restaurant } from '@/models/restaurant.model';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 const ReservationDetail = () => {
   const { id } = useParams();
 
-
-  const navigate = useNavigate();
 
   const [lastUpdate, setLastUpdate] = useState(Date.now());
 
@@ -73,6 +69,7 @@ const ReservationDetail = () => {
       <p>Date: {format(new Date(reservation.date), "dd/MM/yyyy HH:mm")}</p>
       <p>Nombre de personnes: {reservation.nb_people}</p>
       <p>Statut: {reservation.status}</p>
+      <p>Nom: {reservation.name}</p>
       {/* two button accept and reject */}
       {reservation.status === 'PENDING' && (
         <div className="flex gap-4">

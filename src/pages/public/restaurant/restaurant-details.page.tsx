@@ -3,21 +3,20 @@ import reservationApi from "@/lib/api/reservation.api";
 import restaurantApi from "@/lib/api/restaurant.api";
 import type { Restaurant } from "@/models/restaurant.model";
 import { useQuery } from "@tanstack/react-query";
-import { Loader } from "lucide-react";
 import { useParams } from "react-router-dom";
 
 
-import { useConfirm } from "@/hooks/useConfirm";
 import type { Profile } from "@/models/profile.model";
 import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
 import { toast } from "sonner";
 import ReservationForm from "@/components/reservation/reservation-form";
+import { Loader } from "@/components/ui/loader";
 
 const RestaurantDetail = () => {
   const { id } = useParams();
 
-  const { data, loading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["restaurant", id],
     queryFn: async () => id ? await restaurantApi.getRestaurantById(id) : {
       message: "Restaurant not found",
@@ -28,7 +27,6 @@ const RestaurantDetail = () => {
 
 
   const restaurant = data as Restaurant;
-  const { confirm } = useConfirm();
 
   const [user] = useAtom<Profile | undefined>(userAtom);
 
@@ -38,6 +36,11 @@ const RestaurantDetail = () => {
     time: string;
     nb_people: string;
   }) => {
+    if (!user) {
+      toast.error("Vous devez être connecté pour effectuer une réservation");
+      return;
+    }
+
     const dateTime = new Date(values.date);
     dateTime.setHours(Number(values.time.split(":")[0]));
     dateTime.setMinutes(Number(values.time.split(":")[1]));
@@ -46,7 +49,8 @@ const RestaurantDetail = () => {
       restaurantId: restaurant.id,
       date: dateTime,
       nb_people: Number(values.nb_people),
-      userId: user?.id
+      userId: user?.id,
+      name: user?.name,
     }
 
     reservationApi.createReservation(reservation).then(() => {
@@ -72,7 +76,8 @@ const RestaurantDetail = () => {
 
 
 
-  if (loading) return <Loader />
+
+  if (isLoading) return <Loader />
   if (!data || (data as ErrorMessage).statusCode) return <h1>Le restaurant n'existe pas</h1>
   return (
     <div className="flex flex-col min-h-[100dvh]">

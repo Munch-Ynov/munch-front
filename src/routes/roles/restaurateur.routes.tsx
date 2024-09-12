@@ -2,6 +2,7 @@ import { Layout } from "@/components/layout";
 import { DashboardPage } from "@/pages/private/restaurateurs/dashboard.page";
 import { DinningRoomsPage } from "@/pages/private/restaurateurs/dinning-rooms.page";
 import { InformationsPage } from "@/pages/private/restaurateurs/informations.page";
+import AddReservation from "@/pages/private/restaurateurs/reservations/reservation-add.page";
 import ReservationDetail from "@/pages/private/restaurateurs/reservations/reservation-details.page";
 import { ReservationsPage } from "@/pages/private/restaurateurs/reservations/reservations.page";
 import { NotFoundPage } from "@/pages/public/not-found.page";
@@ -17,7 +18,14 @@ const restaurateurRoutes = [
     element: <ReservationsPage />,
     label: "Réservations",
   },
-  { path: "/dinning-rooms", element: <DinningRoomsPage />, label: "Salle" },
+  {
+    path: "/dinning-rooms",
+    element: <DinningRoomsPage />,
+    label: "Salle",
+    // not yet implemented
+    comingSoon: true,
+
+  },
   {
     path: "/informations",
     element: <InformationsPage />,
@@ -30,9 +38,13 @@ export const RestaurateurRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout routes={restaurateurRoutes} />}>
-        {restaurateurRoutes.map((route) => (
-          <Route key={route.path} path={route.path} element={route.element} />
-        ))}
+        {restaurateurRoutes
+          .filter(route => !route.comingSoon)
+          .map((route) => (
+            <Route key={route.path} path={route.path} element={route.element} />
+          ))}
+        <Route path="/reservations/new" element={<AddReservation />} />
+
         <Route path="/reservations/:id" element={<ReservationDetail />} />
 
       </Route>

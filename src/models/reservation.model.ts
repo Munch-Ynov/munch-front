@@ -9,4 +9,5 @@ export interface Reservation {
   restaurantId: string;
   createdAt: Date;
   updatedAt: Date;
+  name: string;
 }
