@@ -281,6 +281,7 @@ export function RegisterRestaurantForm({
                         <FormControl>
                           <MultipleSelector
                             placeholder="Sélectionner les caractéristiques"
+                            hidePlaceholderWhenSelected
                             options={features?.map((f) => ({
                               label: f.name,
                               value: f.id,
