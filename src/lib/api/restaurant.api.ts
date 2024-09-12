@@ -27,14 +27,46 @@ export async function getAllRestaurants(
     size?: number;
     name?: string;
   } = {
-    page: 0,
-    size: 10,
-  }
+      page: 0,
+      size: 10,
+    }
 ) {
   return api<Pagination<Restaurant>>({
     url: prefix,
     method: "GET",
     params,
+  });
+}
+
+
+export async function getFavoritesRestaurants(
+  userId: string,
+  params: {
+    page?: number;
+    size?: number;
+  } = {
+      page: 0,
+      size: 10,
+    }
+) {
+  return api<Pagination<Restaurant>>({
+    url: `favorite/${userId}`,
+    method: "GET",
+    params,
+  });
+}
+
+export async function addFavoriteRestaurant(userId: string, restaurantId: string) {
+  return api<ErrorMessage>({
+    url: `favorite/${userId}/${restaurantId}`,
+    method: "POST",
+  });
+}
+
+export async function removeFavoriteRestaurant(userId: string, restaurantId: string) {
+  return api<ErrorMessage>({
+    url: `favorite/${userId}/${restaurantId}`,
+    method: "DELETE",
   });
 }
 
@@ -66,4 +98,8 @@ export default {
   getRestaurantById,
   getRestaurantByOwner,
   deleteRestaurant,
+
+  getFavoritesRestaurants,
+  addFavoriteRestaurant,
+  removeFavoriteRestaurant,
 };

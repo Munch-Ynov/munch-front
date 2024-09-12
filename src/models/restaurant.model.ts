@@ -1,5 +1,5 @@
 import type { PriceCategoryEnum } from "./enum/price-category.enum";
-import { RestaurantFeature } from "./restaurant-feature.model";
+import type { RestaurantFeature } from "./restaurant-feature.model";
 
 export interface Restaurant {
   id: string;

@@ -3,18 +3,22 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import api from "@/lib/api/restaurant.api";
 import { useQuery } from "@tanstack/react-query";
 
+import RestaurantCard from "@/components/restaurant/restaurant-card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
-import RestaurantCard from "@/components/restaurant/restaurant-card";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import useParam from "@/hooks/useParam/useParam";
+import { userAtom } from "@/store/auth.store";
+import { useAtom } from "jotai";
 import { Filter, Search } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const RestaurantList = () => {
   const [page, setPage] = useParam<number>("page", { default: 0 });
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [user] = useAtom(userAtom)
 
   const { data, isLoading } = useQuery({
     queryKey: ["restaurants", page],
@@ -24,9 +28,30 @@ export const RestaurantList = () => {
       }),
   });
 
+  const [updatedAt, setUpdatedAt] = useState(Date.now());
+
+  const { data: favData } = useQuery({
+    queryKey: ["favorites", user?.id, updatedAt],
+    queryFn: async () =>
+      await api.getFavoritesRestaurants(user?.id, {
+        size: 1000,
+      }),
+  });
+
   const content = data?.content || [];
 
   const navigate = useNavigate();
+
+
+  const toggleFavorite = async (restaurantId: string) => {
+    const isFavorite = favData?.content?.some((fav) => fav.id === restaurantId);
+    if (isFavorite) {
+      await api.removeFavoriteRestaurant(user?.id, restaurantId);
+    } else {
+      await api.addFavoriteRestaurant(user?.id, restaurantId);
+    }
+    setUpdatedAt(Date.now());
+  }
 
   return (
     <main className="flex-1 items-start gap-4 md:gap-8 ">
@@ -80,6 +105,8 @@ export const RestaurantList = () => {
                       <RestaurantCard
                         key={restaurant.id}
                         restaurant={restaurant}
+                        isFavorite={favData?.content?.some((fav) => fav.id === restaurant.id)}
+                        toggleFavorite={() => toggleFavorite(restaurant.id)}
                         onClick={() =>
                           navigate(`/restaurants/${restaurant.id}`)
                         }

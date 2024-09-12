@@ -1,19 +1,22 @@
-import { Heart, HeartIcon } from "lucide-react";
-import type { Restaurant } from "../../models/restaurant.model";
 import { cn } from "@/lib/utils";
-import { Card, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
 import { PriceCategoryEnum } from "@/models/enum/price-category.enum";
+import { HeartIcon } from "lucide-react";
+import type { Restaurant } from "../../models/restaurant.model";
 import { Badge } from "../ui/badge";
-import { Skeleton } from "../ui/skeleton";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/card";
 
 const RestaurantCard = ({
   restaurant,
+  isFavorite,
   onClick,
+  toggleFavorite,
 }: {
   restaurant: Restaurant;
+  isFavorite?: boolean;
   onClick?: () => void;
   className?: string;
+  toggleFavorite?: () => void;
 }) => {
   const getPriceSymbol = (price: PriceCategoryEnum) => {
     switch (price) {
@@ -26,10 +29,6 @@ const RestaurantCard = ({
       case PriceCategoryEnum.VERY_EXPENSIVE:
         return "€€€€";
     }
-  };
-
-  const handleAddFavorite = () => {
-    console.log("TODO : Add Favorite");
   };
 
   return (
@@ -61,13 +60,13 @@ const RestaurantCard = ({
           <Button
             onClick={(e) => {
               e.stopPropagation();
-              handleAddFavorite();
+              toggleFavorite?.();
             }}
             variant="ghost"
             size="icon"
             className="mt-1"
           >
-            <Heart className="h-6 w-6" />
+            <HeartIcon className={cn("h-6 w-6", isFavorite ? "text-red-500 fill-current" : "text-gray-400")} />
           </Button>
         </div>
       </CardContent>
