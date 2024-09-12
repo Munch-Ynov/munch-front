@@ -22,7 +22,7 @@ export type ResponseImageData = {
   original_filename: string;
 };
 
-async function uploadAvatar(formData: FormData): Promise<ResponseImageData> {
+async function uploadPicture(formData: FormData): Promise<ResponseImageData> {
   const response = await fetch(
     `https://api.cloudinary.com/v1_1/${
       import.meta.env.VITE_CLOUDINARY_NAME
@@ -41,5 +41,5 @@ async function uploadAvatar(formData: FormData): Promise<ResponseImageData> {
 }
 
 export default {
-  uploadAvatar,
+  uploadPicture,
 };

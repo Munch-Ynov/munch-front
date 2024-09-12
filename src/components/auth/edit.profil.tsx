@@ -26,7 +26,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import ChangePassword from "@/components/auth/change-password";
-import api from "@/lib/api/images.api";
+import imageApi from "@/lib/api/images.api";
 import { updateProfileToken } from "@/lib/api/profiles.api";
 import { toast } from "sonner";
 import { LogOut, UserCircle, UserCircle2, UserCircle2Icon } from "lucide-react";
@@ -99,7 +99,7 @@ export const EditProfile = ({ open, onOpenChange }: EditProfileProps) => {
     formData.append("file", file as Blob);
     formData.append("upload_preset", "avatar");
 
-    return api.uploadAvatar(formData);
+    return imageApi.uploadPicture(formData);
   };
 
   return (
@@ -124,7 +124,13 @@ export const EditProfile = ({ open, onOpenChange }: EditProfileProps) => {
                     <div className="space-y-2">
                       <Label htmlFor="avatar">Avatar</Label>
                       <div className="flex items-center space-x-4">
-                        {user.avatar ? (
+                        {file ? (
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt="avatar"
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        ) : user.avatar ? (
                           <AdvancedImage
                             cldImg={cld.image(user.avatar)}
                             alt="avatar"

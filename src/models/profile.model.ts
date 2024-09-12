@@ -6,7 +6,6 @@ export interface UserProfile extends Auth {
   name: string;
   phone?: string;
   avatar?: string;
-  banner?: string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
@@ -25,7 +24,6 @@ export interface RestaurateurProfile extends Auth {
   name: string;
   phone?: string;
   avatar?: string;
-  banner?: string;
   restaurants: {
     id: string;
     name: string;
@@ -39,7 +37,6 @@ export interface RestaurateurProfileCreate {
   name: string;
   phone?: string;
   avatar?: string;
-  banner?: string;
   restaurantId?: string;
 }
 

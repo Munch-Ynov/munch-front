@@ -6,6 +6,7 @@ import api from "@/lib/api/profiles.api";
 import { AdvancedImage } from "@cloudinary/react";
 import { cld } from "@/main";
 import { UserCircle2Icon } from "lucide-react";
+import { toast } from "sonner";
 
 export const UsersColumns: ColumnDef<Profile>[] = [
   {
@@ -56,7 +57,11 @@ export const UsersColumns: ColumnDef<Profile>[] = [
       <ActionButtons
         cell={cell}
         showViewButton={false}
-        onDelete={() => api.deleteProfile(cell.id)}
+        onDelete={() =>
+          api
+            .deleteProfile(cell.getValue() as string)
+            .then(() => toast.success("Utilisateur supprimé."))
+        }
       />
     ),
   },

@@ -12,6 +12,8 @@ export interface Restaurant {
   code_postal: string;
   city: string;
   email: string;
+  main_picture: string;
+  pictures: string[];
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;

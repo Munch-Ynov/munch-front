@@ -9,6 +9,8 @@ import { useState } from "react";
 import { EditProfile } from "./auth/edit.profil";
 import { AdvancedImage } from "@cloudinary/react";
 import { cld } from "@/main";
+import { Tooltip } from "@radix-ui/react-tooltip";
+import { TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export const Header = ({
   routes,
@@ -45,24 +47,29 @@ export const Header = ({
           </div>
         </nav>
         <div className="flex items-center gap-4 ml-auto">
-          <Button
-            variant="secondary"
-            size="icon"
-            className="rounded-full"
-            onClick={() => setOpen(!open)}
-          >
-            {user.role === "ADMIN" ? (
-              "Admin"
-            ) : user.avatar ? (
-              <AdvancedImage
-                cldImg={cld.image(user.avatar)}
-                alt="avatar"
-                className="w-10 h-10 rounded-full object-cover"
-              />
-            ) : (
-              <UserCircle2Icon className="w-10 h-10 text-primary" />
-            )}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="secondary"
+                size="icon"
+                className="rounded-full"
+                onClick={() => setOpen(!open)}
+              >
+                {user.role === "ADMIN" ? (
+                  "Admin"
+                ) : user.avatar ? (
+                  <AdvancedImage
+                    cldImg={cld.image(user.avatar)}
+                    alt="avatar"
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                ) : (
+                  <UserCircle2Icon className="w-10 h-10 text-primary" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Mon profil </TooltipContent>
+          </Tooltip>
         </div>
       </div>
       <EditProfile open={open} onOpenChange={() => setOpen(false)} />

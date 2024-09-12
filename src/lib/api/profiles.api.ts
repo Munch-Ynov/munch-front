@@ -52,7 +52,7 @@ export async function getProfilesByRole(role: RoleEnum) {
 
 export async function deleteProfile(id: string) {
   return api<Profile>({
-    url: `${prefix}/${id}`,
+    url: `auth/${id}`,
     method: "DELETE",
   });
 }

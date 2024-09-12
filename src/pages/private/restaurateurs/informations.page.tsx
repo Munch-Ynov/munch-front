@@ -1,4 +1,4 @@
-import { RegisterRestaurantForm } from "@/components/auth/register-restaurant.form";
+import { RegisterRestaurantForm } from "@/components/restaurant/register-restaurant.form";
 import featuresApi from "@/lib/api/features.api";
 import restaurantApi from "@/lib/api/restaurant.api";
 import { userAtom } from "@/store/auth.store";
