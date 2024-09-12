@@ -38,7 +38,6 @@ export default function DashboardPage() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Updated profile:", profile);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -19,17 +19,16 @@ const restaurateurRoutes = [
     label: "Réservations",
   },
   {
+    path: "/informations",
+    element: <InformationsPage />,
+    label: "Informations",
+  },
+  {
     path: "/dinning-rooms",
     element: <DinningRoomsPage />,
     label: "Salle",
     // not yet implemented
     comingSoon: true,
-
-  },
-  {
-    path: "/informations",
-    element: <InformationsPage />,
-    label: "Informations",
   },
 ];
 
@@ -39,14 +38,13 @@ export const RestaurateurRoutes = () => {
     <Routes>
       <Route path="/" element={<Layout routes={restaurateurRoutes} />}>
         {restaurateurRoutes
-          .filter(route => !route.comingSoon)
+          .filter((route) => !route.comingSoon)
           .map((route) => (
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
         <Route path="/reservations/new" element={<AddReservation />} />
 
         <Route path="/reservations/:id" element={<ReservationDetail />} />
-
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

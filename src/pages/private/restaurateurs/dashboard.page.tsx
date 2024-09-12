@@ -19,27 +19,29 @@ import { format } from "date-fns";
 import { useAtom } from "jotai";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export const DashboardPage = () => {
-
+  const navigate = useNavigate();
   const [user] = useAtom<RestaurateurProfile | undefined>(userAtom);
-  const restaurantId = user?.restaurants[0].id;
+  const restaurantId = user?.restaurants[0]?.id;
 
-  if (!restaurantId) throw new Error("Restaurant not found");
+  if (!restaurantId) {
+    navigate("/informations", { replace: true });
+    toast.error("Vous n'avez pas encore de restaurant");
+  }
 
   const [lastUpdate, setLastUpdate] = useState<number>(Date.now());
 
   const { data: upcomingReservationsData } = useQuery({
     queryKey: ["reservations", "upcoming", restaurantId, lastUpdate],
-    queryFn: async () => await reservationApi.getUpcomingReservationsForRestaurant(restaurantId),
+    queryFn: async () =>
+      await reservationApi.getUpcomingReservationsForRestaurant(
+        restaurantId || ""
+      ),
   });
 
   const upcomingReservations = upcomingReservationsData?.content || [];
-  console.log(upcomingReservations);
-
-  const navigate = useNavigate();
-
-
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -82,9 +84,7 @@ export const DashboardPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="hidden md:table-cell">
-                      Date
-                    </TableHead>
+                    <TableHead className="hidden md:table-cell">Date</TableHead>
                     <TableHead className="hidden md:table-cell">
                       Nombre de personnes
                     </TableHead>
@@ -94,31 +94,43 @@ export const DashboardPage = () => {
                     <TableHead className="hidden md:table-cell">
                       Statut
                     </TableHead>
-
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {upcomingReservations.map((reservation) => (
-                    <TableRow key={reservation.id} onClick={() => navigate(`/reservations/${reservation.id}`)} className="cursor-pointer">
+                    <TableRow
+                      key={reservation.id}
+                      onClick={() =>
+                        navigate(`/reservations/${reservation.id}`)
+                      }
+                      className="cursor-pointer"
+                    >
                       <TableCell className="hidden md:table-cell">
-                        {format(reservation.date, 'dd/MM/yyyy')}
+                        {format(reservation.date, "dd/MM/yyyy")}
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         {reservation.nb_people}
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        {format(reservation.date, 'HH:mm')}
+                        {format(reservation.date, "HH:mm")}
                       </TableCell>
                       <TableCell>
-                        <Badge variant="outline"
+                        <Badge
+                          variant="outline"
                           // color change based on status
-                          className={cn('text-xs', {
-                            'bg-green-100 text-green-800': reservation.status === 'ACCEPTED',
-                            'bg-red-100 text-red-800': reservation.status === 'CANCELED',
-                            'bg-yellow-100 text-yellow-800': reservation.status === 'PENDING',
-                            'bg-gray-100 text-gray-800': reservation.status === 'REFUSED',
+                          className={cn("text-xs", {
+                            "bg-green-100 text-green-800":
+                              reservation.status === "ACCEPTED",
+                            "bg-red-100 text-red-800":
+                              reservation.status === "CANCELED",
+                            "bg-yellow-100 text-yellow-800":
+                              reservation.status === "PENDING",
+                            "bg-gray-100 text-gray-800":
+                              reservation.status === "REFUSED",
                           })}
-                        >{toFrenchStatus(reservation.status)}</Badge>
+                        >
+                          {toFrenchStatus(reservation.status)}
+                        </Badge>
                       </TableCell>
                     </TableRow>
                   ))}

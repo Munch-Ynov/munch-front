@@ -82,7 +82,6 @@ export const RestaurantsColumns: ColumnDef<Restaurant>[] = [
         <Button
           variant="ghost"
           onClick={() => {
-            console.log(column.getIsSorted());
             column.toggleSorting(column.getIsSorted() === "asc");
           }}
         >
