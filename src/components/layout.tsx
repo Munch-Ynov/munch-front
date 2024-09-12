@@ -4,7 +4,12 @@ import { Header } from "./header";
 export function Layout({
   routes,
 }: {
-  routes: { path: string; element: JSX.Element; label: string }[];
+  routes: {
+    path: string;
+    element: JSX.Element;
+    label: string;
+    comingSoon?: boolean;
+  }[];
 }) {
   return (
     <div className="flex flex-col">

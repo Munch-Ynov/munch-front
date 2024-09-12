@@ -15,6 +15,8 @@ import { fr } from "date-fns/locale";
 import { useAtom } from "jotai";
 import { FormProvider, useForm } from "react-hook-form";
 import { useConfirm } from "@/hooks/useConfirm";
+import { Input } from "../ui/input";
+import { useState } from "react";
 
 
 interface ReservationFormProps {
@@ -160,7 +162,7 @@ type CalendarPopUpProps = CalendarProps & {
   value?: Date;
 };
 
-function CalendarPopUp({
+export function CalendarPopUp({
   control,
   name,
   ...props
@@ -216,3 +218,132 @@ function CalendarPopUp({
 }
 
 
+
+//  form to add an external reservation (by a restaurateur)
+// user need to enter :
+// - the date of the reservation
+// - the time of the reservation
+// - the number of people
+// - the name of the customer
+
+export interface ExternalReservationFormProps {
+  onSubmit: (values: {
+    date: Date;
+    time: string;
+    nb_people: string;
+    name: string;
+  }) => void;
+}
+
+export function ExternalReservationForm({
+  onSubmit,
+}: ExternalReservationFormProps) {
+  const form = useForm({
+    defaultValues: {
+      date: new Date(),
+      time: "",
+      nb_people: "",
+      name: "",
+    },
+  });
+
+  return (
+    <FormProvider {...form}>
+
+      <div className="grid grid-cols-1 gap-4">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Nom du client</FormLabel>
+              <Input
+                {...field}
+                type="text"
+                className="input"
+                placeholder="Nom du client"
+              />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="grid grid-cols-3 gap-4">
+        <CalendarPopUp
+          control={form.control}
+          name="date"
+          mode="single"
+          id="date"
+          label="Selectionner une date"
+          fromDate={new Date()}
+          locale={fr}
+          toDate={new Date(new Date(new Date().setMonth(new Date().getMonth() + 3)).setDate(0))}
+        >
+        </CalendarPopUp>
+
+        <FormField
+          control={form.control}
+          name="time"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Heure</FormLabel>
+              <Select
+                onValueChange={(value) => {
+                  field.onChange(value);
+                }}
+                value={field.value}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Séléctionner l'heure" />
+                  <ClockIcon className="ml-auto h-4 w-4 opacity-50" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="12:00">12:00</SelectItem>
+                  <SelectItem value="12:30">12:30</SelectItem>
+                  <SelectItem value="13:00">13:00</SelectItem>
+                  <SelectItem value="13:30">13:30</SelectItem>
+                  <SelectItem value="19:00">19:00</SelectItem>
+                  <SelectItem value="19:30">19:30</SelectItem>
+                  <SelectItem value="20:00">20:00</SelectItem>
+                  <SelectItem value="20:30">20:30</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
+
+
+        <FormField
+          control={form.control}
+          name="nb_people"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Nombre de personnes</FormLabel>
+              <Input
+                maxLength={2}
+                onInput={(e) => {
+                  e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '').slice(0, 2);
+                }}
+                {...field}
+                type="number"
+                className="input"
+                placeholder="Nombre de personnes"
+              />
+            </FormItem>
+
+          )}
+        />
+
+
+
+      </div>
+
+      <Button
+        onClick={form.handleSubmit(onSubmit)}
+        type="button"
+        className="w-full"
+      >
+        Ajouter
+      </Button>
+    </FormProvider>
+  );
+}
