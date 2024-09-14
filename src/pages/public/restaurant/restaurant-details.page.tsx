@@ -1,6 +1,7 @@
 import type { ErrorMessage } from "@/lib/api/api";
 import reservationApi from "@/lib/api/reservation.api";
 import restaurantApi from "@/lib/api/restaurant.api";
+import featuresApi from "@/lib/api/features.api";
 import type { Restaurant } from "@/models/restaurant.model";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
@@ -33,6 +34,11 @@ import {
 const RestaurantDetail = () => {
   const { id } = useParams();
   const [user] = useAtom<Profile>(userAtom);
+
+  const { data: featuresByCategory } = useQuery({
+    queryKey: ["featuresRestaurant", id],
+    queryFn: async () => await featuresApi.getFeaturesByRestaurantId(id!),
+  });
 
   const { data, isLoading } = useQuery({
     queryKey: ["restaurant", id],
@@ -130,12 +136,18 @@ const RestaurantDetail = () => {
   if (isLoading) return <Loader />;
   if (!data || (data as ErrorMessage).statusCode)
     return <h1>Le restaurant n'existe pas</h1>;
+
   return (
     <div className="mx-auto bg-white shadow-lg rounded-lg overflow-hidden p-12">
       <div className="relative">
-        <div className="flex justify-between items-baseline mb-4">
+        <div className="flex justify-between items-baseline">
           <div>
-            <h1 className="text-2xl font-bold">{restaurant.name}</h1>
+            <h1 className="text-2xl font-bold">
+              {restaurant.name}
+              <Badge variant="outline" className="text-muted-foreground mx-2">
+                {usePriceSymbol(restaurant.price)}
+              </Badge>
+            </h1>
             <p className="text-gray-600 mb-4">{restaurant.address}</p>
           </div>
           <div className="inline-flex items-center gap-4">
@@ -164,7 +176,7 @@ const RestaurantDetail = () => {
           </div>
         </div>
 
-        <div className="my-8 w-3/4 mx-auto">
+        <div className="my-8 md:my-16 w-3/4 mx-auto">
           <Carousel
             opts={{
               align: "start",
@@ -200,36 +212,62 @@ const RestaurantDetail = () => {
             <CarouselNext />
           </Carousel>
         </div>
-
-        <div className="flex items-baseline mb-1">
-          <span>Fourchette de prix : </span>
-          <Badge variant="outline" className="text-muted-foreground mx-2">
-            {usePriceSymbol(restaurant.price)}
-          </Badge>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-8 md:gap-24 my-8">
+        <div
+          className={cn(
+            Object.keys(featuresByCategory || {}).length > 0
+              ? "md:col-span-4"
+              : "md:col-span-6"
+          )}
+        >
+          <h2 className="text-xl font-semibold mb-2">Description</h2>
+          <p className="text-gray-700 mb-8">{restaurant.description}</p>
         </div>
-        <Badge className="bg-indigo-200 text-indigo-600 mb-8">
-          Cuisine d'Amérique du Sud
-        </Badge>
-
-        <h2 className="text-xl font-semibold mb-2">Description</h2>
-        <p className="text-gray-700 mb-8">{restaurant.description}</p>
-
-        <section id="reservation" className="py-12 md:py-24 bg-muted">
-          <div className="container">
-            <div className="max-w-md mx-auto space-y-6">
-              <h2 className="text-3xl font-bold text-center">
-                Réserver une table
-              </h2>
-              <ReservationForm
-                restaurant={restaurant}
-                isClosed={isClosed}
-                timespots={timespots}
-                onSubmit={onSubmit}
-              />
+        {Object.keys(featuresByCategory || {}).length > 0 && (
+          <div className="md:col-span-2">
+            <h2 className="text-2xl font-semibold">Informations</h2>
+            <div>
+              {Object.entries(featuresByCategory || {}).map(
+                ([categoryName, features]) => (
+                  <div key={categoryName} className="mb-4">
+                    <h2 className="text-lg font-semibold mb-2">
+                      {categoryName}
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                      {features.map((feature) => (
+                        <Badge
+                          key={feature.id}
+                          variant="outline"
+                          className="text-muted-foreground"
+                        >
+                          {feature.name}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )
+              )}
             </div>
           </div>
-        </section>
+        )}
       </div>
+
+      <section id="reservation" className="py-12 md:py-24 bg-muted">
+        <div className="container">
+          <div className="max-w-md mx-auto space-y-6">
+            <h2 className="text-3xl font-bold text-center">
+              Réserver une table
+            </h2>
+            <ReservationForm
+              restaurant={restaurant}
+              isClosed={isClosed}
+              timespots={timespots}
+              onSubmit={onSubmit}
+            />
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
