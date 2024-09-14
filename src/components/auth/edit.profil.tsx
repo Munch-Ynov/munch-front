@@ -1,8 +1,13 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import ChangePassword from "@/components/auth/change-password";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -12,26 +17,21 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { userAtom } from "@/store/auth.store";
-import { useAtom } from "jotai";
-import { RoleEnum } from "@/models/enum/role-enum";
-import { AdvancedImage } from "@cloudinary/react";
-import { cld } from "@/main";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import ChangePassword from "@/components/auth/change-password";
+import { useAuth } from "@/hooks/useAuth";
+import { useConfirm } from "@/hooks/useConfirm";
 import imageApi from "@/lib/api/images.api";
 import { updateProfileToken } from "@/lib/api/profiles.api";
+import { cld } from "@/main";
+import { RoleEnum } from "@/models/enum/role-enum";
+import { userAtom } from "@/store/auth.store";
+import { AdvancedImage } from "@cloudinary/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useAtom } from "jotai";
+import { LogOut, UserCircle2Icon } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { LogOut, UserCircle, UserCircle2, UserCircle2Icon } from "lucide-react";
-import { useConfirm } from "@/hooks/useConfirm";
-import { useAuth } from "@/hooks/useAuth";
+import { z } from "zod";
 
 const profileSchema = z.object({
   avatar: z.string().optional(),

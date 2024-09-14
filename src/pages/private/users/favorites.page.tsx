@@ -34,10 +34,6 @@ export const FavoritesPage = () => {
 
   const navigate = useNavigate();
 
-  const toggleFavorite = async (restaurantId: string) => {
-    await api.removeFavoriteRestaurant(user?.id, restaurantId);
-    setUpdatedAt(Date.now());
-  }
 
   return (
     <main className="flex-1 items-start gap-4 md:gap-8 ">
@@ -92,7 +88,7 @@ export const FavoritesPage = () => {
                         key={restaurant.id}
                         restaurant={restaurant}
                         isFavorite={true}
-                        toggleFavorite={() => toggleFavorite(restaurant.id)}
+                        onFavorite={() => setUpdatedAt(Date.now())}
                         onClick={() =>
                           navigate(`/restaurants/${restaurant.id}`)
                         }

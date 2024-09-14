@@ -156,7 +156,7 @@ export default ReservationForm;
 
 type CalendarPopUpProps = CalendarProps & {
   control: any;
-  onClose: () => void;
+  onClose?: () => void;
   name: string;
   label: string;
   value?: Date;
