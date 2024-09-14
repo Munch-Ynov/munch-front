@@ -25,11 +25,11 @@ ENV TZ=Europe/Paris
 COPY --chown=node:node . .
 
 # Generate the production build
-RUN npm run build
+RUN ["npm","run","build"]
 
-# Remove the dev dependencies
-RUN npm prune --production && npm cache clean --force
-
+# # Remove the dev dependencies
+# RUN npm prune --production && npm cache clean --force
+RUN npm i --only=production && npm cache clean --force
 
 # Path: Dockerfile
 FROM node:22-alpine3.18 as production-stage
