@@ -7,17 +7,27 @@ import type {
 
 const prefix = "restaurant";
 
-export async function createRestaurant(restaurant: Restaurant) {
-  return api<Restaurant>({ url: prefix, method: "POST", body: restaurant });
+export async function createRestaurant(restaurant: Omit<RestaurantWithFeatures, "id" | "createdAt" | "updatedAt">) {
+  return api<Restaurant>({
+    url: prefix,
+    method: "POST",
+    body: {
+      ...restaurant,
+      features: restaurant.features.map((f) => f.id),
+    }
+  });
 }
 
 export async function updateRestaurant(
-  restaurant: Omit<Restaurant, "createdAt" | "updatedAt">
+  restaurant: Omit<RestaurantWithFeatures, "createdAt" | "updatedAt">
 ) {
   return api<Restaurant>({
     url: `${prefix}/${restaurant.id}`,
     method: "PATCH",
-    body: restaurant,
+    body: {
+      ...restaurant,
+      features: restaurant.features.map((f) => f.id),
+    }
   });
 }
 
@@ -27,9 +37,9 @@ export async function getAllRestaurants(
     size?: number;
     name?: string;
   } = {
-    page: 0,
-    size: 10,
-  }
+      page: 0,
+      size: 10,
+    }
 ) {
   return api<Pagination<Restaurant>>({
     url: prefix,
@@ -44,9 +54,9 @@ export async function getFavoritesRestaurants(
     page?: number;
     size?: number;
   } = {
-    page: 0,
-    size: 10,
-  }
+      page: 0,
+      size: 10,
+    }
 ) {
   return api<Pagination<Restaurant>>({
     url: `favorite/${userId}`,

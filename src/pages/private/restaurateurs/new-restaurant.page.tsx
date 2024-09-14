@@ -8,14 +8,11 @@ import { useAtom } from "jotai";
 import { toast } from "sonner";
 import imageApi from "@/lib/api/images.api";
 import { Loader } from "@/components/ui/loader";
+import type { RestaurateurProfile } from "@/models/profile.model";
 
-export const InformationsPage = () => {
-  const [user] = useAtom(userAtom);
-  const { data: restaurant } = useQuery({
-    queryKey: ["my-restaurant"],
-    queryFn: async () => await restaurantApi.getRestaurantByOwner(user?.id),
-    retry: false,
-  });
+export const NewRestaurantPage = () => {
+
+  const [user, setUser] = useAtom<RestaurateurProfile>(userAtom);
 
   const { data: features } = useQuery({
     queryKey: ["features"],
@@ -27,10 +24,6 @@ export const InformationsPage = () => {
     mainPicture: Blob | null,
     pictures: Blob[]
   ) => {
-    if (!restaurant) {
-      throw new Error("Restaurant not found");
-    }
-
     if (mainPicture) {
       uRestaurant.main_picture = (await uploadMainPicture(mainPicture)).public_id
     }
@@ -40,16 +33,19 @@ export const InformationsPage = () => {
     }
 
     try {
-      await restaurantApi.updateRestaurant({
+      const restaurant = await restaurantApi.createRestaurant({
         ...uRestaurant,
-        id: restaurant.id,
-      });
-      toast.success("Restaurant mis à jour avec succès");
+        restaurateurId: user?.id,
+      })
+      if (!restaurant) {
+        throw new Error("Restaurant not created");
+      }
+      setUser((u) => ({ ...u, restaurants: [...u.restaurants, { id: restaurant.id, name: restaurant.name }] }));
+      toast.success("Restaurant créé avec succès");
     } catch (error) {
-      toast.error("Erreur lors de la mise à jour du restaurant");
+      toast.error("Erreur lors de la création du restaurant");
     }
   };
-
 
   const uploadMainPicture = async (picture: Blob) => {
     const formData = new FormData();
@@ -73,15 +69,19 @@ export const InformationsPage = () => {
 
 
   return (
-
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-4 md:gap-8">
       <h1 className="text-2xl font-semibold">
         Ajouter un restaurant
       </h1>
-      {!(restaurant && features)
-        ? <Loader /> :
-        <RegisterRestaurantForm restaurant={restaurant} features={features} onSubmit={onSubmit} />
+      {
+        !features ?
+          <Loader /> :
+          <RegisterRestaurantForm
+            features={features}
+            onSubmit={onSubmit}
+          />
       }
+
     </main>
   );
-};
+}

@@ -12,17 +12,19 @@ import { toast } from "sonner";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/auth.store";
 import api from "@/lib/api/restaurant.api";
-import { Profile } from "@/models/profile.model";
+import type { Profile } from "@/models/profile.model";
 
 const RestaurantCard = ({
   restaurant,
   isFavorite,
   onClick,
+  onFavorite,
 }: {
   restaurant: Restaurant;
   isFavorite?: boolean;
   onClick?: () => void;
   className?: string;
+  onFavorite?: () => void;
 }) => {
   const [user] = useAtom<Profile>(userAtom);
   const [isFav, setIsFav] = useState(isFavorite);
@@ -64,6 +66,7 @@ const RestaurantCard = ({
           toast.error("Erreur lors de l'ajout du restaurant aux favoris");
         });
     }
+    onFavorite?.()
   };
 
   const getPriceSymbol = (price: PriceCategoryEnum) => {

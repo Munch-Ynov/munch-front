@@ -32,10 +32,10 @@ const RestaurantDetail = () => {
       id
         ? await restaurantApi.getRestaurantById(id)
         : {
-            message: "Restaurant not found",
-            error: "Not Found",
-            statusCode: 404,
-          },
+          message: "Restaurant not found",
+          error: "Not Found",
+          statusCode: 404,
+        },
   });
 
   const restaurant = data as Restaurant;
@@ -82,18 +82,21 @@ const RestaurantDetail = () => {
   // TODO
   const isClosed = (date: Date) => date.getDay() === 2;
 
+  const [updatedAt, setUpdatedAt] = useState(new Date());
+
   const { data: favData } = useQuery({
-    queryKey: ["favorites", user.id],
+    queryKey: ["favorites", user.id, updatedAt],
     queryFn: async () =>
       await api.getFavoritesRestaurants(user.id, {
         size: 1000,
       }),
   });
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const isFavorite = favData?.content?.some(
+    (fav) => fav.id === restaurant.id
+  );
 
   const toggleFavorite = async (restaurantId: string) => {
-    setIsFavorite(!isFavorite);
     if (isFavorite) {
       await api
         .removeFavoriteRestaurant(user?.id, restaurantId)
@@ -115,6 +118,7 @@ const RestaurantDetail = () => {
           toast.error("Erreur lors de l'ajout du restaurant aux favoris");
         });
     }
+    setUpdatedAt(new Date());
   };
 
   if (isLoading) return <Loader />;
