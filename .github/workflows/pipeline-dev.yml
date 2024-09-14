@@ -77,4 +77,4 @@ jobs:
             git pull;
             docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
             docker pull ${{ env.IMAGE_NAME }}:latest;
-            docker-compose up -d;
+            docker-compose up -d --force-recreate;
