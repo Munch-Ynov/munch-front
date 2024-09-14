@@ -12,8 +12,8 @@ on:
 env:
   REGISTRY: ghcr.io
   # IMAGE_NAME: ghcr.io/munch-ynov/munch-front
-  # ORGANIZATION: ${{ github.repository_owner }}
-  # CONTAINER_NAME: munch-front
+  ORGANIZATION: ${{ github.repository_owner }}
+  CONTAINER_NAME: munch-front
   IMAGE_NAME: ${{ github.repository }}
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
@@ -77,5 +77,5 @@ jobs:
             git remote set-url origin https://${{ secrets.GITHUB_USERNAME }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ env.ORGANIZATION }}/${{ github.event.repository.name }}.git;
             git pull;
             docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
-            docker pull ${{ env.IMAGE_NAME }}:latest;
+            docker pull ${{ env.IMAGE_NAME }}:main;
             docker-compose up -d;
