@@ -4,6 +4,7 @@ import restaurantApi from "@/lib/api/restaurant.api";
 import type { Restaurant } from "@/models/restaurant.model";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
+import Autoplay from "embla-carousel-autoplay";
 
 import type { Profile } from "@/models/profile.model";
 import { userAtom } from "@/store/auth.store";
@@ -17,10 +18,17 @@ import { AdvancedImage } from "@cloudinary/react";
 import { cld } from "@/main";
 import usePriceSymbol from "@/hooks/usePrice";
 import { Badge } from "@/components/ui/badge";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api from "@/lib/api/restaurant.api";
 import { cn } from "@/lib/utils";
-import { se } from "date-fns/locale";
+
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const RestaurantDetail = () => {
   const { id } = useParams();
@@ -32,10 +40,10 @@ const RestaurantDetail = () => {
       id
         ? await restaurantApi.getRestaurantById(id)
         : {
-          message: "Restaurant not found",
-          error: "Not Found",
-          statusCode: 404,
-        },
+            message: "Restaurant not found",
+            error: "Not Found",
+            statusCode: 404,
+          },
   });
 
   const restaurant = data as Restaurant;
@@ -92,9 +100,7 @@ const RestaurantDetail = () => {
       }),
   });
 
-  const isFavorite = favData?.content?.some(
-    (fav) => fav.id === restaurant.id
-  );
+  const isFavorite = favData?.content?.some((fav) => fav.id === restaurant.id);
 
   const toggleFavorite = async (restaurantId: string) => {
     if (isFavorite) {
@@ -158,6 +164,43 @@ const RestaurantDetail = () => {
           </div>
         </div>
 
+        <div className="my-8 w-3/4 mx-auto">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="mb-8"
+            plugins={[
+              Autoplay({
+                delay: 3000,
+              }),
+            ]}
+          >
+            <CarouselContent>
+              <CarouselItem className="md:basis-1/3 lg:basis-1/4">
+                <AdvancedImage
+                  cldImg={cld.image(restaurant.main_picture)}
+                  alt="main_picture"
+                  className="w-full h-[20vh] object-cover rounded-md"
+                />
+              </CarouselItem>
+              {restaurant.pictures.map((pic, index) => (
+                <CarouselItem className="md:basis-1/3 lg:basis-1/4" key={index}>
+                  <AdvancedImage
+                    key={index}
+                    cldImg={cld.image(pic)}
+                    alt={`Food ${index + 1}`}
+                    className="w-full h-[20vh] object-cover rounded-md"
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
+
         <div className="flex items-baseline mb-1">
           <span>Fourchette de prix : </span>
           <Badge variant="outline" className="text-muted-foreground mx-2">
@@ -167,22 +210,6 @@ const RestaurantDetail = () => {
         <Badge className="bg-indigo-200 text-indigo-600 mb-8">
           Cuisine d'Amérique du Sud
         </Badge>
-
-        <div className="flex gap-8 mb-8">
-          <AdvancedImage
-            cldImg={cld.image(restaurant.main_picture)}
-            alt="main_picture"
-            className="w-full h-[20vh] object-cover rounded-md"
-          />
-          {restaurant.pictures.map((pic, index) => (
-            <AdvancedImage
-              key={index}
-              cldImg={cld.image(pic)}
-              alt={`Food ${index + 1}`}
-              className="w-full h-[20vh] object-cover rounded-md"
-            />
-          ))}
-        </div>
 
         <h2 className="text-xl font-semibold mb-2">Description</h2>
         <p className="text-gray-700 mb-8">{restaurant.description}</p>
