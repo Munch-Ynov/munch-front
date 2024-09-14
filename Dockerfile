@@ -58,6 +58,7 @@ EXPOSE 5000
 
 USER node
 
+
 # Start the application
 CMD ["serve", "-s", "dist", "-l", "5000"]
 
