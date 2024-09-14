@@ -1,6 +1,7 @@
 FROM node:22-alpine3.18 as build-stage
 
 WORKDIR /app
+RUN apk add --no-cache libc6-compat
 
 # Copy package.json and package-lock.json
 COPY --chown=node:node package*.json ./
@@ -31,6 +32,8 @@ RUN ["npm","run","build"]
 # RUN npm prune --production && npm cache clean --force
 RUN npm i --only=production && npm cache clean --force
 
+USER node
+
 # Path: Dockerfile
 FROM node:22-alpine3.18 as production-stage
 
@@ -52,6 +55,8 @@ RUN npm install -g serve
 # Expose the port
 ENV PORT = 5000
 EXPOSE 5000
+
+USER node
 
 # Start the application
 CMD ["serve", "-s", "dist", "-l", "5000"]
