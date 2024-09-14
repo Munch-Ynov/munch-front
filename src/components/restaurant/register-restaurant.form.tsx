@@ -24,20 +24,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useConfirm } from "@/hooks/useConfirm";
 import { PriceCategoryEnum } from "@/models/enum/price-category.enum";
-import { RestaurantFeatureWithCategory } from "@/models/restaurant-feature.model";
-import { RestaurantWithFeatures } from "@/models/restaurant.model";
+import type { RestaurantFeatureWithCategory } from "@/models/restaurant-feature.model";
+import type { RestaurantWithFeatures } from "@/models/restaurant.model";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import restaurantApi from "@/lib/api/restaurant.api";
-import { toast } from "sonner";
-import { Label } from "../ui/label";
-import imageApi from "@/lib/api/images.api";
-import { AdvancedImage } from "@cloudinary/react";
 import { cld } from "@/main";
+import { AdvancedImage } from "@cloudinary/react";
 
 const formSchema = z.object({
   name: z.string(),
@@ -64,13 +59,18 @@ const formSchema = z.object({
 export function RegisterRestaurantForm({
   restaurant,
   features,
+  onSubmit,
 }: {
-  restaurant: RestaurantWithFeatures;
+  restaurant?: RestaurantWithFeatures;
   features: RestaurantFeatureWithCategory[];
+  onSubmit?: (
+    restaurant: Omit<RestaurantWithFeatures, "id" | "createdAt" | "updatedAt">,
+    mainPicture: Blob | null,
+    pictures: Blob[]
+  ) => void;
 }) {
   const [mainPicture, setMainPicture] = useState<File | null>(null);
   const [pictures, setPictures] = useState<File[]>([]);
-  const { confirm } = useConfirm();
   const [featuresValue, setFeaturesValue] = useState(
     restaurant?.features.map((f) => ({
       label: features.find((feature) => feature.id === f.id)?.name ?? "",
@@ -104,49 +104,23 @@ export function RegisterRestaurantForm({
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (mainPicture) {
-      const mainPicture = await uploadMainPicture();
-      values.main_picture = mainPicture.public_id;
-    }
 
-    if (pictures.length) {
-      const pictures = await uploadPictures();
-      values.pictures = pictures.map((p) => p.public_id);
-    }
-
-    const isConfirm = await confirm({
-      content: "Êtes-vous sûr de vouloir enregistrer ces informations ?",
-    });
-    if (isConfirm) {
-      restaurantApi
-        .updateRestaurant({
+  const onSubmitted = (
+    values: z.infer<typeof formSchema>
+  ) => {
+    if (onSubmit) {
+      onSubmit(
+        {
           ...values,
-          id: restaurant.id,
+          features: featuresValue.map((f) => features.find((feature) => feature.id === f.value)).filter((f) => !!f) as RestaurantFeatureWithCategory[],
           price: values.price as PriceCategoryEnum,
-          name: values.name,
-          description: values.description,
-          email: values.email,
-          phone: values.phone,
-          address: values.address,
-          n_siret: values.n_siret,
-          code_postal: values.code_postal,
-          city: values.city,
-          main_picture: values.main_picture,
-          pictures: values.pictures,
-        })
-        .then(() => {
-          toast.success("Informations enregistrées avec succès");
-        })
-        .catch((error) => {
-          console.error(error);
-          toast.error(
-            "Une erreur s'est produite lors de l'enregistrement des informations"
-          );
-        });
+        },
+        mainPicture,
+        pictures
+      );
     }
-  };
-  const submit = form.handleSubmit(onSubmit);
+  }
+
 
   const handleMainPictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMainPicture(e.target.files?.[0] || null);
@@ -156,29 +130,11 @@ export function RegisterRestaurantForm({
     setPictures(Array.from(e.target.files ?? []));
   };
 
-  const uploadMainPicture = async () => {
-    const formData = new FormData();
-    formData.append("file", mainPicture as Blob);
-    formData.append("upload_preset", "restaurant");
 
-    return imageApi.uploadPicture(formData);
-  };
-
-  const uploadPictures = async () => {
-    const promises = pictures.map((picture) => {
-      const formData = new FormData();
-      formData.append("file", picture as Blob);
-      formData.append("upload_preset", "restaurant");
-
-      return imageApi.uploadPicture(formData);
-    });
-
-    return Promise.all(promises);
-  };
 
   return (
     <div className="flex flex-col justify-end items-end gap-4">
-      <Button onClick={submit} className="col-span-6">
+      <Button onClick={form.handleSubmit(onSubmitted)} className="col-span-6">
         Enregistrer
       </Button>
       <div className="flex flex-col lg:flex-row gap-4 w-full">
@@ -192,7 +148,7 @@ export function RegisterRestaurantForm({
           <CardContent>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(onSubmitted)}
                 className="grid grid-cols-6 gap-4"
               >
                 <div className="col-span-6 md:col-span-2">
@@ -274,7 +230,7 @@ export function RegisterRestaurantForm({
                 <div className="col-span-6 md:col-span-6">
                   <FormField
                     control={form.control}
-                    name={`features`}
+                    name="features"
                     render={() => (
                       <FormItem>
                         <FormLabel>Caractéristiques</FormLabel>
@@ -445,16 +401,16 @@ export function RegisterRestaurantForm({
                 {pictures.length > 0 ? (
                   pictures.map((picture, index) => (
                     <img
-                      key={index}
+                      key={picture.name}
                       src={URL.createObjectURL(picture)}
-                      alt="picture"
+                      alt={`picture-${index}`}
                       className="min-w-5/12 h-24 aspect-auto object-cover rounded-md"
                     />
                   ))
                 ) : restaurant?.pictures && restaurant.pictures.length > 0 ? (
-                  restaurant.pictures.map((picture, index) => (
+                  restaurant.pictures.map((picture) => (
                     <AdvancedImage
-                      key={index}
+                      key={picture}
                       cldImg={cld.image(picture)}
                       alt="picture"
                       className="min-w-5/12 h-24 aspect-auto object-cover rounded-md"
@@ -484,3 +440,5 @@ export function RegisterRestaurantForm({
     </div>
   );
 }
+
+

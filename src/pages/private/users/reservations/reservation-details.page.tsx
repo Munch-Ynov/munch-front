@@ -19,7 +19,7 @@ const ReservationDetail = () => {
 
   const navigate = useNavigate();
 
-  const { data: rdata, loading: rloading } = useQuery({
+  const { data: rdata, isLoading: rloading } = useQuery({
     queryKey: ['reservation', id],
     queryFn: async () => id ? await reservationApi.getReservationById(id) : {
       message: 'Reservation not found',
@@ -31,7 +31,7 @@ const ReservationDetail = () => {
   const reservation = rdata as Reservation;
 
 
-  const { data: restaurantData, loading: restaurantLoading } = useQuery({
+  const { data: restaurantData, isLoading: restaurantLoading } = useQuery({
     queryKey: ['restaurant', reservation?.restaurantId],
     queryFn: async () => {
       if (!reservation) return undefined;
@@ -63,7 +63,7 @@ const ReservationDetail = () => {
 
   if (loading) return <Loader />
   if (!rdata || (rdata as ErrorMessage).statusCode) return <h1>La reservation n'existe pas</h1>
-  if (!restaurantData || (restaurantData as ErrorMessage).statusCode) return <h1>Le restaurant n'existe pas</h1>
+  if (!restaurantData) return <h1>Le restaurant n'existe pas</h1>
 
   return (
     <div>

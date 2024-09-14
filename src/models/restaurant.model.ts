@@ -17,6 +17,7 @@ export interface Restaurant {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
+  restaurateurId?: string;
 }
 
 export interface RestaurantWithFeatures extends Restaurant {

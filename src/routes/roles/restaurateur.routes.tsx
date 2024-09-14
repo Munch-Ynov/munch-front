@@ -2,6 +2,7 @@ import { Layout } from "@/components/layout";
 import { DashboardPage } from "@/pages/private/restaurateurs/dashboard.page";
 import { DinningRoomsPage } from "@/pages/private/restaurateurs/dinning-rooms.page";
 import { InformationsPage } from "@/pages/private/restaurateurs/informations.page";
+import { NewRestaurantPage } from "@/pages/private/restaurateurs/new-restaurant.page";
 import AddReservation from "@/pages/private/restaurateurs/reservations/reservation-add.page";
 import ReservationDetail from "@/pages/private/restaurateurs/reservations/reservation-details.page";
 import { ReservationsPage } from "@/pages/private/restaurateurs/reservations/reservations.page";
@@ -34,6 +35,17 @@ const restaurateurRoutes = [
 
 export const RestaurateurRoutes = () => {
   const [user] = useAtom(userAtom);
+
+  if (user?.restaurants.length === 0) {
+    return (
+      <Routes>
+        <Route path="*" element={<Layout routes={[]} />}>
+          <Route path="*" element={<NewRestaurantPage />} />
+        </Route>
+      </Routes>
+    )
+  }
+
   return (
     <Routes>
       <Route path="/" element={<Layout routes={restaurateurRoutes} />}>
