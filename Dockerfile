@@ -29,7 +29,7 @@ COPY --chown=node:node . .
 RUN ["npm","run","build"]
 
 # # Remove the dev dependencies
-# RUN npm prune --production && npm cache clean --force
+RUN npm prune --production && npm cache clean --force
 RUN npm i --only=production && npm cache clean --force
 
 USER node
