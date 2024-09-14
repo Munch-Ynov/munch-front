@@ -1,21 +1,22 @@
-import { AuthStatus } from "@/pages/auth/status.page";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { Header } from "./header";
 
-export function Layout() {
+export function Layout({
+  routes,
+}: {
+  routes: {
+    path: string;
+    element: JSX.Element;
+    label: string;
+    comingSoon?: boolean;
+  }[];
+}) {
   return (
-    <div>
-      <AuthStatus />
-
-      <ul>
-        <li>
-          <Link to="/">Public Page</Link>
-        </li>
-        <li>
-          <Link to="/protected">Protected Page</Link>
-        </li>
-      </ul>
-
-      <Outlet />
+    <div className="flex flex-col">
+      <Header routes={routes} />
+      <div className="container py-8">
+        <Outlet />
+      </div>
     </div>
   );
 }
