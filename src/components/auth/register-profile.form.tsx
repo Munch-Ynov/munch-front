@@ -42,57 +42,25 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [roleSelected, setRoleSelected] = useState<RoleEnum>(role);
-  const [defaultValues, setDefaultValues] = useState({
-    email: "john.doe@example.com",
-    password: "!Password123",
-    name: "John Doe",
-    phone: "+33123456789",
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
   });
 
   useEffect(() => {
     setRoleSelected(role);
-    if (role === RoleEnum.RESTAURATEUR) {
-      setDefaultValues({
-        email: "bernard.loiseau@example.com",
-        password: "!Password123",
-        name: "Bernard Loiseau",
-        phone: "+33234567890",
-      });
-    } else {
-      setDefaultValues({
-        email: "john.doe@example.com",
-        password: "!Password123",
-        name: "John Doe",
-        phone: "+33123456789",
-      });
-    }
   }, [role]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: defaultValues,
-  });
-
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (role === RoleEnum.RESTAURATEUR) {
-      register("bernard.loiseau@example.com", "!Password123", role, {
-        name: "Bernard Loiseau",
-        phone: "+33234567890",
-      }).then(() => {
-        navigate("/", { replace: true });
-      });
-    } else {
-      ///
-      const { email, password } = values;
-      const profile = {
-        name: values.name,
-        phone: values.phone,
-      };
+    const { email, password } = values;
+    const profile = {
+      name: values.name,
+      phone: values.phone,
+    };
 
-      register(email, password, role, profile).then(() => {
-        navigate("/", { replace: true });
-      });
-    }
+    register(email, password, role, profile).then(() => {
+      navigate("/", { replace: true });
+    });
   }
 
   return (
@@ -100,7 +68,7 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
       <CardHeader>
         <CardTitle>
           <div className="flex flex-col gap-2">
-            <div className="w-full flex justify-between">
+            <div className="w-full flex flex-row-reverse justify-between">
               {roleSelected === RoleEnum.RESTAURATEUR ? (
                 <Badge variant="outline">Restaurateur</Badge>
               ) : (
@@ -180,7 +148,7 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
               />
             </div>
             <Button className="w-full" type="submit">
-              S'inscrire
+              Créer un compte
             </Button>
           </form>
         </Form>

@@ -1,4 +1,4 @@
-import { UserKPIResponse } from "@/models/kpi.model";
+import { RestaurantKPIResponse, UserKPIResponse } from "@/models/kpi.model";
 import { api } from "./api";
 
 const prefix = "kpi";
@@ -10,6 +10,14 @@ async function getUserKPI(userId: string) {
   });
 }
 
+async function getRestaurantKPI(restaurantId: string) {
+  return api<RestaurantKPIResponse>({
+    url: `${prefix}/restaurant/${restaurantId}`,
+    method: "GET",
+  });
+}
+
 export default {
   getUserKPI,
+  getRestaurantKPI,
 };

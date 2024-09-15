@@ -29,24 +29,29 @@ export const Header = ({
   const [user] = useAtom(userAtom);
   const location = useLocation();
 
-
-  if (!user) return (
-    <header className="flex items-center justify-between px-4 py-3 bg-white border-b">
-      <Link to="/" className="flex items-center space-x-2">
-        <Link to="/">
-          <img src="/img/logo.svg" width="96" height="32" alt="Munch" />
-        </Link>
-      </Link>
-      <div className="space-x-2">
-        <Link to="/login" className="text-muted-foreground hover:text-primary">
-          <Button variant="outline">Se connecter</Button>
-        </Link>
-        <Link to="/register" className="text-white">
-          <Button>Créer un compte</Button>
-        </Link>
-      </div>
-    </header >
-  )
+  if (!user)
+    return (
+      <header className="bg-white border-b">
+        <div className="container flex items-center justify-between px-4 py-3">
+          <Link to="/" className="flex items-center space-x-2">
+            <Link to="/">
+              <img src="/img/logo.svg" width="96" height="32" alt="Munch" />
+            </Link>
+          </Link>
+          <div className="space-x-2">
+            <Link
+              to="/login"
+              className="text-muted-foreground hover:text-primary"
+            >
+              <Button variant="outline">Se connecter</Button>
+            </Link>
+            <Link to="/register" className="text-white">
+              <Button>Créer un compte</Button>
+            </Link>
+          </div>
+        </div>
+      </header>
+    );
 
   return (
     <header className="border-b shrink-0">
@@ -93,7 +98,7 @@ export const Header = ({
                     className={cn(
                       "text-muted-foreground",
                       location.pathname === route.path &&
-                      "text-primary font-bold"
+                        "text-primary font-bold"
                     )}
                   >
                     {route.label}

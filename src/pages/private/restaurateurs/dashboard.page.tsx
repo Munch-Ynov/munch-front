@@ -1,5 +1,12 @@
+import type { RestaurateurProfile } from "@/models/profile.model";
+import { userAtom } from "@/store/auth.store";
+import { useQuery } from "@tanstack/react-query";
+import { useAtom } from "jotai";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import kpiApi from "@/lib/api/kpi.api";
 import { CardKPI } from "@/components/kpi/card.kpi";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -9,17 +16,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import reservationApi from "@/lib/api/reservation.api";
-import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 import toFrenchStatus from "@/models/enum/reservation-status.enum";
-import type { RestaurateurProfile } from "@/models/profile.model";
-import { userAtom } from "@/store/auth.store";
-import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { useAtom } from "jotai";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export const DashboardPage = () => {
   const navigate = useNavigate();
@@ -33,15 +33,10 @@ export const DashboardPage = () => {
 
   const [lastUpdate, setLastUpdate] = useState<number>(Date.now());
 
-  const { data: upcomingReservationsData } = useQuery({
-    queryKey: ["reservations", "upcoming", restaurantId, lastUpdate],
-    queryFn: async () =>
-      await reservationApi.getUpcomingReservationsForRestaurant(
-        restaurantId || ""
-      ),
+  const { data: kpiData, isLoading } = useQuery({
+    queryKey: ["kpiRestaurant", restaurantId],
+    queryFn: async () => await kpiApi.getRestaurantKPI(restaurantId!),
   });
-
-  const upcomingReservations = upcomingReservationsData?.content || [];
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -50,27 +45,27 @@ export const DashboardPage = () => {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <CardKPI
               title="Réservations Confirmées"
-              value={128}
+              value={kpiData?.confirmedReservations || 0}
               icon="Calendar"
-              subtitle="+14% par rapport à la semaine dernière"
+              isLoading={isLoading}
+            />
+            <CardKPI
+              title="Utilisateurs uniques"
+              value={kpiData?.distinctUsers || 0}
+              icon="Users"
+              isLoading={isLoading}
             />
             <CardKPI
               title="Tables Disponibles"
-              value={24}
+              value={43}
               icon="ClipboardList"
-              subtitle="6 tables réservées"
+              isLoading={isLoading}
             />
             <CardKPI
               title="Capacité Totale"
               value={120}
               icon="Users"
-              subtitle="Nombre de places assises dans tous les espaces"
-            />
-            <CardKPI
-              title="Chiffre d'Affaires Moyen Quotidien"
-              value={3240}
-              icon="Info"
-              subtitle="+5.2% par rapport au mois dernier"
+              isLoading={isLoading}
             />
           </div>
         </section>
@@ -97,7 +92,7 @@ export const DashboardPage = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {upcomingReservations.map((reservation) => (
+                  {kpiData?.futureReservations.map((reservation) => (
                     <TableRow
                       key={reservation.id}
                       onClick={() =>

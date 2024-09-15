@@ -5,8 +5,9 @@ import { RoleEnum } from "@/models/enum/role-enum";
 import { MoveRight } from "lucide-react";
 
 export function RegisterPage() {
-
-  const [accountType, setAccountType] = useParam("account", { default: "user" });
+  const [accountType, setAccountType] = useParam("account", {
+    default: "user",
+  });
 
   const isRestaurant = accountType === "restaurant";
 

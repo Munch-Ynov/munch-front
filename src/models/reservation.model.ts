@@ -1,4 +1,5 @@
 import { ReservationStatusEnum } from "./enum/reservation-status.enum";
+import { UserProfile } from "./profile.model";
 import { Restaurant } from "./restaurant.model";
 
 export interface Reservation {
@@ -15,4 +16,8 @@ export interface Reservation {
 
 export interface ReservationWithRestaurant extends Reservation {
   restaurant: Restaurant;
+}
+
+export interface ReservationWithUser extends Reservation {
+  user: UserProfile["name"];
 }
