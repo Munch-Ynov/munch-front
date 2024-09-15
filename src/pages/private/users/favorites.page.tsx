@@ -7,7 +7,11 @@ import RestaurantCard from "@/components/restaurant/restaurant-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/ui/loader";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import useParam from "@/hooks/useParam/useParam";
 import featuresApi from "@/lib/api/features.api";
 import type { Category } from "@/models/category.model";
@@ -20,7 +24,6 @@ import { Link, useNavigate } from "react-router-dom";
 export const FavoritesPage = () => {
   const [page, setPage] = useParam<number>("page", { default: 0 });
   const [searchTerm, setSearchTerm] = useState("");
-
 
   const { data: dFeatures } = useQuery({
     queryKey: ["features"],
@@ -107,31 +110,47 @@ export const FavoritesPage = () => {
                         <div key={category.id} className="flex flex-col">
                           <h3 className="font-bold">{category.name}</h3>
                           <div className="ml-2">
-                            {
-                              features.filter((feature) => feature.category.id === category.id).map((feature) => (
-                                <div key={feature.id} className="flex items-center ml-2 w-full h-8">
+                            {features
+                              .filter(
+                                (feature) => feature.category.id === category.id
+                              )
+                              .map((feature) => (
+                                <div
+                                  key={feature.id}
+                                  className="flex items-center ml-2 w-full h-8"
+                                >
                                   <Input
-                                    checked={selectedFeatures.includes(feature.id)}
+                                    checked={selectedFeatures.includes(
+                                      feature.id
+                                    )}
                                     type="checkbox"
                                     id={feature.id}
                                     className="w-4 h-4 mr-2"
                                     onChange={(e) => {
                                       if (e.target.checked) {
-                                        setSelectedFeatures([...selectedFeatures, feature.id])
+                                        setSelectedFeatures([
+                                          ...selectedFeatures,
+                                          feature.id,
+                                        ]);
                                       } else {
-                                        setSelectedFeatures(selectedFeatures.filter((f) => f !== feature.id))
+                                        setSelectedFeatures(
+                                          selectedFeatures.filter(
+                                            (f) => f !== feature.id
+                                          )
+                                        );
                                       }
-                                    }} />
-                                  <label htmlFor={feature.id}>{feature.name}</label>
+                                    }}
+                                  />
+                                  <label htmlFor={feature.id}>
+                                    {feature.name}
+                                  </label>
                                 </div>
-                              ))
-                            }
+                              ))}
                           </div>
                         </div>
                       ))}
                     </div>
                   </PopoverContent>
-
                 </Popover>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mt-4">
@@ -149,12 +168,14 @@ export const FavoritesPage = () => {
                         .includes(searchTerm.toLowerCase())
                     )
                     .map((restaurant) => (
-                      <Link to={`/restaurants/${restaurant.id}`} key={restaurant.id}>
+                      <Link
+                        to={`/restaurants/${restaurant.id}`}
+                        key={restaurant.id}
+                      >
                         <RestaurantCard
                           key={restaurant.id}
                           restaurant={restaurant}
                           isFavorite={true}
-
                           className="mb-4"
                         />
                       </Link>
