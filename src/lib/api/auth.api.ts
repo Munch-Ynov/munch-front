@@ -1,4 +1,4 @@
-import { api } from "@/lib/api/api";
+import { api, ErrorMessage } from "@/lib/api/api";
 import type { RoleEnum } from "@/models/enum/role-enum";
 import type { Profile, ProfileCreate } from "@/models/profile.model";
 
@@ -26,15 +26,14 @@ export async function register(
 }
 
 export async function login(email: string, password: string) {
-  return api<{ accessToken: string; user: Profile }>(
-    {
-      url: `${prefix}/login`,
-      method: "POST",
-      body: {
-        email,
-        password,
-      }
-    });
+  return api<{ accessToken: string; user: Profile }>({
+    url: `${prefix}/login`,
+    method: "POST",
+    body: {
+      email,
+      password,
+    },
+  });
 }
 
 export async function refreshToken() {
@@ -47,7 +46,7 @@ export async function refreshToken() {
 export async function logout() {
   return api({
     url: `${prefix}/logout`,
-    method: "POST"
+    method: "POST",
   });
 }
 

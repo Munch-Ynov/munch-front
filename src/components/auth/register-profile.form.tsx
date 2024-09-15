@@ -23,6 +23,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "../ui/badge";
+import { toast } from "sonner";
+import { ErrorMessage } from "@/lib/api/api";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -58,9 +60,14 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
       phone: values.phone,
     };
 
-    register(email, password, role, profile).then(() => {
-      navigate("/", { replace: true });
-    });
+    register(email, password, role, profile)
+      .then(() => {
+        navigate("/", { replace: true });
+        toast.success("Votre compte a été créé");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
   }
 
   return (

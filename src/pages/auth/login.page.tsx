@@ -28,12 +28,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
+  email: z.string().email({ message: "Adresse e-mail invalide" }),
   password: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters long" }),
+    .min(8, { message: "Le mot de passe doit contenir au moins 8 caractères" })
+    .regex(/[a-z]/, {
+      message: "Le mot de passe doit contenir au moins une lettre minuscule",
+    })
+    .regex(/[A-Z]/, {
+      message: "Le mot de passe doit contenir au moins une lettre majuscule",
+    })
+    .regex(/[0-9]/, {
+      message: "Le mot de passe doit contenir au moins un chiffre",
+    })
+    .regex(/[^a-zA-Z0-9]/, {
+      message: "Le mot de passe doit contenir au moins un caractère spécial",
+    }),
 });
 
 export function LoginPage() {
@@ -54,9 +67,13 @@ export function LoginPage() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     const { email, password } = values;
 
-    login(email, password).then(() => {
-      navigate(fromLocation, { replace: true });
-    });
+    login(email, password)
+      .then(() => {
+        navigate(fromLocation, { replace: true });
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
   }
 
   return (
