@@ -41,11 +41,12 @@ export const RestaurateurRoutes = () => {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    if (user?.restaurants.length === 0) return;
-    setRoutes(restaurateurRoutes);
-  }, [user?.restaurants.length]);
+    if (user?.restaurants?.length) {
+      setRoutes(restaurateurRoutes);
+    }
+  }, [user?.restaurants?.length]);
 
-  if (user?.restaurants.length === 0) {
+  if (!user?.restaurants?.length) {
     return (
       <Routes>
         <Route path="*" element={<Layout />}>
@@ -54,9 +55,6 @@ export const RestaurateurRoutes = () => {
       </Routes>
     );
   }
-
-
-
 
   return (
     <Routes>
@@ -67,7 +65,6 @@ export const RestaurateurRoutes = () => {
             <Route key={route.path} path={route.path} element={route.element} />
           ))}
         <Route path="/reservations/new" element={<AddReservation />} />
-
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

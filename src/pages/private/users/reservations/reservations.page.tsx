@@ -29,22 +29,20 @@ export const ReservationsPage = () => {
 
   const content = data?.content || [];
 
-
   const { confirm } = useConfirm();
 
   const cancelReservation = async (id: string) => {
     confirm({
-      title: 'Annuler la réservation',
-      content: 'Êtes-vous sûr de vouloir annuler cette réservation ?',
+      title: "Annuler la réservation",
+      content: "Êtes-vous sûr de vouloir annuler cette réservation ?",
     }).then((confirmed) => {
       if (confirmed) {
         reservationApi.cancelReservation(id).then(() => {
-          toast.success('Votre réservation a été annulée avec succès');
+          toast.success("Votre réservation a été annulée avec succès");
         });
       }
     });
   };
-
 
   return (
     <main className="flex-1 items-start gap-4 md:gap-8 ">
@@ -68,7 +66,11 @@ export const ReservationsPage = () => {
               />
             </div> */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4 md:gap-4 mt-4">
-              {isLoading && <Loader />}
+              {isLoading && (
+                <div className="flex justify-center">
+                  <Loader />
+                </div>
+              )}
               {!isLoading && content && content.length === 0 && (
                 <p>Aucun réservation trouvé.</p>
               )}
@@ -109,8 +111,6 @@ export const ReservationsPage = () => {
           </Card>
         </TabsContent>
       </Tabs>
-
-
     </main>
   );
 };

@@ -100,11 +100,15 @@ const RestaurantDetail = () => {
   const [updatedAt, setUpdatedAt] = useState(new Date());
 
   const { data: favData } = useQuery({
-    queryKey: ["favorites", user.id, updatedAt],
+    queryKey: ["favorites", user?.id, updatedAt],
     queryFn: async () =>
-      await api.getFavoritesRestaurants(user.id, {
-        size: 1000,
-      }),
+      user?.id
+        ? await api.getFavoritesRestaurants(user.id, {
+            size: 1000,
+          })
+        : {
+            content: [],
+          },
   });
 
   useEffect(() => {
