@@ -17,7 +17,6 @@ import type { Profile } from "@/models/profile.model";
 const RestaurantCard = ({
   restaurant,
   isFavorite,
-  onClick,
   onFavorite,
 }: {
   restaurant: Restaurant;
@@ -66,7 +65,7 @@ const RestaurantCard = ({
           toast.error("Erreur lors de l'ajout du restaurant aux favoris");
         });
     }
-    onFavorite?.()
+    onFavorite?.();
   };
 
   const getPriceSymbol = (price: PriceCategoryEnum) => {
@@ -83,12 +82,7 @@ const RestaurantCard = ({
   };
 
   return (
-    <Card
-      key={restaurant.id}
-      onKeyDown={onClick ? (e) => e.key === "Enter" && onClick() : undefined}
-      onClick={onClick}
-      className="overflow-hidden cursor-pointer"
-    >
+    <Card key={restaurant.id} className="overflow-hidden cursor-pointer">
       <div className="relative h-48">
         <AdvancedImage
           cldImg={cld.image(restaurant?.main_picture)}
@@ -100,7 +94,9 @@ const RestaurantCard = ({
         <div className="flex justify-between items-start">
           <div>
             <h2 className="text-xl font-bold">{restaurant.name}</h2>
-            <p className="text-gray-600">{restaurant.address}</p>
+            <p className="text-gray-600 truncate max-w-48">
+              {restaurant.address}
+            </p>
             <Badge variant="outline" className="mt-2">
               {getPriceSymbol(restaurant.price)}
             </Badge>
@@ -108,6 +104,7 @@ const RestaurantCard = ({
           <Button
             onClick={(e) => {
               e.stopPropagation();
+              e.preventDefault();
               handleToggleFavorite();
             }}
             variant="ghost"

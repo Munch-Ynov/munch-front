@@ -8,46 +8,41 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarDays, Star, UserCircle2 } from "lucide-react";
+import {
+  CalendarDays,
+  Group,
+  Heart,
+  Star,
+  User2,
+  UserCircle2,
+  Users,
+} from "lucide-react";
 import { CardKPI } from "@/components/kpi/card.kpi";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/auth.store";
 import { AdvancedImage } from "@cloudinary/react";
 import { cld } from "@/main";
+import { useQuery } from "@tanstack/react-query";
+import apiKpi from "@/lib/api/kpi.api";
+import RestaurantCard from "@/components/restaurant/restaurant-card";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export default function DashboardPage() {
   const [user] = useAtom(userAtom);
   const [profile, setProfile] = useState(user);
+  const navigate = useNavigate();
 
-  const reservationsPassees = [
-    { restaurant: "Le Petit Bistro", date: "2024-07-15", personnes: 2 },
-    { restaurant: "La Grande Table", date: "2024-06-30", personnes: 4 },
-    { restaurant: "Chez Marie", date: "2024-06-10", personnes: 3 },
-  ];
-
-  const reservationsFutures = [
-    { restaurant: "L'Étoile Filante", date: "2024-09-05", personnes: 2 },
-    { restaurant: "Le Jardin Secret", date: "2024-09-20", personnes: 6 },
-  ];
-
-  const restaurantsFavoris = [
-    "Le Petit Bistro",
-    "L'Étoile Filante",
-    "La Brasserie du Coin",
-  ];
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setProfile((prev: any) => ({ ...prev, [name]: value }));
-  };
-
-  const handleRoleChange = (value: string) => {
-    setProfile((prev: any) => ({ ...prev, role: value }));
-  };
+  const { data: kpis, isLoading } = useQuery({
+    queryKey: ["kpis", user.id],
+    queryFn: async () => await apiKpi.getUserKPI(user.id),
+  });
 
   return (
     <div className="container mx-auto p-4">
@@ -67,9 +62,24 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="flex space-x-4">
-          <CardKPI icon="Utensils" title="Réservations totales" value={5} />
-          <CardKPI icon="Star" title="Restaurants favoris" value={3} />
-          <CardKPI icon="Calendar" title="Prochaines réservations" value={2} />
+          <CardKPI
+            icon="Utensils"
+            title="Réservations totales"
+            value={kpis?.numberOfReservations || 0}
+            isLoading={isLoading}
+          />
+          <CardKPI
+            icon="Star"
+            title="Restaurants favoris"
+            value={kpis?.numberOfFavoriteRestaurants || 0}
+            isLoading={isLoading}
+          />
+          <CardKPI
+            icon="MapPin"
+            title="Restaurants visités"
+            value={kpis?.distinctRestaurants || 0}
+            isLoading={isLoading}
+          />
         </div>
       </div>
 
@@ -82,25 +92,33 @@ export default function DashboardPage() {
         <TabsContent value="history">
           <Card>
             <CardHeader>
-              <CardTitle>Historique des réservations</CardTitle>
-              <CardDescription>Vos réservations passées</CardDescription>
+              <CardTitle>Historique</CardTitle>
+              <CardDescription>Vos dernières réservations</CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="space-y-4">
-                {reservationsPassees.map((reservation, index) => (
+                {kpis?.lastReservations.map((reservation, index) => (
                   <li
                     key={index}
                     className="flex items-center justify-between border-b pb-2"
                   >
                     <div>
-                      <p className="font-medium">{reservation.restaurant}</p>
+                      <p className="font-medium">
+                        {reservation.restaurant.name}
+                      </p>
                       <p className="text-sm text-muted-foreground">
-                        {reservation.date}
+                        {new Date(reservation.date).toLocaleString("fr-FR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </p>
                     </div>
                     <div className="flex items-center">
-                      <CalendarDays className="mr-2 h-4 w-4 text-muted-foreground" />
-                      <span>{reservation.personnes} personnes</span>
+                      <Users className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <span>{reservation.nb_people} personnes</span>
                     </div>
                   </li>
                 ))}
@@ -116,20 +134,28 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-4">
-                {reservationsFutures.map((reservation, index) => (
+                {kpis?.futureReservations.map((reservation, index) => (
                   <li
                     key={index}
                     className="flex items-center justify-between border-b pb-2"
                   >
                     <div>
-                      <p className="font-medium">{reservation.restaurant}</p>
+                      <p className="font-medium">
+                        {reservation.restaurant.name}
+                      </p>
                       <p className="text-sm text-muted-foreground">
-                        {reservation.date}
+                        {new Date(reservation.date).toLocaleString("fr-FR", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </p>
                     </div>
                     <div className="flex items-center">
                       <CalendarDays className="mr-2 h-4 w-4 text-muted-foreground" />
-                      <span>{reservation.personnes} personnes</span>
+                      <span>{reservation.nb_people} personnes</span>
                     </div>
                   </li>
                 ))}
@@ -144,14 +170,28 @@ export default function DashboardPage() {
               <CardDescription>Vos restaurants préférés</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-2">
-                {restaurantsFavoris.map((restaurant, index) => (
-                  <li key={index} className="flex items-center">
-                    <Star className="mr-2 h-4 w-4 text-yellow-400" />
-                    <span>{restaurant}</span>
-                  </li>
-                ))}
-              </ul>
+              <Carousel className="mx-10">
+                <CarouselContent>
+                  {kpis?.favoriteRestaurants.map((favorite, index) => (
+                    <CarouselItem
+                      key={favorite.restaurantId}
+                      className="md:basis-1/3"
+                    >
+                      <Link to={`/restaurants/${favorite.restaurantId}`}>
+                        <RestaurantCard
+                          restaurant={favorite.restaurant}
+                          isFavorite
+
+                          className="mb-4 "
+                        />
+                      </Link>
+                    </CarouselItem>
+
+                  ))}
+                </CarouselContent>
+                <CarouselNext />
+                <CarouselPrevious />
+              </Carousel>
             </CardContent>
           </Card>
         </TabsContent>

@@ -10,6 +10,7 @@ import { NotFoundPage } from "@/pages/public/not-found.page";
 import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useRoutes } from "../main.routes";
 
 const restaurateurRoutes = [
   { path: "/", element: <Navigate to="/dashboard" />, label: "Accueil" },
@@ -28,7 +29,6 @@ const restaurateurRoutes = [
     path: "/dinning-rooms",
     element: <DinningRoomsPage />,
     label: "Salle",
-    // not yet implemented
     comingSoon: true,
   },
 ];
@@ -36,19 +36,23 @@ const restaurateurRoutes = [
 export const RestaurateurRoutes = () => {
   const [user] = useAtom(userAtom);
 
+  const { setRoutes } = useRoutes();
+
   if (user?.restaurants.length === 0) {
     return (
       <Routes>
-        <Route path="*" element={<Layout routes={[]} />}>
+        <Route path="*" element={<Layout />}>
           <Route path="*" element={<NewRestaurantPage />} />
         </Route>
       </Routes>
-    )
+    );
   }
+
+  setRoutes(restaurateurRoutes);
 
   return (
     <Routes>
-      <Route path="/" element={<Layout routes={restaurateurRoutes} />}>
+      <Route path="/" element={<Layout />}>
         {restaurateurRoutes
           .filter((route) => !route.comingSoon)
           .map((route) => (

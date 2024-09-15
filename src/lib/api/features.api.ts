@@ -15,6 +15,13 @@ async function getFeature(id: string) {
   return api<RestaurantFeature>({ url: `${prefix}/${id}`, method: "GET" });
 }
 
+async function getFeaturesByRestaurantId(restaurantId: string) {
+  return api<Record<string, RestaurantFeatureWithCategory[]>>({
+    url: `${prefix}/restaurant/${restaurantId}`,
+    method: "GET",
+  });
+}
+
 async function updateFeature(id: string, feature: RestaurantFeature) {
   return api<RestaurantFeature>({
     url: `${prefix}/${id}`,
@@ -30,6 +37,7 @@ async function deleteFeature(id: string) {
 export default {
   getFeatures,
   getFeature,
+  getFeaturesByRestaurantId,
   updateFeature,
   deleteFeature,
 };

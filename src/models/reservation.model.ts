@@ -1,4 +1,6 @@
 import { ReservationStatusEnum } from "./enum/reservation-status.enum";
+import { UserProfile } from "./profile.model";
+import { Restaurant } from "./restaurant.model";
 
 export interface Reservation {
   id: string;
@@ -10,4 +12,12 @@ export interface Reservation {
   createdAt: Date;
   updatedAt: Date;
   name: string;
+}
+
+export interface ReservationWithRestaurant extends Reservation {
+  restaurant: Restaurant;
+}
+
+export interface ReservationWithUser extends Reservation {
+  user: UserProfile["name"];
 }

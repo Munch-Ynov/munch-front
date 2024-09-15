@@ -77,6 +77,12 @@ dependencies:
   date-fns:
     specifier: ^3.6.0
     version: 3.6.0
+  embla-carousel-autoplay:
+    specifier: ^8.3.0
+    version: 8.3.0(embla-carousel@8.3.0)
+  embla-carousel-react:
+    specifier: ^8.3.0
+    version: 8.3.0(react@18.3.1)
   jotai:
     specifier: ^2.8.3
     version: 2.9.3(@types/react@18.3.4)(react@18.3.1)
@@ -85,7 +91,7 @@ dependencies:
     version: 0.383.0(react@18.3.1)
   munch-front:
     specifier: 'file:'
-    version: file:(@types/react-dom@18.3.0)(@types/react@18.3.4)(tailwindcss@3.4.10)
+    version: file:(@types/react-dom@18.3.0)(@types/react@18.3.4)(embla-carousel@8.3.0)(tailwindcss@3.4.10)
   next-themes:
     specifier: ^0.3.0
     version: 0.3.0(react-dom@18.3.1)(react@18.3.1)
@@ -2928,6 +2934,36 @@ packages:
     resolution: {integrity: sha512-lbBcvtIJ4J6sS4tb5TLp1b4LyfCdMkwStzXPyAgVgTRAsep4bvrAGaBOP7ZJtQMNJpSQ9SqG4brWOroNaQtm7Q==}
     dev: true
 
+  /embla-carousel-autoplay@8.3.0(embla-carousel@8.3.0):
+    resolution: {integrity: sha512-h7DFJLf9uQD+XDxr1NwA3/oFIjsnj/iED2RjET5u6/svMec46IbF1CYPhmB5Q/1Fc0WkcvhPpsEsrtVXQLxNzA==}
+    peerDependencies:
+      embla-carousel: 8.3.0
+    dependencies:
+      embla-carousel: 8.3.0
+    dev: false
+
+  /embla-carousel-react@8.3.0(react@18.3.1):
+    resolution: {integrity: sha512-P1FlinFDcIvggcErRjNuVqnUR8anyo8vLMIH8Rthgofw7Nj8qTguCa2QjFAbzxAUTQTPNNjNL7yt0BGGinVdFw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.1 || ^18.0.0
+    dependencies:
+      embla-carousel: 8.3.0
+      embla-carousel-reactive-utils: 8.3.0(embla-carousel@8.3.0)
+      react: 18.3.1
+    dev: false
+
+  /embla-carousel-reactive-utils@8.3.0(embla-carousel@8.3.0):
+    resolution: {integrity: sha512-EYdhhJ302SC4Lmkx8GRsp0sjUhEN4WyFXPOk0kGu9OXZSRMmcBlRgTvHcq8eKJE1bXWBsOi1T83B+BSSVZSmwQ==}
+    peerDependencies:
+      embla-carousel: 8.3.0
+    dependencies:
+      embla-carousel: 8.3.0
+    dev: false
+
+  /embla-carousel@8.3.0:
+    resolution: {integrity: sha512-Ve8dhI4w28qBqR8J+aMtv7rLK89r1ZA5HocwFz6uMB/i5EiC7bGI7y+AM80yAVUJw3qqaZYK7clmZMUR8kM3UA==}
+    dev: false
+
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
 
@@ -4423,13 +4459,14 @@ packages:
     resolution: {integrity: sha512-YGAhaO7J5ywOXW6InXNlLmfU194F8lVgu7bRntUF3TiG8Y3nBK0x1UJJuHUP/e8IyihkjCYqhCScpSwnlaSRkQ==}
     dev: false
 
-  file:(@types/react-dom@18.3.0)(@types/react@18.3.4)(tailwindcss@3.4.10):
+  file:(@types/react-dom@18.3.0)(@types/react@18.3.4)(embla-carousel@8.3.0)(tailwindcss@3.4.10):
     resolution: {directory: '', type: directory}
     id: 'file:'
     name: munch-front
     dependencies:
       '@cloudinary/react': 1.13.0(react@18.3.1)
       '@cloudinary/url-gen': 1.20.0
+      '@grafana/faro-react': 1.10.0(react-dom@18.3.1)(react-router-dom@6.26.1)(react@18.3.1)
       '@hookform/resolvers': 3.9.0(react-hook-form@7.53.0)
       '@radix-ui/react-accordion': 1.2.0(@types/react-dom@18.3.0)(@types/react@18.3.4)(react-dom@18.3.1)(react@18.3.1)
       '@radix-ui/react-alert-dialog': 1.1.1(@types/react-dom@18.3.0)(@types/react@18.3.4)(react-dom@18.3.1)(react@18.3.1)
@@ -4451,6 +4488,8 @@ packages:
       clsx: 2.1.1
       cmdk: 1.0.0(@types/react-dom@18.3.0)(@types/react@18.3.4)(react-dom@18.3.1)(react@18.3.1)
       date-fns: 3.6.0
+      embla-carousel-autoplay: 8.3.0(embla-carousel@8.3.0)
+      embla-carousel-react: 8.3.0(react@18.3.1)
       jotai: 2.9.3(@types/react@18.3.4)(react@18.3.1)
       lucide-react: 0.383.0(react@18.3.1)
       next-themes: 0.3.0(react-dom@18.3.1)(react@18.3.1)
@@ -4467,5 +4506,7 @@ packages:
     transitivePeerDependencies:
       - '@types/react'
       - '@types/react-dom'
+      - embla-carousel
+      - supports-color
       - tailwindcss
     dev: false

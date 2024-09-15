@@ -1,21 +1,26 @@
 import { RegisterProfileForm } from "@/components/auth/register-profile.form";
 import { Button } from "@/components/ui/button";
+import useParam from "@/hooks/useParam/useParam";
 import { RoleEnum } from "@/models/enum/role-enum";
 import { MoveRight } from "lucide-react";
-import { useState } from "react";
 
 export function RegisterPage() {
-  const [isRestaurant, setIsRestaurant] = useState(false);
+  const [accountType, setAccountType] = useParam("account", {
+    default: "user",
+  });
+
+  const isRestaurant = accountType === "restaurant";
+
   return (
     <div className="min-h-screen flex-col">
       <div className="flex flex-row-reverse my-4 h-full">
         {isRestaurant ? (
-          <Button variant={"link"} onClick={() => setIsRestaurant(false)}>
+          <Button variant={"link"} onClick={() => setAccountType("user")}>
             Se connecter en tant qu'utilisateur
             <MoveRight size={24} className="pl-2" />
           </Button>
         ) : (
-          <Button variant={"link"} onClick={() => setIsRestaurant(true)}>
+          <Button variant={"link"} onClick={() => setAccountType("restaurant")}>
             Se connecter en tant que restaurateur
             <MoveRight size={24} className="pl-2" />
           </Button>
