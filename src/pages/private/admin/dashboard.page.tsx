@@ -24,16 +24,16 @@ export const DashboardPage = () => {
           subtitle="+12% par rapport au mois dernier"
         />
         <CardKPI
-          title="Taux de Réservation Complété (%)"
-          value={72}
-          icon="Check"
-          subtitle="+3% par rapport à la semaine dernière"
+          title="Nouveaux Restaurants inscrits"
+          value={5}
+          icon="Utensils"
+          subtitle="+3 par rapport à la semaine dernière"
         />
         <CardKPI
-          title="Tables Actives"
-          value={152}
+          title="Nombre de couvert moyen"
+          value={34}
           icon="Table"
-          subtitle="+8 nouvelles tables ajoutées cette semaine"
+          subtitle="+4% par rapport au mois dernier"
         />
         <CardKPI
           title="Nombre de Signalements"
@@ -46,7 +46,7 @@ export const DashboardPage = () => {
         <TabsList>
           <TabsTrigger value="reservations">Reservations</TabsTrigger>
           <TabsTrigger value="dining-rooms">Dining Rooms</TabsTrigger>
-          <TabsTrigger value="restaurant-info">Restaurant Info</TabsTrigger>
+          <TabsTrigger value="restaurant-info">New Restaurants</TabsTrigger>
         </TabsList>
         <TabsContent value="reservations">
           <Card>

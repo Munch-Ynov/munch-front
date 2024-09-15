@@ -28,7 +28,6 @@ const restaurateurRoutes = [
     path: "/dinning-rooms",
     element: <DinningRoomsPage />,
     label: "Salle",
-    // not yet implemented
     comingSoon: true,
   },
 ];
@@ -43,7 +42,7 @@ export const RestaurateurRoutes = () => {
           <Route path="*" element={<NewRestaurantPage />} />
         </Route>
       </Routes>
-    )
+    );
   }
 
   return (

@@ -12,8 +12,13 @@ const adminRoutes = [
   { path: "/", element: <Navigate to="/dashboard" />, label: "Accueil" },
   { path: "/dashboard", element: <DashboardPage />, label: "Dashboard" },
   { path: "/users", element: <ProfilesPage />, label: "Utilisateurs" },
-  { path: "/reports", element: <ReportsPage />, label: "Signalements" },
   { path: "/restaurants", element: <RestaurantsPage />, label: "Restaurants" },
+  {
+    path: "/reports",
+    element: <ReportsPage />,
+    label: "Signalements",
+    comingSoon: true,
+  },
 ];
 
 export const AdminRoutes = () => {
