@@ -11,7 +11,7 @@ RUN npm install
 # Set to production environment
 ENV NODE_ENV production
 
-# Set API URL 
+# Set API URL
 ARG API_URL
 ENV VITE_API_URL=${API_URL}
 

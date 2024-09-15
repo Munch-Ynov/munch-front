@@ -17,7 +17,7 @@ export async function api<T>({
   url: string;
   method: Method;
   body?: unknown;
-  params?: { [key: string]: string | number | boolean };
+  params?: { [key: string]: string[] | string | number | boolean };
 }): Promise<T | null> {
   try {
     let uri = url;
