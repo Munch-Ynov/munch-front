@@ -60,21 +60,41 @@ jobs:
     runs-on: ubuntu-latest
     name: deploy to server
     steps:
-      - name: Deploy using ssh
+      - name: copy .env and docker-compose.yml
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "~/${{ github.event.repository.name }}/"
+          timeout: 120s
+      - name: executing remote ssh commands
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          port: 22
           script: |
-            cd ~/${{ github.event.repository.name }};
-            if docker ps -a | grep -q ${{ env.IMAGE_NAME }}; then
-              docker stop ${{ env.CONTAINER_NAME }};
-              docker rm ${{ env.CONTAINER_NAME}};
-            fi
-            git remote set-url origin https://${{ secrets.GITHUB_USERNAME }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ env.ORGANIZATION }}/${{ github.event.repository.name }}.git;
-            git pull;
-            docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
-            docker pull ${{ env.IMAGE_NAME }}:main;
-            docker-compose up -d;
+            cd ~/${{ github.event.repository.name }}
+            echo ${{ secrets.REGISTRY_KEY }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker compose up -d --remove-orphans --force-recreate
+      # - name: Deploy using ssh
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.SSH_HOST }}
+      #     username: ${{ secrets.SSH_USERNAME }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     port: 22
+      #     script: |
+      #       cd ~/${{ github.event.repository.name }};
+      #       if docker ps -a | grep -q ${{ env.IMAGE_NAME }}; then
+      #         docker stop ${{ env.CONTAINER_NAME }};
+      #         docker rm ${{ env.CONTAINER_NAME}};
+      #       fi
+      #       git remote set-url origin https://${{ secrets.GITHUB_USERNAME }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ env.ORGANIZATION }}/${{ github.event.repository.name }}.git;
+      #       git pull;
+      #       docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
+      #       docker pull ${{ env.IMAGE_NAME }}:main;
+      #       docker-compose up -d;
+      
