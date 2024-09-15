@@ -17,7 +17,6 @@ import type { Profile } from "@/models/profile.model";
 const RestaurantCard = ({
   restaurant,
   isFavorite,
-  onClick,
   onFavorite,
 }: {
   restaurant: Restaurant;
@@ -85,8 +84,6 @@ const RestaurantCard = ({
   return (
     <Card
       key={restaurant.id}
-      onKeyDown={onClick ? (e) => e.key === "Enter" && onClick() : undefined}
-      onClick={onClick}
       className="overflow-hidden cursor-pointer"
     >
       <div className="relative h-48">

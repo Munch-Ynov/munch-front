@@ -68,8 +68,6 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
     }
   }, [role]);
 
-  useEffect(() => {}, [defaultValues]);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: defaultValues,
@@ -103,9 +101,10 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
         <CardTitle>
           <div className="flex flex-col gap-2">
             <div className="w-full flex justify-between">
-              <span>👋</span>
-              {roleSelected === RoleEnum.RESTAURATEUR && (
+              {roleSelected === RoleEnum.RESTAURATEUR ? (
                 <Badge variant="outline">Restaurateur</Badge>
+              ) : (
+                <Badge variant="outline">Utilisateur</Badge>
               )}
             </div>
             <span className="text-3xl text-primary font-bold">S'inscrire</span>
@@ -181,7 +180,7 @@ export function RegisterProfileForm({ role }: { role: RoleEnum }) {
               />
             </div>
             <Button className="w-full" type="submit">
-              Register
+              S'inscrire
             </Button>
           </form>
         </Form>

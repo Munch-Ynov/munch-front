@@ -54,6 +54,8 @@ export async function getFavoritesRestaurants(
   params: {
     page?: number;
     size?: number;
+    name?: string;
+    features?: string[];
   } = {
       page: 0,
       size: 10,

@@ -15,7 +15,7 @@ import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
 import { Filter, Search } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const RestaurantList = () => {
   const [page, setPage] = useParam<number>("page", { default: 0 });
@@ -38,6 +38,7 @@ export const RestaurantList = () => {
       await api.getAllRestaurants({
         page: page,
         name: searchTerm,
+        size: 8,
         features: selectedFeatures,
       }),
   });
@@ -67,7 +68,7 @@ export const RestaurantList = () => {
 
 
   return (
-    <main className="flex-1 items-start gap-4 md:gap-8 ">
+    <main className="flex-1 items-start gap-4 md:gap-8 w-full max-w-6xl mx-auto">
       <Tabs defaultValue="all">
         <TabsContent value="all">
           <Card x-chunk="dashboard-06-chunk-0">
@@ -162,17 +163,17 @@ export const RestaurantList = () => {
                         .includes(searchTerm.toLowerCase())
                     )
                     .map((restaurant) => (
-                      <RestaurantCard
-                        key={restaurant.id}
-                        restaurant={restaurant}
-                        isFavorite={favData?.content?.some(
-                          (fav) => fav.id === restaurant.id
-                        )}
-                        onClick={() =>
-                          navigate(`/restaurants/${restaurant.id}`)
-                        }
-                        className="mb-4"
-                      />
+                      <Link to={`/restaurants/${restaurant.id}`} key={restaurant.id}>
+                        <RestaurantCard
+                          key={restaurant.id}
+                          restaurant={restaurant}
+                          isFavorite={favData?.content?.some(
+                            (fav) => fav.id === restaurant.id
+                          )}
+
+                          className="mb-4"
+                        />
+                      </Link>
                     ))}
               </div>
             </CardContent>

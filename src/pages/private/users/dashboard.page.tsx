@@ -25,7 +25,7 @@ import { cld } from "@/main";
 import { useQuery } from "@tanstack/react-query";
 import apiKpi from "@/lib/api/kpi.api";
 import RestaurantCard from "@/components/restaurant/restaurant-card";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Carousel,
   CarouselContent,
@@ -177,15 +177,16 @@ export default function DashboardPage() {
                       key={favorite.restaurantId}
                       className="md:basis-1/3"
                     >
-                      <RestaurantCard
-                        restaurant={favorite.restaurant}
-                        isFavorite
-                        onClick={() =>
-                          navigate(`/restaurants/${favorite.restaurantId}`)
-                        }
-                        className="mb-4 "
-                      />
+                      <Link to={`/restaurants/${favorite.restaurantId}`}>
+                        <RestaurantCard
+                          restaurant={favorite.restaurant}
+                          isFavorite
+
+                          className="mb-4 "
+                        />
+                      </Link>
                     </CarouselItem>
+
                   ))}
                 </CarouselContent>
                 <CarouselNext />

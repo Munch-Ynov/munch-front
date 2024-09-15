@@ -8,11 +8,9 @@ import type { Restaurant } from "@/models/restaurant.model";
 
 function ReservationCard({
   reservation,
-  onClick,
   className,
 }: {
   reservation: Reservation;
-  onClick?: () => void;
   className?: string;
 }) {
 
@@ -28,9 +26,7 @@ function ReservationCard({
 
   return (
     <div
-      onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}
-      onClick={onClick}
-      className={cn(onClick ? "cursor-pointer hover:bg-gray-100" : '', 'flex row-auto', 'rounded-sm', className)}>
+      className={cn("cursor-pointer hover:bg-gray-100", 'flex row-auto', 'rounded-sm', className)}>
       <div className="flex-1 justify-between">
         {restaurant.name}
       </div>

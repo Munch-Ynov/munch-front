@@ -15,7 +15,7 @@ import { userAtom } from "@/store/auth.store";
 import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const ReservationsPage = () => {
 
@@ -67,12 +67,13 @@ export const ReservationsPage = () => {
               )}
               {!isLoading && content && content.length > 0 &&
                 content.map((reservation) => (
-                  <ReservationCard
-                    key={reservation.id}
-                    reservation={reservation}
-                    onClick={() => navigate(`/reservations/${reservation.id}`)}
-                    className="mb-4"
-                  />
+                  <Link to={`/reservations/${reservation.id}`} key={reservation.id}>
+                    <ReservationCard
+                      key={reservation.id}
+                      reservation={reservation}
+                      className="mb-4"
+                    />
+                  </Link>
                 ))
               }
             </div>

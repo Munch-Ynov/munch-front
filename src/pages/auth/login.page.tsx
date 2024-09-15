@@ -62,9 +62,11 @@ export function LoginPage() {
     <section className="flex items-center justify-center h-screen">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">
+            Se connecter
+          </CardTitle>
           <CardDescription>
-            Enter your email below to login to your account.
+            Connectez-vous pour accéder à votre compte
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -104,7 +106,9 @@ export function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>
+                      Mot de passe
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
@@ -117,7 +121,7 @@ export function LoginPage() {
                 )}
               />
               <Button className="w-full" type="submit">
-                Log in
+                Se connecter
               </Button>
             </form>
           </Form>
