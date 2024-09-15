@@ -79,9 +79,10 @@ export function LoginPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Compte (demo)</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Input placeholder="john.doe@example.com" {...field} />
+                    {/* <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        {/* <Input placeholder="john.doe@example.com" {...field} /> */}
+                        
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -97,7 +98,7 @@ export function LoginPage() {
                           Compte administrateur
                         </SelectItem>
                       </SelectContent>
-                    </Select>
+                    </Select> */}
                     <FormMessage />
                   </FormItem>
                 )}
