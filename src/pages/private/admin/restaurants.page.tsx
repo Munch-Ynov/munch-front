@@ -16,10 +16,8 @@ import { PlusCircle } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import useParam from "@/hooks/useParam/useParam";
 
-
 export const RestaurantsPage = () => {
-  const [page, setPage] = useParam<number>('page', { default: 0 });
-
+  const [page, setPage] = useParam<number>("page", { default: 0 });
 
   const { data, isLoading } = useQuery({
     queryKey: ["restaurants", page],
@@ -39,8 +37,7 @@ export const RestaurantsPage = () => {
               <CardTitle>
                 <div className="flex justify-between">
                   Liste des Restaurants
-                  <Button className="h-8 gap-1">
-                    <PlusCircle className="h-3.5 w-3.5" />
+                  <Button size="lg" className="h-8 gap-1">
                     <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                       Ajouter
                     </span>
@@ -84,7 +81,6 @@ export const RestaurantsPage = () => {
           Suivant
         </Button>
       </div>
-
     </main>
   );
 };

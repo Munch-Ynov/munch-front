@@ -4,7 +4,7 @@ import { userAtom } from "../../store/auth.store";
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
   const [user] = useAtom(userAtom);
-  let location = useLocation();
+  const location = useLocation();
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
