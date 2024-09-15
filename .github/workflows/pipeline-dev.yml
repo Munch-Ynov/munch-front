@@ -68,9 +68,10 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
+          port: 22
           source: "docker-compose.yml"
           target: "~/${{ github.event.repository.name }}/"
-          timeout: 120s
+          # timeout: 120s
       - name: executing remote ssh commands
         uses: appleboy/ssh-action@master
         with:
