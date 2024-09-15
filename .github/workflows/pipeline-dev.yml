@@ -60,7 +60,9 @@ jobs:
     runs-on: ubuntu-latest
     name: deploy to server
     steps:
-      - name: copy .env and docker-compose.yml
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: copy docker-compose.yml
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
