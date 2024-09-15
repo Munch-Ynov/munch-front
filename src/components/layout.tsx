@@ -10,7 +10,7 @@ export function Layout() {
   return (
     <div className="flex flex-col">
       <Header routes={routes} />
-      <div className="container py-8">
+      <div className="container py-8 min-h-screen">
         <Outlet />
       </div>
       <Footer />

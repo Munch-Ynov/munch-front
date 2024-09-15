@@ -19,7 +19,7 @@ import { AdvancedImage } from "@cloudinary/react";
 import { cld } from "@/main";
 import usePriceSymbol from "@/hooks/usePrice";
 import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "@/lib/api/restaurant.api";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +34,7 @@ import {
 const RestaurantDetail = () => {
   const { id } = useParams();
   const [user] = useAtom<Profile>(userAtom);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const { data: featuresByCategory } = useQuery({
     queryKey: ["featuresRestaurant", id],
@@ -99,14 +100,22 @@ const RestaurantDetail = () => {
   const [updatedAt, setUpdatedAt] = useState(new Date());
 
   const { data: favData } = useQuery({
-    queryKey: ["favorites", user.id, updatedAt],
+    queryKey: ["favorites", user?.id, updatedAt],
     queryFn: async () =>
-      await api.getFavoritesRestaurants(user.id, {
-        size: 1000,
-      }),
+      user?.id
+        ? await api.getFavoritesRestaurants(user.id, {
+            size: 1000,
+          })
+        : {
+            content: [],
+          },
   });
 
-  const isFavorite = favData?.content?.some((fav) => fav.id === restaurant.id);
+  useEffect(() => {
+    setIsFavorite(
+      favData?.content?.some((fav) => fav.id === restaurant?.id) || false
+    );
+  }, [favData, restaurant]);
 
   const toggleFavorite = async (restaurantId: string) => {
     if (isFavorite) {

@@ -54,7 +54,6 @@ export const EditProfile = ({ open, onOpenChange }: EditProfileProps) => {
 
   const form = useForm<z.infer<typeof profileSchema>>({
     defaultValues: user,
-    resolver: zodResolver(profileSchema),
   });
 
   const handleLogout = async () => {
@@ -82,7 +81,10 @@ export const EditProfile = ({ open, onOpenChange }: EditProfileProps) => {
     }
     await updateProfileToken({ ...values })
       .then((res) => {
-        setUser(res);
+        console.log("Profile updated", res);
+        if (res) {
+          setUser(res);
+        }
         toast.success("Profil mis à jour");
       })
       .catch((err) => {
@@ -202,7 +204,7 @@ export const EditProfile = ({ open, onOpenChange }: EditProfileProps) => {
                 </Button>
               </form>
             </Form>
-            <ChangePassword />
+            {/* <ChangePassword /> */}
           </div>
           <Button variant="outline" onClick={handleLogout}>
             <LogOut size={16} className="mr-2" />

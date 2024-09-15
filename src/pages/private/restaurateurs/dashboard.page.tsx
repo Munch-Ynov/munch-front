@@ -93,13 +93,7 @@ export const DashboardPage = () => {
                 </TableHeader>
                 <TableBody>
                   {kpiData?.futureReservations.map((reservation) => (
-                    <TableRow
-                      key={reservation.id}
-                      onClick={() =>
-                        navigate(`/reservations/${reservation.id}`)
-                      }
-                      className="cursor-pointer"
-                    >
+                    <TableRow key={reservation.id}>
                       <TableCell className="hidden md:table-cell">
                         {format(reservation.date, "dd/MM/yyyy")}
                       </TableCell>

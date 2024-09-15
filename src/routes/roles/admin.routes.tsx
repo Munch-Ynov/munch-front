@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -8,6 +9,7 @@ import { NotFoundPage } from "@/pages/public/not-found.page";
 import { RestaurantsPage } from "@/pages/private/admin/restaurants.page";
 import { ProfilesPage } from "@/pages/private/admin/profiles.page";
 import { useRoutes } from "../main.routes";
+import { useEffect } from "react";
 
 const adminRoutes = [
   { path: "/", element: <Navigate to="/dashboard" />, label: "Accueil" },
@@ -27,7 +29,11 @@ export const AdminRoutes = () => {
 
   const { setRoutes } = useRoutes();
 
-  setRoutes(adminRoutes);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    setRoutes(adminRoutes);
+  }, [user]);
+
 
   return (
     <Routes>

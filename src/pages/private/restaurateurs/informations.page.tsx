@@ -23,7 +23,10 @@ export const InformationsPage = () => {
   });
 
   const onSubmit = async (
-    uRestaurant: Omit<RestaurantWithFeatures, "id" | "createdAt" | "updatedAt" | "deletedAt">,
+    uRestaurant: Omit<
+      RestaurantWithFeatures,
+      "id" | "createdAt" | "updatedAt" | "deletedAt"
+    >,
     mainPicture: Blob | null,
     pictures: Blob[]
   ) => {
@@ -32,11 +35,15 @@ export const InformationsPage = () => {
     }
 
     if (mainPicture) {
-      uRestaurant.main_picture = (await uploadMainPicture(mainPicture)).public_id
+      uRestaurant.main_picture = (
+        await uploadMainPicture(mainPicture)
+      ).public_id;
     }
 
     if (pictures.length) {
-      uRestaurant.pictures = (await uploadPictures(pictures)).map((p) => p.public_id)
+      uRestaurant.pictures = (await uploadPictures(pictures)).map(
+        (p) => p.public_id
+      );
     }
 
     try {
@@ -49,7 +56,6 @@ export const InformationsPage = () => {
       toast.error("Erreur lors de la mise à jour du restaurant");
     }
   };
-
 
   const uploadMainPicture = async (picture: Blob) => {
     const formData = new FormData();
@@ -71,17 +77,17 @@ export const InformationsPage = () => {
     return Promise.all(promises);
   };
 
-
   return (
-
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-4 md:gap-8">
-      <h1 className="text-2xl font-semibold">
-        Ajouter un restaurant
-      </h1>
-      {!(restaurant && features)
-        ? <Loader /> :
-        <RegisterRestaurantForm restaurant={restaurant} features={features} onSubmit={onSubmit} />
-      }
+      {!(restaurant && features) ? (
+        <Loader />
+      ) : (
+        <RegisterRestaurantForm
+          restaurant={restaurant}
+          features={features}
+          onSubmit={onSubmit}
+        />
+      )}
     </main>
   );
 };

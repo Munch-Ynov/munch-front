@@ -27,8 +27,7 @@ export async function api<T>({
         if (params[key] !== undefined)
           searchParams.append(key, params[key].toString());
       }
-      if (searchParams.toString())
-        uri += `?${searchParams.toString()}`;
+      if (searchParams.toString()) uri += `?${searchParams.toString()}`;
     }
 
     return fetch(`${import.meta.env.VITE_API_URL}/${uri}`, {
@@ -42,7 +41,7 @@ export async function api<T>({
       if (!res.ok) {
         return res.json().then((error) => {
           console.error(error);
-          throw new Error(error.message || res.statusText);
+          return Promise.reject(error as ErrorMessage);
         });
       }
       if (res.status === 204) {
@@ -50,9 +49,7 @@ export async function api<T>({
       }
       const result = res.json();
       return result as Promise<T>;
-
     });
-
   } catch (error) {
     console.error(error);
     throw error;

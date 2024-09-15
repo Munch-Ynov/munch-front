@@ -12,6 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Loader } from "@/components/ui/loader";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -31,7 +33,9 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
-import { Loader } from "@/components/ui/loader";
+import { useState } from "react";
+import { useConfirm } from "@/hooks/useConfirm";
+import { toast } from "sonner";
 
 
 
@@ -43,11 +47,14 @@ export const ReservationsPage = () => {
 
   // if it shows the past reservations
   const [status, setStatus] = useParam<string>('status', { default: 'all' });
+  const [available, setAvailable] = useParam<string>('available', { default: 'all' });
 
   const [page, setPage] = useParam<number>('page', { default: 0 });
 
+  const [lastUpdate, setLastUpdate] = useState(Date.now());
+
   const { data, isLoading } = useQuery({
-    queryKey: ["reservations", user?.restaurants[0].id, page, status],
+    queryKey: ["reservations", user?.restaurants[0].id, page, status, available, lastUpdate],
     queryFn: async () => await reservationApi.getReservationByRestaurant(
       user?.restaurants[0].id,
       {
@@ -56,6 +63,7 @@ export const ReservationsPage = () => {
       {
         past: status !== 'upcoming',
         upcoming: status !== 'past',
+        available: available !== 'all',
       }
     ),
   });
@@ -84,6 +92,37 @@ export const ReservationsPage = () => {
     window.URL.revokeObjectURL(url);
   }
 
+  const { confirm } = useConfirm();
+
+
+  const acceptReservation = async (id: string) => {
+    const res = await confirm({
+      title: 'Accepter la reservation',
+      content: 'Voulez-vous vraiment accepter cette reservation ?',
+    });
+    if (res) {
+      const data = await reservationApi.acceptReservation(id);
+      if (data) {
+        toast.success('Reservation acceptée');
+        setLastUpdate(Date.now());
+      }
+    }
+  };
+
+  const rejectReservation = async (id: string) => {
+    const res = await confirm({
+      title: 'Refuser la reservation',
+      content: 'Voulez-vous vraiment refuser cette reservation ?',
+    });
+    if (res) {
+      const data = await reservationApi.rejectReservation(id);
+      if (data) {
+        toast.success('Reservation refusée');
+        setLastUpdate(Date.now());
+      }
+    }
+  }
+
   if (isLoading) return <Loader />;
 
 
@@ -93,11 +132,15 @@ export const ReservationsPage = () => {
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-4 md:gap-8">
       <Tabs defaultValue={status} onValueChange={(value) => setStatus(value)}>
         <div className="flex items-center">
-          <TabsList>
-            <TabsTrigger value="all">Tous</TabsTrigger>
-            <TabsTrigger value="upcoming">À venir</TabsTrigger>
-            <TabsTrigger value="past">Passées</TabsTrigger>
-          </TabsList>
+          <div className="flex justify-between items-center gap-4 w-full md:w-auto">
+            <TabsList>
+              <TabsTrigger value="all">Tous</TabsTrigger>
+              <TabsTrigger value="upcoming">À venir</TabsTrigger>
+              <TabsTrigger value="past">Passées</TabsTrigger>
+            </TabsList>
+
+            <Switch checked={available === 'available'} onCheckedChange={(checked) => setAvailable(checked ? 'available' : 'all')} />
+          </div>
           <div className="ml-auto flex items-center gap-2">
             <Button size="sm" variant="outline" className="h-8 gap-1" onClick={exportData}>
               <File className="h-3.5 w-3.5" />
@@ -137,11 +180,14 @@ export const ReservationsPage = () => {
                     <TableHead className="hidden md:table-cell">
                       Statut
                     </TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      Actions
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {reservations.map((reservation) => (
-                    <TableRow key={reservation.id} onClick={() => navigate(`/reservations/${reservation.id}`)} className="cursor-pointer">
+                    <TableRow key={reservation.id} className="cursor-pointer">
                       <TableCell className="hidden md:table-cell">
                         {reservation.name}
                       </TableCell>
@@ -165,6 +211,18 @@ export const ReservationsPage = () => {
                           })}
                         >{toFrenchStatus(reservation.status)}</Badge>
                       </TableCell>
+
+
+                      {reservation.status === 'PENDING' && (
+                        <TableCell className="hidden md:table-cell">
+                          <Button variant="ghost" size="sm" className=" h-8" onClick={() => acceptReservation(reservation.id)}>
+                            Accepter
+                          </Button>
+                          <Button variant="destructive" size="sm" className="h-8 " onClick={() => rejectReservation(reservation.id)}>
+                            Refuser
+                          </Button>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>

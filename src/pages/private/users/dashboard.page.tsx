@@ -93,9 +93,17 @@ export default function DashboardPage() {
           <Card>
             <CardHeader>
               <CardTitle>Historique</CardTitle>
-              <CardDescription>Vos dernières réservations</CardDescription>
+              <CardDescription>Vos anciennes réservations</CardDescription>
             </CardHeader>
             <CardContent>
+              {kpis?.lastReservations.length === 0 && (
+                <div className="flex flex-col items-center justify-center h-64">
+                  <p className="text-lg text-muted-foreground">
+                    Vous n'avez pas encore de réservations passées
+                  </p>
+                </div>
+              )}
+
               <ul className="space-y-4">
                 {kpis?.lastReservations.map((reservation, index) => (
                   <li
@@ -133,6 +141,19 @@ export default function DashboardPage() {
               <CardDescription>Vos prochaines réservations</CardDescription>
             </CardHeader>
             <CardContent>
+              {kpis?.futureReservations.length === 0 && (
+                <div className="flex flex-col items-center justify-center h-64">
+                  <p className="text-lg text-muted-foreground">
+                    Vous n'avez pas encore de réservations à venir
+                  </p>
+                  <Button
+                    onClick={() => navigate("/restaurants")}
+                    className="mt-4"
+                  >
+                    Trouver un restaurant
+                  </Button>
+                </div>
+              )}
               <ul className="space-y-4">
                 {kpis?.futureReservations.map((reservation, index) => (
                   <li
@@ -181,12 +202,10 @@ export default function DashboardPage() {
                         <RestaurantCard
                           restaurant={favorite.restaurant}
                           isFavorite
-
                           className="mb-4 "
                         />
                       </Link>
                     </CarouselItem>
-
                   ))}
                 </CarouselContent>
                 <CarouselNext />

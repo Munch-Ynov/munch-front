@@ -27,26 +27,24 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
     await api
       .register(email, password, role, profile)
       .then((res) => {
-        setUser(res?.user);
-        setAccessToken(res?.accessToken);
-        toast.success("Votre compte a été créé avec succès");
+        setUser(res!.user);
+        setAccessToken(res!.accessToken);
       })
       .catch((error) => {
-        toast.error(error);
+        return Promise.reject(error);
       });
   };
 
   const login = async (email: string, password: string) => {
-    setIsLoading(true);
     await api
       .login(email, password)
       .then((res) => {
-        setUser(res?.user);
-        setAccessToken(res?.accessToken);
+        setUser(res!.user);
+        setAccessToken(res!.accessToken);
         toast.success("Connexion réussie");
       })
       .catch((error) => {
-        toast.error(error.message);
+        return Promise.reject(error);
       });
   };
 
