@@ -17,33 +17,6 @@ env:
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
-  build-s3:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '16'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload to S3
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read
-        env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          SOURCE_DIR: 'dist/'
 
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -110,22 +83,33 @@ jobs:
             cd ~/${{ github.event.repository.name }}
             echo ${{ secrets.REGISTRY_KEY }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker compose up -d --remove-orphans --force-recreate
-      # - name: Deploy using ssh
-      #   uses: appleboy/ssh-action@master
-      #   with:
-      #     host: ${{ secrets.SSH_HOST }}
-      #     username: ${{ secrets.SSH_USERNAME }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     port: 22
-      #     script: |
-      #       cd ~/${{ github.event.repository.name }};
-      #       if docker ps -a | grep -q ${{ env.IMAGE_NAME }}; then
-      #         docker stop ${{ env.CONTAINER_NAME }};
-      #         docker rm ${{ env.CONTAINER_NAME}};
-      #       fi
-      #       git remote set-url origin https://${{ secrets.GITHUB_USERNAME }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ env.ORGANIZATION }}/${{ github.event.repository.name }}.git;
-      #       git pull;
-      #       docker login ghcr.io -u ${{ github.actor }} --password-stdin <<< ${{ secrets.REGISTRY_KEY }};
-      #       docker pull ${{ env.IMAGE_NAME }}:main;
-      #       docker-compose up -d;
+
+      
+  # build-s3:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '16'
+
+  #     - name: Install dependencies
+  #       run: npm install
+
+  #     - name: Build
+  #       run: npm run build
+
+  #     - name: Upload to S3
+  #       uses: jakejarvis/s3-sync-action@master
+  #       with:
+  #         args: --acl public-read
+  #       env:
+  #         AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         AWS_REGION: ${{ secrets.AWS_REGION }}
+  #         SOURCE_DIR: 'dist/'
       
