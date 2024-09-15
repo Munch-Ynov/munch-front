@@ -1,14 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Layout } from "@/components/layout";
 import { DashboardPage } from "@/pages/private/restaurateurs/dashboard.page";
 import { DinningRoomsPage } from "@/pages/private/restaurateurs/dinning-rooms.page";
 import { InformationsPage } from "@/pages/private/restaurateurs/informations.page";
 import { NewRestaurantPage } from "@/pages/private/restaurateurs/new-restaurant.page";
 import AddReservation from "@/pages/private/restaurateurs/reservations/reservation-add.page";
-import ReservationDetail from "@/pages/private/restaurateurs/reservations/reservation-details.page";
 import { ReservationsPage } from "@/pages/private/restaurateurs/reservations/reservations.page";
 import { NotFoundPage } from "@/pages/public/not-found.page";
 import { userAtom } from "@/store/auth.store";
 import { useAtom } from "jotai";
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useRoutes } from "../main.routes";
 
@@ -38,6 +39,12 @@ export const RestaurateurRoutes = () => {
 
   const { setRoutes } = useRoutes();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (user?.restaurants.length === 0) return;
+    setRoutes(restaurateurRoutes);
+  }, [user?.restaurants.length]);
+
   if (user?.restaurants.length === 0) {
     return (
       <Routes>
@@ -48,7 +55,8 @@ export const RestaurateurRoutes = () => {
     );
   }
 
-  setRoutes(restaurateurRoutes);
+
+
 
   return (
     <Routes>
@@ -60,7 +68,6 @@ export const RestaurateurRoutes = () => {
           ))}
         <Route path="/reservations/new" element={<AddReservation />} />
 
-        <Route path="/reservations/:id" element={<ReservationDetail />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

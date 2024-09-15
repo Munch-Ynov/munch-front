@@ -8,6 +8,7 @@ import { useAtom } from "jotai";
 import { createContext, useContext, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoutes } from "./protected.routes";
+import RestaurantDetail from "@/pages/public/restaurant/restaurant-details.page";
 
 export const MainRoutes = () => {
   const [user] = useAtom(userAtom);
@@ -28,6 +29,7 @@ export const PublicRoutes = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/restaurants" element={<RestaurantList />} />
+        <Route path="/restaurants/:id" element={<RestaurantDetail />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Route>
     </Routes>

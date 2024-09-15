@@ -3,14 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader } from "@/components/ui/loader";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { useConfirm } from "@/hooks/useConfirm";
 import useParam from "@/hooks/useParam/useParam";
 import reservationApi from "@/lib/api/reservation.api";
 import type { UserProfile } from "@/models/profile.model";
 import { userAtom } from "@/store/auth.store";
 import { useQuery } from "@tanstack/react-query";
 import { useAtom } from "jotai";
-
-import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export const ReservationsPage = () => {
   const [user] = useAtom<UserProfile | undefined>(userAtom);
@@ -29,7 +29,22 @@ export const ReservationsPage = () => {
 
   const content = data?.content || [];
 
-  const navigate = useNavigate();
+
+  const { confirm } = useConfirm();
+
+  const cancelReservation = async (id: string) => {
+    confirm({
+      title: 'Annuler la réservation',
+      content: 'Êtes-vous sûr de vouloir annuler cette réservation ?',
+    }).then((confirmed) => {
+      if (confirmed) {
+        reservationApi.cancelReservation(id).then(() => {
+          toast.success('Votre réservation a été annulée avec succès');
+        });
+      }
+    });
+  };
+
 
   return (
     <main className="flex-1 items-start gap-4 md:gap-8 ">
@@ -61,16 +76,12 @@ export const ReservationsPage = () => {
                 content &&
                 content.length > 0 &&
                 content.map((reservation) => (
-                  <Link
-                    to={`/reservations/${reservation.id}`}
+                  <ReservationCard
                     key={reservation.id}
-                  >
-                    <ReservationCard
-                      key={reservation.id}
-                      reservation={reservation}
-                      className="mb-4"
-                    />
-                  </Link>
+                    reservation={reservation}
+                    className="mb-4 cursor-pointer"
+                    cancelReservation={() => cancelReservation(reservation.id)}
+                  />
                 ))}
             </div>
             <CardFooter className="flex justify-between">
@@ -98,6 +109,8 @@ export const ReservationsPage = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+
     </main>
   );
 };

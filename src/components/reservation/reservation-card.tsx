@@ -1,28 +1,25 @@
-import type { Reservation } from "@/models/reservation.model";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import restaurantApi from "@/lib/api/restaurant.api";
-import { useQuery } from "@tanstack/react-query";
-import toFrenchStatus from "../../models/enum/reservation-status.enum";
-import type { Restaurant } from "@/models/restaurant.model";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import restaurantApi from "@/lib/api/restaurant.api";
+import { cn } from "@/lib/utils";
+import type { Reservation } from "@/models/reservation.model";
+import type { Restaurant } from "@/models/restaurant.model";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { CalendarIcon, ClockIcon, UsersIcon } from "lucide-react";
+import toFrenchStatus from "../../models/enum/reservation-status.enum";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
 
 function ReservationCard({
   reservation,
   className,
+  onClick,
+  cancelReservation,
 }: {
   reservation: Reservation;
   className?: string;
+  onClick?: () => void;
+  cancelReservation?: () => void;
 }) {
   const { data } = useQuery({
     queryKey: ["restaurant", reservation.restaurantId],
@@ -35,7 +32,9 @@ function ReservationCard({
   if (!restaurant) return null;
 
   return (
-    <div className="container mx-auto">
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+    <div className={cn("container mx-auto", className)}
+      onClick={onClick}>
       <Card key={reservation.id} className="w-full">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
@@ -72,6 +71,20 @@ function ReservationCard({
               {reservation.nb_people > 1 ? "personnes" : "personne"}
             </span>
           </div>
+          {
+            cancelReservation && reservation.status === "PENDING" &&
+            <div className="flex justify-end mt-4">
+              <Button
+                variant="destructive"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  cancelReservation?.();
+                }}
+              >
+                Annuler
+              </Button>
+            </div>
+          }
         </CardContent>
       </Card>
     </div>

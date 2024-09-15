@@ -1,12 +1,14 @@
+import { Layout } from "@/components/layout";
 import DashboardPage from "@/pages/private/users/dashboard.page";
 import { FavoritesPage } from "@/pages/private/users/favorites.page";
-import ReservationDetail from "@/pages/private/users/reservations/reservation-details.page";
 import { ReservationsPage } from "@/pages/private/users/reservations/reservations.page";
 import RestaurantDetail from "@/pages/public/restaurant/restaurant-details.page";
 import { RestaurantList } from "@/pages/public/restaurant/restaurant-list.page";
+import { userAtom } from "@/store/auth.store";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useRoutes } from "../main.routes";
-import { Layout } from "@/components/layout";
 
 const userRoutes = [
   { path: "/", element: <DashboardPage />, label: "Accueil" },
@@ -24,9 +26,14 @@ const userRoutes = [
 ];
 
 export const UserRoutes = () => {
+  const [user] = useAtom(userAtom);
 
   const { setRoutes } = useRoutes();
-  setRoutes(userRoutes);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    setRoutes(userRoutes);
+  }, [user]);
 
   return (
     <Routes>
@@ -35,7 +42,6 @@ export const UserRoutes = () => {
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
         <Route path="/restaurants/:id" element={<RestaurantDetail />} />
-        <Route path="/reservations/:id" element={<ReservationDetail />} />
       </Route>
     </Routes>
   );

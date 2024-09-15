@@ -45,6 +45,7 @@ export async function getReservationByRestaurant(
   filters: {
     past?: boolean;
     upcoming?: boolean;
+    available?: boolean;
   } = {}
 ) {
   return api<Pagination<Reservation>>({
