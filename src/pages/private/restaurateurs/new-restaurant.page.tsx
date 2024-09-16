@@ -40,9 +40,13 @@ export const NewRestaurantPage = () => {
       if (!restaurant) {
         throw new Error("Restaurant not created");
       }
-      setUser((u) => ({ ...u, restaurants: [...u.restaurants, { id: restaurant.id, name: restaurant.name }] }));
+      setUser((u) => ({ 
+        ...u, restaurants: [
+          
+         { id: restaurant.id, name: restaurant.name }] }));
       toast.success("Restaurant créé avec succès");
     } catch (error) {
+      console.log({error});
       toast.error("Erreur lors de la création du restaurant");
     }
   };
