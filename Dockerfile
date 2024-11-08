@@ -1,4 +1,4 @@
-FROM node:22-alpine3.18 as build-stage
+FROM node:22.1.0-alpine3.18 as build-stage
 
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
@@ -35,7 +35,7 @@ RUN npm i --only=production && npm cache clean --force
 USER node
 
 # Path: Dockerfile
-FROM node:22-alpine3.18 as production-stage
+FROM node:22.1.0-alpine3.18 as production-stage
 
 WORKDIR /app
 
